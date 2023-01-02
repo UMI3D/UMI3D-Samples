@@ -289,9 +289,10 @@ MonoBehaviour:
   UMI3DAnchor: {fileID: 0}
   immersiveOnly: 0
   VolumeId: 0
+  nodeName: 
   xBillboard: 0
   yBillboard: 0
-  hasCollider: 0
+  hasCollider: 1
   colliderType: 3
   convex: 0
   colliderCenter: {x: 0, y: 0, z: 0}
@@ -1667,6 +1668,7 @@ MonoBehaviour:
   UMI3DAnchor: {fileID: 0}
   immersiveOnly: 0
   VolumeId: 0
+  nodeName: 
   xBillboard: 0
   yBillboard: 0
   hasCollider: 0
@@ -1770,6 +1772,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1434960494}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1434960496 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2534866581884222612, guid: d08d9a7714f4f9b49b9e625a2d73c314,
+    type: 3}
+  m_PrefabInstance: {fileID: 1434960494}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1434960497
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1434960496}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2432090755550338912, guid: d08d9a7714f4f9b49b9e625a2d73c314, type: 3}
 --- !u!1 &1589337212
 GameObject:
   m_ObjectHideFlags: 0
@@ -2256,6 +2278,7 @@ MonoBehaviour:
   UMI3DAnchor: {fileID: 0}
   immersiveOnly: 0
   VolumeId: 0
+  nodeName: 
   xBillboard: 0
   yBillboard: 0
   hasCollider: 0
@@ -2942,6 +2965,8 @@ MonoBehaviour:
   Identifier: {fileID: 11400000, guid: bf3cbe3936c9ad84fa84a8bdec93e151, type: 2}
   WorldController: {fileID: 11400000, guid: 84a2fe2dd60104f4aa9ec8b69935580d, type: 2}
   mumbleIp: 
+  mumbleHttpIp: 
+  guid: 
   useRandomForgePort: 0
   forgePort: 0
   forgeMasterServerHost: 
