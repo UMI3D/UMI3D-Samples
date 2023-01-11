@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using BeardedManStudios.Forge.Networking.Unity;
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace umi3d.edk.interaction
     /// <summary>
     /// Abstract UMI3D interaction. Base class for all interactions.
     /// </summary>
-    public abstract class AbstractInteraction : MonoBehaviour, UMI3DMediaEntity, IBytable
+    public abstract class AbstractInteraction : MonoBehaviour, UMI3DLoadableEntity, IBytable
     {
 
         /// <summary>
@@ -86,11 +87,20 @@ namespace umi3d.edk.interaction
         }
 
         #region properties
+        public UMI3DAsyncProperty<UIRect> ObjectUIRect { get { Register(); return _objectUIRect; } protected set => _objectUIRect = value; }
+
+        private UMI3DAsyncProperty<UIRect> _objectUIRect;
+
+        /// <summary>
+        /// Link an ui rect to an interactable.
+        /// </summary>
+        [SerializeField, EditorReadOnly, Tooltip("Check this box if a collider is attached to that node.")]
+        public UIRect UILink = null;
 
         /// <summary>
         /// Indicates if the interaction is part of another.
         /// </summary>
-        [HideInInspector] 
+        [HideInInspector]
         public bool IsSubInteraction = false;
 
         /// <summary>
@@ -154,6 +164,9 @@ namespace umi3d.edk.interaction
             });
             interactionId = id;
             inited = true;
+
+            ObjectUIRect = new UMI3DAsyncProperty<UIRect>(id, UMI3DPropertyKeys.Interaction_UI_Link, UILink, null, (o, u) => o.Equals(u));
+
         }
 
         #endregion
@@ -210,6 +223,7 @@ namespace umi3d.edk.interaction
             dto.icon3D = Display.icon3D.ToDto();
             dto.id = Id();
             dto.description = Display.description;
+            dto.uiLinkId = ObjectUIRect.GetValue(user)?.Id() ?? 0;
         }
 
         /// <summary>
@@ -223,28 +237,53 @@ namespace umi3d.edk.interaction
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public virtual Bytable ToByte(UMI3DUser user)
+        public virtual Bytable ToBytes(UMI3DUser user)
         {
-            return UMI3DNetworkingHelper.Write(GetInteractionKey())
-                    + UMI3DNetworkingHelper.Write(Id())
-                    + UMI3DNetworkingHelper.Write(Display.name)
+            return UMI3DSerializer.Write(GetInteractionKey())
+                    + UMI3DSerializer.Write(Id())
+                    + UMI3DSerializer.Write(Display.name)
                     + Display.icon2D.ToByte()
                     + Display.icon3D.ToByte()
-                    + UMI3DNetworkingHelper.Write(Display.description);
+                    + UMI3DSerializer.Write(Display.description);
         }
 
         /// <inheritdoc/>
         Bytable IBytable.ToBytableArray(params object[] parameters)
         {
             if (parameters.Length < 1)
-                return ToByte(null);
-            return ToByte(parameters[0] as UMI3DUser);
+                return ToBytes(null);
+            return ToBytes(parameters[0] as UMI3DUser);
         }
 
         /// <inheritdoc/>
         bool IBytable.IsCountable()
         {
             return true;
+        }
+
+        public LoadEntity GetLoadEntity(HashSet<UMI3DUser> users = null)
+        {
+            var operation = new LoadEntity()
+            {
+                entities = new List<UMI3DLoadableEntity>() { this },
+                users = users != null ? new HashSet<UMI3DUser>(users) : UMI3DServer.Instance.UserSetWhenHasJoined()
+            };
+            return operation;
+        }
+
+        public DeleteEntity GetDeleteEntity(HashSet<UMI3DUser> users = null)
+        {
+            var operation = new DeleteEntity()
+            {
+                entityId = Id(),
+                users = users != null ? new HashSet<UMI3DUser>(users) : UMI3DServer.Instance.UserSetWhenHasJoined()
+            };
+            return operation;
+        }
+
+        public IEntity ToEntityDto(UMI3DUser user)
+        {
+            return ToDto(user);
         }
 
         #region filter
