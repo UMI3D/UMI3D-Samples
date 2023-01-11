@@ -30,7 +30,7 @@ public class Redirection : MonoBehaviour
         var gate = new GateDto()
         {
             gateId = "SuperGateID",
-            metaData = UMI3DNetworkingHelper.Write("Data").ToBytes()
+            metaData = UMI3DSerializer.Write("Data").ToBytes()
         };
         var red = new RedirectionDto()
         {

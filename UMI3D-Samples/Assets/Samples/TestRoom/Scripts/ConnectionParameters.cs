@@ -34,7 +34,8 @@ public class ConnectionParameters : MonoBehaviour
             ((PinIdentifierWithParameter)pinIdentifier).GetParameter = GetParameter;
     }
 
-    FormDto GetParameter(UMI3DCollaborationUser user) {
-        return form.ToDto(user) as FormDto;
+    ConnectionFormDto GetParameter(UMI3DCollaborationUser user) {
+        UnityEngine.Debug.LogError("Need to convert form to connectionForm");
+        return form.ToDto(user) as ConnectionFormDto;
     }
 }

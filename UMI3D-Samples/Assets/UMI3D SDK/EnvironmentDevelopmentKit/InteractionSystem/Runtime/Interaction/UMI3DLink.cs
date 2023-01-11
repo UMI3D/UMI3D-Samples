@@ -58,10 +58,10 @@ namespace umi3d.edk.interaction
         }
 
         /// <inheritdoc/>
-        public override Bytable ToByte(UMI3DUser user)
+        public override Bytable ToBytes(UMI3DUser user)
         {
-            return base.ToByte(user)
-                + UMI3DNetworkingHelper.Write(url);
+            return base.ToBytes(user)
+                + UMI3DSerializer.Write(url);
         }
 
         /// <inheritdoc/>
