@@ -37,7 +37,7 @@ public class Redirection : MonoBehaviour
             gate = gate,
             media = (UMI3DCollaborationServer.Instance.WorldController as StandAloneWorldControllerAPI).ToDto()
         };
-        var request = new RedirectionRequest(true, red);
-        request.Dispatch();
+        var request = new RedirectionRequest(red);
+        request.ToTransaction(true).Dispatch();
     }
 }
