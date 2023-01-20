@@ -31,6 +31,8 @@ namespace umi3d.worldController
 
         private readonly List<string> tokens = new List<string>();
 
+        const bool useForm = false;
+
         public virtual async Task<ConnectionFormDto> GenerateForm(User user)
         {
             var form = new ConnectionFormDto()
@@ -91,6 +93,12 @@ namespace umi3d.worldController
         {
             if (user.Token != null && tokens.Contains(user.Token))
                 return await Task.FromResult(true);
+
+            if(!useForm)
+            {
+                SetToken(user);
+                return await Task.FromResult(true);
+            }
 
             return await Task.FromResult(false);
         }
