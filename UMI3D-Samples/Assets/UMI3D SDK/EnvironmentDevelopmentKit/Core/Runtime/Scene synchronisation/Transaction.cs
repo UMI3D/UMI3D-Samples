@@ -27,6 +27,7 @@ namespace umi3d.edk
     public class Transaction : IEnumerable<Operation>
     {
 
+
         public Transaction() { }
 
         public Transaction(bool reliable) : this()
@@ -40,6 +41,8 @@ namespace umi3d.edk
         }
 
         public Transaction(List<Operation> operations) : this(false,operations) { }
+
+
 
         /// <summary>
         /// Reliable transactions are transactions for which receiving is ensuring.

@@ -33,4 +33,4 @@ sysinfo.txt
 
 # Builds
 *.apk
-/UMI3D-Samples/Logs/AssetImportWorker0-prev.log
+/UMI3D-Samples/Logs/
