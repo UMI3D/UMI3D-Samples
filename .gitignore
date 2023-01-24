@@ -33,3 +33,4 @@ sysinfo.txt
 
 # Builds
 *.apk
+/UMI3D-Samples/Logs/
