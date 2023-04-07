@@ -94,15 +94,19 @@ namespace umi3d.edk.collaboration
         public UMI3DAsyncProperty<string> audioLogin;
         #endregion audioSettings
 
+        /// <summary>
+        /// Room object used to relay data
+        /// </summary>
+        public ICollaborationRoom RelayRoom;
+
         public UMI3DAsyncProperty<bool> avatarStatus;
 
         public UMI3DAsyncProperty<UMI3DAbstractAnimation> onStartSpeakingAnimationId;
         public UMI3DAsyncProperty<UMI3DAbstractAnimation> onStopSpeakingAnimationId;
 
-        public UMI3DCollaborationUser(RegisterIdentityDto identity)
+        public UMI3DCollaborationUser(RegisterIdentityDto identity) : base(lastGivenUserId++)
         {
             this.identityDto = identity ?? new RegisterIdentityDto();
-            userId = UMI3DEnvironment.Register(this, lastGivenUserId++);
 
             audioFrequency = new UMI3DAsyncProperty<int>(userId, UMI3DPropertyKeys.UserAudioFrequency, 12000);
             microphoneStatus = new UMI3DAsyncProperty<bool>(userId, UMI3DPropertyKeys.UserMicrophoneStatus, false);
@@ -187,7 +191,7 @@ namespace umi3d.edk.collaboration
             {
                 id = Id(),
                 status = status,
-                avatarId = Avatar == null ? 0 : Avatar.Id(),
+                //avatarId = Avatar == null ? 0 : Avatar.Id(),
                 networkId = networkPlayer?.NetworkId ?? 0,
                 audioSourceId = audioPlayer?.Id() ?? 0,
                 audioFrequency = audioFrequency.GetValue(),

@@ -1,4 +1,4 @@
-﻿// Copyright 2020-2022 Andreas Atteneder
+﻿// Copyright 2020 Andreas Atteneder
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,30 +15,18 @@
 
 namespace GLTFast.Schema {
 
-    /// <summary>
-    /// Sparse values property of a glTF <seealso cref="AccessorSparse"/>
-    /// </summary>
     [System.Serializable]
     public class AccessorSparseValues {
         /// <summary>
         /// The index of the bufferView with sparse values.
         /// Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
         /// </summary>
-        public uint bufferView;
+        public uint BufferView;
 
         /// <summary>
         /// The offset relative to the start of the bufferView in bytes. Must be aligned.
         /// <minimum>0</minimum>
         /// </summary>
-        public int byteOffset = 0;
-        
-        internal void GltfSerialize(JsonWriter writer) {
-            writer.AddObject();
-            writer.AddProperty("bufferView", bufferView);
-            if (byteOffset >= 0) {
-                writer.AddProperty("byteOffset", byteOffset);
-            }
-            writer.Close();
-        }
+        public int ByteOffset = 0;
     }
 }

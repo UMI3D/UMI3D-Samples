@@ -338,7 +338,17 @@ namespace umi3d.edk
         /// Get entity by id.
         /// </summary>
         /// <param name="id">Entity to get id</param>
+        [Obsolete("Use GetEntityInstance(ulong) instead.")]
         public static E GetEntity<E>(ulong id) where E : class, UMI3DEntity
+        {
+            return Instance.GetEntityInstance<E>(id);
+        }
+
+        /// <summary>
+        /// Get entity by id.
+        /// </summary>
+        /// <param name="id">Entity to get id</param>
+        public E GetEntityInstance<E>(ulong id) where E : class, UMI3DEntity
         {
             if (Exists)
                 return Instance.entities[id] as E;
@@ -401,6 +411,16 @@ namespace umi3d.edk
         /// Register an entity to the environment with an id, and return it's id. 
         /// </summary>
         /// <param name="entity">Entity to register</param>
+        /// <returns>Registered object's id</returns>
+        public virtual ulong RegisterEntity(UMI3DEntity entity)
+        {
+            return Register(entity);
+        }
+
+        /// <summary>
+        /// Register an entity to the environment with an id, and return it's id. 
+        /// </summary>
+        /// <param name="entity">Entity to register</param>
         /// <param name="id">id to use</param>
         /// <returns>Registered object's id (same as id field if the id wasn't already used).</returns>
         public static ulong Register(UMI3DEntity entity, ulong id)
@@ -420,6 +440,17 @@ namespace umi3d.edk
             {
                 throw new System.NullReferenceException("UMI3DEnvironment doesn't exists !");
             }
+        }
+
+        /// <summary>
+        /// Register an entity to the environment with an id, and return it's id. 
+        /// </summary>
+        /// <param name="entity">Entity to register</param>
+        /// <param name="id">id to use</param>
+        /// <returns>Registered object's id (same as id field if the id wasn't already used).</returns>
+        public virtual ulong RegisterEntity(UMI3DEntity entity, ulong id)
+        {
+            return Register(entity, id);
         }
 
         /// <summary>

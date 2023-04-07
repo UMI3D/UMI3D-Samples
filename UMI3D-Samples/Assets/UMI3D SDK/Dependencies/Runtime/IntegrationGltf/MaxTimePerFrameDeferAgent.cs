@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GLTFast
 {
@@ -23,7 +22,7 @@ namespace GLTFast
         private float timeAtBeginning = 0;
         public bool ShouldDefer()
         {
-            if (Time.realtimeSinceStartup - timeAtBeginning > timeBudget)
+            if(Time.realtimeSinceStartup - timeAtBeginning > timeBudget)
             {
                 timeAtBeginning = Time.realtimeSinceStartup;
                 return true;
@@ -31,24 +30,6 @@ namespace GLTFast
           //  Debug.Log(" -> " + Time.realtimeSinceStartup + "  " + timeAtBeginning);
             return false;
         }
-
-        public bool ShouldDefer(float duration)
-        {
-            if (Time.realtimeSinceStartup - timeAtBeginning > duration)
-            {
-                timeAtBeginning = Time.realtimeSinceStartup;
-                return true;
-            }
-            //  Debug.Log(" -> " + Time.realtimeSinceStartup + "  " + timeAtBeginning);
-            return false;
-        }
-
-#pragma warning disable 1998
-        /// <inheritdoc />
-        public async Task BreakPoint() { }
-        /// <inheritdoc />
-        public async Task BreakPoint(float duration) { }
-#pragma warning restore 1998
     }
 }
 

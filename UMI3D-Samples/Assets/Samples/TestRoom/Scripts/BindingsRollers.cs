@@ -21,6 +21,7 @@ using umi3d.edk.userCapture;
 using umi3d.common.userCapture;
 using umi3d.edk.collaboration;
 using UnityEngine;
+using inetum.unityUtils;
 
 public class BindingsRollers : MonoBehaviour
 {
@@ -64,8 +65,8 @@ public class BindingsRollers : MonoBehaviour
 
         tempUser = content.user as UMI3DTrackedUser;
 
-        ResetPosition = tempUser.Avatar.transform.localPosition;
-        ResetRotation = tempUser.Avatar.transform.localRotation;
+        ResetPosition = tempUser.CurrentTrackingFrame.position; 
+        ResetRotation = tempUser.CurrentTrackingFrame.rotation;
 
         UMI3DBinding LeftBinding = new UMI3DBinding()
         {
@@ -75,7 +76,7 @@ public class BindingsRollers : MonoBehaviour
             syncPosition = true,
             syncRotation = true,
             freezeWorldScale = true,
-            offsetRotation = Quaternion.Euler(0, 80.7f, 0),
+            offsetRotation = new Vector4().FromQuaternion(Quaternion.Euler(0, 80.7f, 0)),
             offsetPosition = new Vector3(0.034f, 0, 0.065f)
         };
 
@@ -87,73 +88,73 @@ public class BindingsRollers : MonoBehaviour
             syncPosition = true,
             syncRotation = true,
             freezeWorldScale = true,
-            offsetRotation = Quaternion.Euler(0, 94.42f, 0),
+            offsetRotation = new Vector4().FromQuaternion(Quaternion.Euler(0, 94.42f, 0)),
             offsetPosition = new Vector3(-0.034f, 0, 0.065f)
         };
 
         rollerBindings.Add(LeftBinding);
         rollerBindings.Add(RightBinding);
 
-        SetEntityProperty op = UMI3DEmbodimentManager.Instance.UpdateBindingList(tempUser.Avatar, rollerBindings);
+        //SetEntityProperty op = UMI3DEmbodimentManager.Instance.UpdateBindingList(tempUser.Avatar, rollerBindings);
 
-        Transaction transaction = new Transaction();
-        transaction.AddIfNotNull(op);
-        transaction.reliable = true;
+        //Transaction transaction = new Transaction();
+        //transaction.AddIfNotNull(op);
+        //transaction.reliable = true;
 
-        UMI3DServer.Dispatch(transaction);
+        //UMI3DServer.Dispatch(transaction);
 
-        UMI3DEmbodimentManager.Instance.VehicleEmbarkment(tempUser, VehicleModel);
+        //UMI3DEmbodimentManager.Instance.VehicleEmbarkment(tempUser, VehicleModel);
 
-        StartVehicleInterpolation();
+        //StartVehicleInterpolation();
 
-        updateCoroutine = StartCoroutine(UpdateInterpolation());
-        StartCoroutine(MoveAroundTheScene());
+        //updateCoroutine = StartCoroutine(UpdateInterpolation());
+        //StartCoroutine(MoveAroundTheScene());
     }
 
     public void UnbindRollers()
     {
-        if (tempUser == null)
-            return;
+        //if (tempUser == null)
+        //    return;
 
-        Transaction transaction = new Transaction();
-        transaction.reliable = true;
+        //Transaction transaction = new Transaction();
+        //transaction.reliable = true;
 
-        transaction.AddIfNotNull(UMI3DEmbodimentManager.Instance.UpdateBindingList(tempUser.Avatar, new List<UMI3DBinding>()));
+        //transaction.AddIfNotNull(UMI3DEmbodimentManager.Instance.UpdateBindingList(tempUser.Avatar, new List<UMI3DBinding>()));
 
-        UMI3DServer.Dispatch(transaction);
-        tempUser = null;
-        rollerBindings = new List<UMI3DBinding>();
+        //UMI3DServer.Dispatch(transaction);
+        //tempUser = null;
+        //rollerBindings = new List<UMI3DBinding>();
     }
 
-    IEnumerator MoveAroundTheScene()
-    {
-        yield return new WaitForSeconds(1);
+    //IEnumerator MoveAroundTheScene()
+    //{
+    //    yield return new WaitForSeconds(1);
 
-        float startAngle = Vector3.Angle(Vector3.forward, VehicleModel.transform.position - Center.position) * Mathf.Deg2Rad;
+    //    float startAngle = Vector3.Angle(Vector3.forward, VehicleModel.transform.position - Center.position) * Mathf.Deg2Rad;
 
-        angle = startAngle;
+    //    angle = startAngle;
 
-        while (angle < 2*Mathf.PI + startAngle)
-        {
-            angle += MovementSpeed * Time.deltaTime;
+    //    while (angle < 2*Mathf.PI + startAngle)
+    //    {
+    //        angle += MovementSpeed * Time.deltaTime;
 
-            Vector3 offset = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * MovementRadius;
+    //        Vector3 offset = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * MovementRadius;
 
-            VehicleModel.transform.position = Center.position + offset + new Vector3(0, VehicleModel.transform.position.y, 0);
-            VehicleModel.transform.rotation = Quaternion.Euler(0, Mathf.Atan2(Mathf.Sin(angle), Mathf.Cos(angle)) * (180 / Mathf.PI), 0) * Quaternion.Euler(0, 90, 0);
+    //        VehicleModel.transform.position = Center.position + offset + new Vector3(0, VehicleModel.transform.position.y, 0);
+    //        VehicleModel.transform.rotation = Quaternion.Euler(0, Mathf.Atan2(Mathf.Sin(angle), Mathf.Cos(angle)) * (180 / Mathf.PI), 0) * Quaternion.Euler(0, 90, 0);
 
-            yield return new WaitForEndOfFrame();
-        }
+    //        yield return new WaitForEndOfFrame();
+    //    }
 
-        StopVehicleInterpolation();
-        StopCoroutine(updateCoroutine);
+    //    StopVehicleInterpolation();
+    //    StopCoroutine(updateCoroutine);
 
-        yield return new WaitForSeconds(1);
+    //    yield return new WaitForSeconds(1);
 
-        UMI3DEmbodimentManager.Instance.VehicleEmbarkment(tempUser, 0, default, default, UMI3DEmbodimentManager.Instance.EmbodimentsScene, default, ResetPosition, ResetRotation);
+    //    UMI3DEmbodimentManager.Instance.VehicleEmbarkment(tempUser, 0, default, default, UMI3DEmbodimentManager.Instance.EmbodimentsScene, default, ResetPosition, ResetRotation);
 
-        UnbindRollers();
-    }
+    //    UnbindRollers();
+    //}
 
     void StartVehicleInterpolation()
     {

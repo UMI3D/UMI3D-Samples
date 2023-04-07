@@ -32,6 +32,7 @@ namespace umi3d.common
         public const uint GetLocalInfoRequest = 7;
         public const uint RedirectionRequest = 8;
         public const uint ForceLogoutRequest = 9;
+        public const uint PlayPoseRequest = 10;
 
         public const uint UserMicrophoneStatus = 21;
         public const uint UserAvatarStatus = 22;
@@ -64,6 +65,7 @@ namespace umi3d.common
         public const uint SetSendingTracking = 305;
         public const uint VehicleRequest = 306;
         public const uint VehicleConfirmation = 307;
+        public const uint SetUTSBoneTargetFPS = 308;
 
         public const uint InteractionRequest = 10001;
         public const uint EventStateChanged = 10002;
@@ -80,6 +82,7 @@ namespace umi3d.common
         public const uint UserTrackingFrame = 10013;
         public const uint NotificationCallback = 10014;
         public const uint BoardedVehicleRequest = 10015;
+        public const uint UserTrackingBone = 10016;
 
         public const uint EmoteRequest = 10020;
 

@@ -1,4 +1,4 @@
-﻿// Copyright 2020-2022 Andreas Atteneder
+﻿// Copyright 2020 Andreas Atteneder
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,12 +15,8 @@
 
 namespace GLTFast.Schema
 {
-    
-    /// <summary>
-    /// Image data used to create a texture.
-    /// </summary>
     [System.Serializable]
-    public class Image : NamedObject
+    public class Image : RootChild
     {
         /// <summary>
         /// The uri of the image.  Relative paths are relative to the .gltf file.
@@ -41,19 +37,8 @@ namespace GLTFast.Schema
         /// </summary>
         public int bufferView = -1;
 
-        internal void GltfSerialize(JsonWriter writer) {
-            writer.AddObject();
-            GltfSerializeRoot(writer);
-            if (!string.IsNullOrEmpty(uri)) {
-                writer.AddProperty("uri", uri);
-            }
-            if (!string.IsNullOrEmpty(mimeType)) {
-                writer.AddProperty("mimeType", mimeType);
-            }
-            if (bufferView >= 0) {
-                writer.AddProperty("bufferView", bufferView);
-            }
-            writer.Close();
-        }
+#if KTX_UNITY
+        public ImageExtension extensions;
+#endif
     }
 }

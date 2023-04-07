@@ -98,61 +98,61 @@ public class BindingActivation : MonoBehaviour
     /// Grabs the object or releases it if it was already hold by a user.
     /// </summary>
     /// <param name="content"></param>
-    public void UpdateBindingActivation(umi3d.edk.interaction.AbstractInteraction.InteractionEventContent content)
-    {
-        UMI3DTrackedUser user = content.user as UMI3DTrackedUser;
-        uint bonetype = content.boneType;
+    //public void UpdateBindingActivation(umi3d.edk.interaction.AbstractInteraction.InteractionEventContent content)
+    //{
+    //    UMI3DTrackedUser user = content.user as UMI3DTrackedUser;
+    //    uint bonetype = content.boneType;
 
-        if (!activation)
-        {
-            if (!bonetype.Equals(BoneType.Viewpoint) && Vector3.Distance(transform.position, user.Avatar.skeletonAnimator.GetBoneTransform(bonetype.ConvertToBoneType().GetValueOrDefault()).transform.position) > HandDistActivation)
-                return;
+    //    if (!activation)
+    //    {
+    //        if (!bonetype.Equals(BoneType.Viewpoint) && Vector3.Distance(transform.position, user.Avatar.skeletonAnimator.GetBoneTransform(bonetype.ConvertToBoneType().GetValueOrDefault()).transform.position) > HandDistActivation)
+    //            return;
 
-            bindingAnchor = user.Avatar.skeletonAnimator.GetBoneTransform(bonetype.ConvertToBoneType().GetValueOrDefault()).transform;
-            activation = true;
+    //        bindingAnchor = user.Avatar.skeletonAnimator.GetBoneTransform(bonetype.ConvertToBoneType().GetValueOrDefault()).transform;
+    //        activation = true;
 
-            localPosOffset = bonetype.Equals(BoneType.Viewpoint) ? Vector3.forward * 1.5f : bindingAnchor.InverseTransformPoint(transform.position);
-            localRotOffset = Quaternion.Inverse(bindingAnchor.rotation) * transform.rotation;
+    //        localPosOffset = bonetype.Equals(BoneType.Viewpoint) ? Vector3.forward * 1.5f : bindingAnchor.InverseTransformPoint(transform.position);
+    //        localRotOffset = Quaternion.Inverse(bindingAnchor.rotation) * transform.rotation;
 
-            tempUserID = user.Id();
+    //        tempUserID = user.Id();
 
-            tempBinding = new UMI3DBinding()
-            {
-                node = GetComponent<UMI3DNode>(),
-                boneType = bonetype,
-                isBinded = true,
-                syncPosition = true,
-                offsetPosition = localPosOffset,
-                offsetRotation = localRotOffset
-            };
+    //        tempBinding = new UMI3DBinding()
+    //        {
+    //            node = GetComponent<UMI3DNode>(),
+    //            boneType = bonetype,
+    //            isBinded = true,
+    //            syncPosition = true,
+    //            offsetPosition = localPosOffset,
+    //            offsetRotation = localRotOffset
+    //        };
 
-            SetEntityProperty op = UMI3DEmbodimentManager.Instance.AddBinding(user.Avatar, tempBinding);
+    //        SetEntityProperty op = UMI3DEmbodimentManager.Instance.AddBinding(user.Avatar, tempBinding);
 
-            Transaction transaction = new Transaction();
-            transaction.AddIfNotNull(op);
-            transaction.reliable = true;
+    //        Transaction transaction = new Transaction();
+    //        transaction.AddIfNotNull(op);
+    //        transaction.reliable = true;
 
 
-            UMI3DServer.Dispatch(transaction);
-        }
-        else
-        {
-            if (!user.Id().Equals(tempUserID))
-                return;
+    //        UMI3DServer.Dispatch(transaction);
+    //    }
+    //    else
+    //    {
+    //        if (!user.Id().Equals(tempUserID))
+    //            return;
 
-            activation = false;
+    //        activation = false;
 
-            Transaction transaction = new Transaction();
+    //        Transaction transaction = new Transaction();
 
-            transaction.AddIfNotNull(UMI3DEmbodimentManager.Instance.RemoveBinding(user.Avatar, tempBinding));
-            transaction.AddIfNotNull(GetComponent<UMI3DNode>().objectPosition.SetValue(tempLocalPos));
-            transaction.AddIfNotNull(GetComponent<UMI3DNode>().objectRotation.SetValue(tempLocalRot));
+    //        transaction.AddIfNotNull(UMI3DEmbodimentManager.Instance.RemoveBinding(user.Avatar, tempBinding));
+    //        transaction.AddIfNotNull(GetComponent<UMI3DNode>().objectPosition.SetValue(tempLocalPos));
+    //        transaction.AddIfNotNull(GetComponent<UMI3DNode>().objectRotation.SetValue(tempLocalRot));
 
-            transaction.reliable = true;
+    //        transaction.reliable = true;
 
-            UMI3DServer.Dispatch(transaction);
-        }
-    }
+    //        UMI3DServer.Dispatch(transaction);
+    //    }
+    //  }
 
     #endregion
 }

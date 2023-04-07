@@ -35,21 +35,21 @@ namespace umi3d.common
             switch (value)
             {
                 case long:
-                    type = (int)UMI3DAnimatorParameyerType.Integer;
+                    type = (int)UMI3DAnimatorParameterType.Integer;
                     this.value = (int)((long)this.value % Int32.MaxValue);
                     break;
                 case int:
-                    type = (int) UMI3DAnimatorParameyerType.Integer;
+                    type = (int) UMI3DAnimatorParameterType.Integer;
                     break;
                 case double:
                     this.value = (float)(double)this.value;
-                    type = (int)UMI3DAnimatorParameyerType.Float;
+                    type = (int)UMI3DAnimatorParameterType.Float;
                     break;
                 case float:
-                    type = (int) UMI3DAnimatorParameyerType.Float;
+                    type = (int) UMI3DAnimatorParameterType.Float;
                     break;
                 case bool:
-                    type = (int)UMI3DAnimatorParameyerType.Bool;
+                    type = (int)UMI3DAnimatorParameterType.Bool;
                     break;
                 default:
                     UMI3DLogger.LogError("Animator parameter type not supported " + value.GetType(), DebugScope.Animation);
@@ -84,19 +84,19 @@ namespace umi3d.common
         /// <returns></returns>
         public static object FromByte(ByteContainer container)
         {
-            UMI3DAnimatorParameyerType type = (UMI3DAnimatorParameyerType)UMI3DSerializer.Read<int>(container);
+            UMI3DAnimatorParameterType type = (UMI3DAnimatorParameterType)UMI3DSerializer.Read<int>(container);
 
             object value = null;
 
             switch (type)
             {
-                case UMI3DAnimatorParameyerType.Bool:
+                case UMI3DAnimatorParameterType.Bool:
                     value = UMI3DSerializer.Read<bool>(container);
                     break;
-                case UMI3DAnimatorParameyerType.Float:
+                case UMI3DAnimatorParameterType.Float:
                     value = UMI3DSerializer.Read<float>(container);
                     break;
-                case UMI3DAnimatorParameyerType.Integer:
+                case UMI3DAnimatorParameterType.Integer:
                     value = UMI3DSerializer.Read<int>(container);
                     break;
             }
@@ -106,7 +106,7 @@ namespace umi3d.common
     }
 
 
-    public enum UMI3DAnimatorParameyerType
+    public enum UMI3DAnimatorParameterType
     {
         Bool, Float, Integer
     }

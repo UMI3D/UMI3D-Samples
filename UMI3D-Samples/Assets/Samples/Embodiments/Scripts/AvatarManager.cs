@@ -65,83 +65,83 @@ public class AvatarManager : MonoBehaviour
     [SerializeField, EditorReadOnly]
     Vector3 rotationOffset;
     // Start is called before the first frame update
-    void Start()
-    {
-        UMI3DEmbodimentManager.Instance.NewEmbodiment.AddListener(NewAvatar);
-    }
+    //void Start()
+    //{
+    //    UMI3DEmbodimentManager.Instance.NewEmbodiment.AddListener(NewAvatar);
+    //}
 
-    void NewAvatar(UMI3DAvatarNode node)
-    {
-        if (UMI3DCollaborationServer.Collaboration.GetUser(node.userId) != null && !Handled.Contains(UMI3DCollaborationServer.Collaboration.GetUser(node.userId)))
-        {
-            Handled.Add(UMI3DCollaborationServer.Collaboration.GetUser(node.userId));
-            StartCoroutine(_NewAvatar(UMI3DCollaborationServer.Collaboration.GetUser(node.userId)));
-        }
-    }
+    //void NewAvatar(UMI3DAvatarNode node)
+    //{
+    //    if (UMI3DCollaborationServer.Collaboration.GetUser(node.userId) != null && !Handled.Contains(UMI3DCollaborationServer.Collaboration.GetUser(node.userId)))
+    //    {
+    //        Handled.Add(UMI3DCollaborationServer.Collaboration.GetUser(node.userId));
+    //        StartCoroutine(_NewAvatar(UMI3DCollaborationServer.Collaboration.GetUser(node.userId)));
+    //    }
+    //}
 
-    IEnumerator _NewAvatar(UMI3DCollaborationUser user)
-    {
-        if (user == null) yield break;
-        var wait = new WaitForFixedUpdate();
+    //IEnumerator _NewAvatar(UMI3DCollaborationUser user)
+    //{
+    //    if (user == null) yield break;
+    //    var wait = new WaitForFixedUpdate();
 
-        UMI3DAvatarNode avatarnode = user.Avatar;
+    //    UMI3DAvatarNode avatarnode = user.Avatar;
 
-        while (avatarnode == null)
-        {
-            yield return wait;
-            avatarnode = user.Avatar;
-        }
+    //    while (avatarnode == null)
+    //    {
+    //        yield return wait;
+    //        avatarnode = user.Avatar;
+    //    }
 
-        while (user.status.Equals(StatusType.READY))
-        {
-            yield return wait;
-        }
+    //    while (user.status.Equals(StatusType.READY))
+    //    {
+    //        yield return wait;
+    //    }
 
-        GameObject avatarModelnode = new GameObject("AvatarModel");
-        avatarModelnode.transform.SetParent(avatarnode.transform);
-        avatarModelnode.transform.localPosition = Vector3.zero;
-        avatarModelnode.transform.localRotation = Quaternion.identity;
+    //    GameObject avatarModelnode = new GameObject("AvatarModel");
+    //    avatarModelnode.transform.SetParent(avatarnode.transform);
+    //    avatarModelnode.transform.localPosition = Vector3.zero;
+    //    avatarModelnode.transform.localRotation = Quaternion.identity;
 
-        UMI3DModel avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
+    //    UMI3DModel avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
 
-        avatarModel.objectModel.SetValue(Avatar);
-        avatarModel.objectScale.SetValue(UMI3DEmbodimentManager.Instance.embodimentSize[avatarnode.userId]);
+    //    avatarModel.objectModel.SetValue(Avatar);
+    //    avatarModel.objectScale.SetValue(UMI3DEmbodimentManager.Instance.embodimentSize[avatarnode.userId]);
 
-        List<Operation> ops = new List<Operation>();
+    //    List<Operation> ops = new List<Operation>();
 
-        LoadEntity op = avatarModel.GetLoadEntity();
-        ops.Add(op);
-        BindingsTransactionManager.Instance.Dispatch(ops, true);
+    //    LoadEntity op = avatarModel.GetLoadEntity();
+    //    ops.Add(op);
+    //    BindingsTransactionManager.Instance.Dispatch(ops, true);
 
-        StartCoroutine(Binding(avatarModel, avatarnode, user));
-    }
+    //    StartCoroutine(Binding(avatarModel, avatarnode, user));
+    //}
 
-    IEnumerator Binding(UMI3DModel avatarModel, UMI3DAvatarNode avatarnode, UMI3DUser user)
-    {
-        List<Operation> ops = new List<Operation>();
+    //IEnumerator Binding(UMI3DModel avatarModel, UMI3DAvatarNode avatarnode, UMI3DUser user)
+    //{
+    //    List<Operation> ops = new List<Operation>();
 
-        SetEntityProperty op;
-        if (bindRig)
-        {
-            foreach (Bind bind in binds.binds)
-            {
-                UMI3DBinding binding = new UMI3DBinding()
-                {
-                    boneType = bind.boneType,
-                    rigName = bind.rigName,
-                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
-                    offsetPosition = bind.positionOffset,
-                    node = avatarModel,
-                    isBinded = true,
-                    syncPosition = bind.boneType.Equals(BoneType.CenterFeet) || bind.boneType.Equals(BoneType.Hips)
-                };
+    //    SetEntityProperty op;
+    //    if (bindRig)
+    //    {
+    //        foreach (Bind bind in binds.binds)
+    //        {
+    //            UMI3DBinding binding = new UMI3DBinding()
+    //            {
+    //                boneType = bind.boneType,
+    //                rigName = bind.rigName,
+    //                offsetRotation = Quaternion.Euler(bind.rotationOffset),
+    //                offsetPosition = bind.positionOffset,
+    //                node = avatarModel,
+    //                isBinded = true,
+    //                syncPosition = bind.boneType.Equals(BoneType.CenterFeet) || bind.boneType.Equals(BoneType.Hips)
+    //            };
 
-                op = UMI3DEmbodimentManager.Instance.AddBinding(avatarnode, binding);
-                ops.Add(op);
-            }
-        }
-        BindingsTransactionManager.Instance.Dispatch(ops, true);
-        yield break;
-    }
+    //            op = UMI3DEmbodimentManager.Instance.AddBinding(avatarnode, binding);
+    //            ops.Add(op);
+    //        }
+    //    }
+    //    BindingsTransactionManager.Instance.Dispatch(ops, true);
+    //    yield break;
+    //}
 
 }

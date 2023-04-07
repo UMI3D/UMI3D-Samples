@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Andreas Atteneder
+// Copyright 2020 Andreas Atteneder
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,31 +15,13 @@
 
 namespace GLTFast.Schema {
 
-    /// <summary>
-    /// Texture extensions
-    /// </summary>
     [System.Serializable]
     public class TextureExtension {
-        
-        /// <inheritdoc cref="Extension.TextureBasisUniversal"/>
-        public TextureBasisUniversal KHR_texture_basisu = null;
-
-        internal void GltfSerialize(JsonWriter writer) {
-            throw new System.NotImplementedException($"GltfSerialize missing on {GetType()}");
-        }
+        public TextureFormat KHR_texture_basisu = null;
     }
 
-    /// <summary>
-    /// Basis Universal texture extension
-    /// <seealso cref="Extension.TextureBasisUniversal"/>
-    /// </summary>
     [System.Serializable]
-    public class TextureBasisUniversal {
-        
-        /// <summary>
-        /// Index of the image which defines a reference to the KTX v2 image
-        /// with Basis Universal supercompression.
-        /// </summary>
+    public class TextureFormat {
         public int source = -1;
     }
 }
