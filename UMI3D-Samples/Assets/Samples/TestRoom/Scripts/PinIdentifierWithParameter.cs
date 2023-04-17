@@ -41,6 +41,7 @@ public class PinIdentifierWithParameter : PinIdentifierApi
 
     //void debugForm(FormDto form)
     //{
+
     //    if(form != null && form.fields != null)
     //    foreach (var dto in form.fields)
     //        switch (dto)
