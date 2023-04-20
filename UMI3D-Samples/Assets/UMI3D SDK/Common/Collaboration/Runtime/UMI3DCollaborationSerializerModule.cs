@@ -788,8 +788,8 @@ namespace umi3d.common.collaboration
                 case true when typeof(T) == typeof(BonePoseDto):
                     {
                         uint bone;
-                        Vector3 position;
-                        Vector4 rotation;
+                        SerializableVector3 position;
+                        SerializableVector4 rotation;
 
                         readable = UMI3DSerializer.TryRead(container, out bone);
                         readable &= UMI3DSerializer.TryRead(container, out position);
@@ -849,7 +849,7 @@ namespace umi3d.common.collaboration
                 case true when typeof(T) == typeof(BoneRotationConditionDto):
                     {
                         uint boneId;
-                        Vector4 rotation;
+                        SerializableVector4 rotation;
                         readable = UMI3DSerializer.TryRead(container, out boneId);
                         readable &= UMI3DSerializer.TryRead(container, out rotation);
 
@@ -869,7 +869,7 @@ namespace umi3d.common.collaboration
 
                 case true when typeof(T) == typeof(DirectionConditionDto):
                     {
-                        Vector3 direction;
+                        SerializableVector3 direction;
                         readable = UMI3DSerializer.TryRead(container, out direction);
 
                         if (readable)
@@ -887,7 +887,7 @@ namespace umi3d.common.collaboration
 
                 case true when typeof(T) == typeof(UserScaleConditionDto):
                     {
-                        Vector3 scale;
+                        SerializableVector3 scale;
                         readable = UMI3DSerializer.TryRead(container, out scale);
 
                         if (readable)
@@ -905,7 +905,7 @@ namespace umi3d.common.collaboration
 
                 case true when typeof(T) == typeof(ScaleConditionDto):
                     {
-                        Vector3 scale;
+                        SerializableVector3 scale;
                         readable = UMI3DSerializer.TryRead(container, out scale);
 
                         if (readable)

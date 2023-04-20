@@ -50,10 +50,10 @@ namespace umi3d.common.userCapture
         /// <summary>
         /// The position of the bone
         /// </summary>
-        public Vector3 position { get; set; }
+        public SerializableVector3 position { get; set; }
         /// <summary>
         /// The rotation of the bone
         /// </summary>
-        public Vector4 rotation { get; set; }
+        public SerializableVector4 rotation { get; set; }
     }
 }
