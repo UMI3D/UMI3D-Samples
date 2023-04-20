@@ -433,7 +433,9 @@ namespace umi3d.common
         /// <returns></returns>
         public static Bytable WriteCollection<T>(IEnumerable<T> value)
         {
-            if (typeof(IBytable).IsAssignableFrom(typeof(T)) || (value.Count() > 0 && !value.Any(e => !typeof(IBytable).IsAssignableFrom(e.GetType()))))
+            UnityEngine.Debug.Log("111111111111111111111111 ::: " + (value == null));
+            UnityEngine.Debug.Log("TYPE OF T  ::: " + (typeof(T)));
+            if (typeof(IBytable).IsAssignableFrom(typeof(T)) || (value.Count() > 0 && !value.Any(e => { UnityEngine.Debug.Log("2222222222222222222222 :::" + (e == null)); return !typeof(IBytable).IsAssignableFrom(e.GetType());})))
             {
                 return WriteIBytableCollection(value.Select((e) => e as IBytable));
             }

@@ -70,6 +70,8 @@ namespace umi3d.edk.userCapture
 
         public async Task InitNewUserPoses(UMI3DUser user, List<PoseDto> userPoses)
         {
+            //if (userPoses.Contains(null)) return;
+
             Operation operation;
             lock (joinLock)
             {
