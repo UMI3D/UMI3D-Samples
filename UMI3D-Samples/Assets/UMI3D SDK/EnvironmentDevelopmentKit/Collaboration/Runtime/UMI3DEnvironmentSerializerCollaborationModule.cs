@@ -83,7 +83,6 @@ namespace umi3d.edk.collaboration
                      + UMI3DSerializer.Write<string>(user.login);
                     return true;
                 case UMI3DCollaborationUser user:
-                    Debug.Log("je passeeeeeee");
                     bytable = UMI3DSerializer.Write<ulong>(user.Id())
                     +UMI3DSerializer.Write<uint>((uint)user.status)
                     //+ UMI3DSerializer.Write<ulong>(user.Avatar == null ? 0 : user.Avatar.Id())

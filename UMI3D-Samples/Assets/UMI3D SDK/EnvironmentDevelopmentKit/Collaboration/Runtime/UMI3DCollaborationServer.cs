@@ -607,7 +607,6 @@ namespace umi3d.edk.collaboration
                 }
                 if (user.status < StatusType.ACTIVE) continue;
                 transaction.Simplify();
-                UnityEngine.Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBb");
                 SendTransaction(user, transaction);
 
                 TransactionToBeSend.Remove(user);

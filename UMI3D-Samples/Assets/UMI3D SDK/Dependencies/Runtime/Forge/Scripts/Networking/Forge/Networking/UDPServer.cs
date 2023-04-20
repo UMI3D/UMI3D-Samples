@@ -59,7 +59,6 @@ namespace BeardedManStudios.Forge.Networking
 		public void Send(NetworkingPlayer player, FrameStream frame, bool reliable = false)
 		{
 			UDPPacketComposer composer = new UDPPacketComposer(this, player, frame, reliable);
-            UnityEngine.Debug.Log(" SEEEEEEEEEEEEEEEEEENNNNNNNNNNNNNNNNDDDDDDDDDDDDDDD ");
             // If this message is reliable then make sure to keep a reference to the composer
             // so that there are not any run-away threads
             if (reliable)

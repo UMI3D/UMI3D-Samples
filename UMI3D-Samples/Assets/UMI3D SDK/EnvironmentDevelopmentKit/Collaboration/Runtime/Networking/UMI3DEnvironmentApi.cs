@@ -475,7 +475,7 @@ namespace umi3d.edk.collaboration
                     try
                     {
                         JoinDto join = dto as JoinDto;
-                        await user.JoinDtoReception(join.userSize, join.clientLocalPoses);
+                        await user.JoinDtoReception(join.userSize, join.clientLocalPoses.ToArray());
 
                         e.Response.WriteContent(UMI3DEnvironment.ToEnterDto(user).ToBson());
                         await UMI3DCollaborationServer.NotifyUserJoin(user);
@@ -750,6 +750,9 @@ namespace umi3d.edk.collaboration
                     memstream.Write(buffer, 0, bytesRead);
                 bytes = memstream.ToArray();
             }
+
+            //StreamWriter streamWriter = new StreamWriter(@"C:\Users\VladimirChantitch\Documents\txt.txt", false);
+            //streamWriter.Write(bytes);
             action.Invoke(UMI3DDto.FromBson(bytes));
         }
 

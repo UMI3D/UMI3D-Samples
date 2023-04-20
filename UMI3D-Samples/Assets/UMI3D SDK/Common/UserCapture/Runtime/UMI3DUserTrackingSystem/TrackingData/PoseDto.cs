@@ -18,6 +18,7 @@ using System.Collections.Generic;
 
 namespace umi3d.common.userCapture
 {
+    [System.Serializable]
     public class PoseDto : UMI3DDto
     {
         public PoseDto() { }
@@ -36,14 +37,17 @@ namespace umi3d.common.userCapture
         /// <summary>
         /// all the bone pose that are composing the current pose
         /// </summary>
-        public List<BoneDto> bones { get; private set; }
+        public List<BoneDto> bones { get; set; }
         public void SetBonePoseDtoArray(List<BoneDto> bones)
         {
             this.bones = bones;
         }
 
-        public BonePoseDto boneAnchor { get; private set; }
+        public BonePoseDto boneAnchor { get;  set; }
 
         public int id { get; set; }
+
+        public SerializableVector3 PleaseDealeteMeFast = new SerializableVector3();
+        public uint ImToBeDeleted;
     }
 }

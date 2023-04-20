@@ -594,7 +594,7 @@ namespace umi3d.common.userCapture
             PoseSetterBoneComponent bone_component = bone_components.Find(bc => bc.BoneType == bonePoseDto.bone);
             if (bone_component != null)
             {
-                bone_component.transform.rotation = bonePoseDto.rotation.ToQuaternion();
+                bone_component.transform.rotation = bonePoseDto.Rotation.ToQuaternion();
                 bone_component.isSavable = true;
             }
         }

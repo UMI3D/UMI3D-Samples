@@ -533,9 +533,7 @@ namespace umi3d.edk.collaboration
             var bin = new Binary(timestep, isTcpClient, data, BeardedManStudios.Forge.Networking.Receivers.Target, channel, isTcp);
             try
             {
-                Debug.Log("HHHHHHHHHHHHHHHHHHHHHHHHHH");
                 server.Send(player, bin, isReliable);
-                Debug.Log("OOOOOOOOOOOOOOOOOOOOOOOOOO");
             }
             catch (Exception e)
             {
