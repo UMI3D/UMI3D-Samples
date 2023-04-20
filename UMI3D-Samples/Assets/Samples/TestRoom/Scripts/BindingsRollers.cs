@@ -68,32 +68,32 @@ public class BindingsRollers : MonoBehaviour
         ResetPosition = tempUser.CurrentTrackingFrame.position; 
         ResetRotation = tempUser.CurrentTrackingFrame.rotation;
 
-        UMI3DBinding LeftBinding = new UMI3DBinding()
-        {
-            node = LeftRoller.GetComponent<UMI3DNode>(),
-            boneType = BoneType.LeftAnkle,
-            isBinded = true,
-            syncPosition = true,
-            syncRotation = true,
-            freezeWorldScale = true,
-            offsetRotation = new Vector4().FromQuaternion(Quaternion.Euler(0, 80.7f, 0)),
-            offsetPosition = new Vector3(0.034f, 0, 0.065f)
-        };
+        //UMI3DBinding LeftBinding = new UMI3DBinding()
+        //{
+        //    node = LeftRoller.GetComponent<UMI3DNode>(),
+        //    boneType = BoneType.LeftAnkle,
+        //    isBinded = true,
+        //    syncPosition = true,
+        //    syncRotation = true,
+        //    freezeWorldScale = true,
+        //    offsetRotation = new Vector4().FromQuaternion(Quaternion.Euler(0, 80.7f, 0)),
+        //    offsetPosition = new Vector3(0.034f, 0, 0.065f)
+        //};
 
-        UMI3DBinding RightBinding = new UMI3DBinding()
-        {
-            node = RightRoller.GetComponent<UMI3DNode>(),
-            boneType = BoneType.RightAnkle,
-            isBinded = true,
-            syncPosition = true,
-            syncRotation = true,
-            freezeWorldScale = true,
-            offsetRotation = new Vector4().FromQuaternion(Quaternion.Euler(0, 94.42f, 0)),
-            offsetPosition = new Vector3(-0.034f, 0, 0.065f)
-        };
+        //UMI3DBinding RightBinding = new UMI3DBinding()
+        //{
+        //    node = RightRoller.GetComponent<UMI3DNode>(),
+        //    boneType = BoneType.RightAnkle,
+        //    isBinded = true,
+        //    syncPosition = true,
+        //    syncRotation = true,
+        //    freezeWorldScale = true,
+        //    offsetRotation = new Vector4().FromQuaternion(Quaternion.Euler(0, 94.42f, 0)),
+        //    offsetPosition = new Vector3(-0.034f, 0, 0.065f)
+        //};
 
-        rollerBindings.Add(LeftBinding);
-        rollerBindings.Add(RightBinding);
+        //rollerBindings.Add(LeftBinding);
+        //rollerBindings.Add(RightBinding);
 
         //SetEntityProperty op = UMI3DEmbodimentManager.Instance.UpdateBindingList(tempUser.Avatar, rollerBindings);
 
