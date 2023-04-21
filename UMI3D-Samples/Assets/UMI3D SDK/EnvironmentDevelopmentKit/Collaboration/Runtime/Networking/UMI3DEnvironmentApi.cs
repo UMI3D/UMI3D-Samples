@@ -262,6 +262,7 @@ namespace umi3d.edk.collaboration
         {
             string file = e.Request.RawUrl.Substring(UMI3DNetworkingKeys.privateFiles.Length);
             file = inetum.unityUtils.Path.Combine(UMI3DServer.privateRepository, file);
+            UnityEngine.Debug.Log(file);
             file = System.Uri.UnescapeDataString(file);
             UMI3DLogger.Log($"Get private file{file}", scope);
             //Validate url.

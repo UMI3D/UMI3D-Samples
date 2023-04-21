@@ -572,7 +572,6 @@ MonoBehaviour:
   environmentName: Embodiment Test Scene
   scenes: []
   globalLibraries:
-  - {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
   - {fileID: 11400000, guid: eb88a75c6fb46e74ea6477d40a198cbb, type: 2}
   - {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
   defaultStartPosition: {x: 0, y: 0, z: -5.96}
