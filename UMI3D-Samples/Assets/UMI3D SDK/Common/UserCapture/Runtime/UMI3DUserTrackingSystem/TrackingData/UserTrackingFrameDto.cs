@@ -40,9 +40,9 @@ namespace umi3d.common.userCapture
         /// </summary>
         public List<ControllerDto> trackedBones;
 
-        public List<int> playerServerPoses;
+        public List<int> playerServerPoses = new List<int>();
 
-        public List<int> playerUserPoses;
+        public List<int> playerUserPoses = new List<int>();
 
         /// <summary>
         /// Current jump height of the avatar.
