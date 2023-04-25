@@ -102,7 +102,7 @@ public class BindingsRollers : MonoBehaviour
 
         UMI3DServer.Dispatch(transaction);
 
-        UMI3DEmbodimentManager.Instance.VehicleEmbarkment(tempUser, VehicleModel);
+        UMI3DEmbodimentManager.Instance.UpdateFrame(tempUser, VehicleModel, new Vector3(),new Quaternion());
 
         StartVehicleInterpolation();
 
@@ -150,7 +150,7 @@ public class BindingsRollers : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
-        UMI3DEmbodimentManager.Instance.VehicleEmbarkment(tempUser, 0, default, default, UMI3DEmbodimentManager.Instance.EmbodimentsScene, default, ResetPosition, ResetRotation);
+        UMI3DEmbodimentManager.Instance.UpdateFrame(tempUser, UMI3DEmbodimentManager.Instance.EmbodimentsScene, ResetPosition, ResetRotation);
 
         UnbindRollers();
     }
