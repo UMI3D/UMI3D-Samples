@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1f899c3fb63bb2498bdf6dc42c12b40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LaunchServerOnStart: 0
+  LaunchServerOnStart: 1
   Name: {fileID: 1341638982}
   Pin: {fileID: 1999748049}
   StartButton: {fileID: 37873045}
