@@ -262,7 +262,6 @@ namespace umi3d.edk.collaboration
         {
             string file = e.Request.RawUrl.Substring(UMI3DNetworkingKeys.privateFiles.Length);
             file = inetum.unityUtils.Path.Combine(UMI3DServer.privateRepository, file);
-            UnityEngine.Debug.Log(file);
             file = System.Uri.UnescapeDataString(file);
             UMI3DLogger.Log($"Get private file{file}", scope);
             //Validate url.
@@ -751,9 +750,6 @@ namespace umi3d.edk.collaboration
                     memstream.Write(buffer, 0, bytesRead);
                 bytes = memstream.ToArray();
             }
-
-            //StreamWriter streamWriter = new StreamWriter(@"C:\Users\VladimirChantitch\Documents\txt.txt", false);
-            //streamWriter.Write(bytes);
             action.Invoke(UMI3DDto.FromBson(bytes));
         }
 

@@ -38,7 +38,7 @@ public class BindingsRollers : MonoBehaviour
     public SimpleModificationListener Listener;
 
     private UMI3DTrackedUser tempUser;
-    private List<UMI3DBinding> rollerBindings = new List<UMI3DBinding>();
+    private List<RigBoneBinding> rollerBindings = new List<RigBoneBinding>();
 
     private float angle;
     private Coroutine updateCoroutine;

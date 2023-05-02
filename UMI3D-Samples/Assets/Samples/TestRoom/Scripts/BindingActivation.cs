@@ -40,7 +40,7 @@ public class BindingActivation : MonoBehaviour
     /// <summary>
     /// Current binding when <see cref="node"/> is grabbed.
     /// </summary>
-    UMI3DBinding tempBinding;
+    BoneBinding tempBinding;
 
     /// <summary>
     /// Id of the current <see cref="UMI3DUser"/> who is grabbing <see cref="node"/>.

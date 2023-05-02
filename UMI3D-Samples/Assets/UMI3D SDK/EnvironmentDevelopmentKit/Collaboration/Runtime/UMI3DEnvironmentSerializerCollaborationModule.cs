@@ -13,10 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BeardedManStudios.Forge.Networking.Unity;
 using umi3d.common;
 using umi3d.common.collaboration;
-using UnityEngine;
 
 namespace umi3d.edk.collaboration
 {
@@ -62,9 +60,9 @@ namespace umi3d.edk.collaboration
             {
                 case UserDto user:
                     bytable = UMI3DSerializer.Write<ulong>(user.id)
-                    +UMI3DSerializer.Write<uint>((uint)user.status)
+                    + UMI3DSerializer.Write<uint>((uint)user.status)
                     //+ UMI3DSerializer.Write<ulong>(user.avatarId)
-                    +UMI3DSerializer.Write<ulong>(user.audioSourceId)
+                    + UMI3DSerializer.Write<ulong>(user.audioSourceId)
                     + UMI3DSerializer.Write<int>(user.audioFrequency)
                     + UMI3DSerializer.Write<ulong>(user.videoSourceId)
                     + UMI3DSerializer.Write<uint>(user.networkId)
@@ -84,7 +82,7 @@ namespace umi3d.edk.collaboration
                     return true;
                 case UMI3DCollaborationUser user:
                     bytable = UMI3DSerializer.Write<ulong>(user.Id())
-                    +UMI3DSerializer.Write<uint>((uint)user.status)
+                    + UMI3DSerializer.Write<uint>((uint)user.status)
                     //+ UMI3DSerializer.Write<ulong>(user.Avatar == null ? 0 : user.Avatar.Id())
                     + UMI3DSerializer.Write<ulong>(user.audioPlayer?.Id() ?? 0)
                     + UMI3DSerializer.Write<int>(user.audioFrequency.GetValue())

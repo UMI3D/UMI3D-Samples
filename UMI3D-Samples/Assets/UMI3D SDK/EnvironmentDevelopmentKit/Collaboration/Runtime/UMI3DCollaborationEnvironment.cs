@@ -18,7 +18,6 @@ using umi3d.common;
 using umi3d.common.collaboration;
 using umi3d.edk.userCapture;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace umi3d.edk.collaboration
 {
@@ -40,6 +39,7 @@ namespace umi3d.edk.collaboration
             if (_dto is UMI3DCollaborationEnvironmentDto dto)
             {
                 dto.userList = UMI3DCollaborationServer.Collaboration.ToDto(user);
+                
                 dto.allPoses = UMI3DPoseManager.Instance.objectAllPoses.GetValue(user);
             }
         }

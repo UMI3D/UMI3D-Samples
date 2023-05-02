@@ -109,7 +109,7 @@ namespace umi3d.common
                     TypeNameHandling = typeNameHandling
                 };
                 UMI3DDto dto = serializer.Deserialize<UMI3DDto>(reader);
-                return dto; 
+                return dto;
             }
         }
 

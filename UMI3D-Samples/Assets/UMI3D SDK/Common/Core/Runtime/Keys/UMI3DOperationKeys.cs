@@ -52,6 +52,10 @@ namespace umi3d.common
 
         public const uint MultiSetEntityProperty = 110;
 
+        public const uint UpdateBindingsActivation = 120;
+        public const uint AddBinding = 121;
+        public const uint RemoveBinding = 122;
+
 
         public const uint ProjectTool = 200;
         public const uint SwitchTool = 201;
@@ -63,8 +67,8 @@ namespace umi3d.common
         public const uint StopInterpolationProperty = 303;
         public const uint SetSendingCameraProperty = 304;
         public const uint SetSendingTracking = 305;
-        public const uint VehicleRequest = 306;
-        public const uint VehicleConfirmation = 307;
+        public const uint FrameRequest = 306;
+        public const uint FrameConfirmation = 307;
         public const uint SetUTSBoneTargetFPS = 308;
 
         public const uint InteractionRequest = 10001;

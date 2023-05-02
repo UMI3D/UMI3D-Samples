@@ -192,7 +192,7 @@ namespace umi3d.common
 
         #region UserTracking
         // 11000-11999
-        public const uint UserBindings = 11001;
+        public const uint Bindings = 11001;
         public const uint ActiveBindings = 11002;
 
         public const uint ActivePoseOverrider = 11003;
@@ -241,6 +241,7 @@ namespace umi3d.common
         public const uint AnimationNodeId = 13401;
         public const uint AnimationStateName = 13402;
         public const uint AnimationAnimatorParameters = 13403;
+        public const uint AnimationAnimatorNormalizedTime = 13404;
 
         #endregion
 

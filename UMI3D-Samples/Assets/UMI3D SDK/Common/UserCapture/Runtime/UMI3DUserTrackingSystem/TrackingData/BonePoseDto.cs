@@ -50,11 +50,10 @@ namespace umi3d.common.userCapture
 
         [SerializeField] SerializableVector3 position = new SerializableVector3();
         [SerializeField] SerializableVector4 rotation = new SerializableVector4();
-
         /// <summary>
         /// The position of the bone
         /// </summary>
-        public SerializableVector3 Position { get => position ; set => position = value; }
+        public SerializableVector3 Position { get => position; set => position = value; }
         /// <summary>
         /// The rotation of the bone
         /// </summary>

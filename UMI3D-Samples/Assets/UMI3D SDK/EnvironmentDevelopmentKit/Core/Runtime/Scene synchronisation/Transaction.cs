@@ -138,6 +138,9 @@ namespace umi3d.edk
                     {
                         case StartInterpolationProperty starti:
                         case StopInterpolationProperty stopi:
+                        case AbstractBinding:
+                        case RemoveBinding:
+                        case UpdateBindingsActivation:
                         case SetEntityDictionaryAddProperty a:
                         case SetEntityDictionaryRemoveProperty r:
                         case SetEntityListAddProperty al:
@@ -329,7 +332,8 @@ namespace umi3d.edk
                             break;
 
                         default:
-                            throw new System.Exception($"Missing type {op.GetType()}");
+                            newOperations.Add(op);
+                            break;
                     }
                     lastOperation = op;
                 }

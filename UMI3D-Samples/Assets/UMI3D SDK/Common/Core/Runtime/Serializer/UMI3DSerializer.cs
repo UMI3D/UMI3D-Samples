@@ -92,6 +92,11 @@ namespace umi3d.common
         public static bool TryRead<T>(ByteContainer container, out T result)
         {
             bool read;
+            if (container.length <= 0) { 
+                result = default(T);
+                return false; 
+            }
+
             foreach (UMI3DSerializerModule module in modules)
             {
                 if (module.Read<T>(container, out read, out result))
@@ -433,7 +438,7 @@ namespace umi3d.common
         /// <returns></returns>
         public static Bytable WriteCollection<T>(IEnumerable<T> value)
         {
-            if (typeof(IBytable).IsAssignableFrom(typeof(T)) || (value.Count() > 0 && !value.Any(e => { return !typeof(IBytable).IsAssignableFrom(e.GetType());})))
+            if (typeof(IBytable).IsAssignableFrom(typeof(T)) || (value.Count() > 0 && !value.Any(e => !typeof(IBytable).IsAssignableFrom(e.GetType()))))
             {
                 return WriteIBytableCollection(value.Select((e) => e as IBytable));
             }
