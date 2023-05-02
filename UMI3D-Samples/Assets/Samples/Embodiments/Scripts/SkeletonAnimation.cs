@@ -15,17 +15,17 @@ public class SkeletonAnimation : MonoBehaviour
     Dictionary<ulong, Animator> animators = new Dictionary<ulong, Animator>();
 
     // Start is called before the first frame update
-    //void Start()
-    //{
-    //    UMI3DEmbodimentManager.Instance.NewEmbodiment.AddListener(SkeletonInstantiation);
-    //    UMI3DEmbodimentManager.Instance.UpdateEvent.AddListener(UpdateBone);
-    //}
+    void Start()
+    {
+        //UMI3DEmbodimentManager.Instance.NewEmbodiment.AddListener(SkeletonInstantiation);
+        //UMI3DEmbodimentManager.Instance.UpdateEvent.AddListener(UpdateBone);
+    }
 
-    //// Update is called once per frame
-    //void Update()
-    //{
+    // Update is called once per frame
+    void Update()
+    {
         
-    //}
+    }
 
     //void SkeletonInstantiation(UMI3DAvatarNode node)
     //{
@@ -36,10 +36,10 @@ public class SkeletonAnimation : MonoBehaviour
     //    animators.Add(node.userId, skeleton.GetComponentInChildren<Animator>());
     //}
 
-    //void UpdateBone(UMI3DUserEmbodimentBone bone)
-    //{
-    //    Animator userAnimator = animators[bone.userId];
-    //    Transform transform = userAnimator.GetBoneTransform(bone.boneType.ConvertToBoneType().GetValueOrDefault());
-    //    transform.localRotation = bone.spatialPosition.localRotation;
-    //}
+    void UpdateBone(UMI3DUserEmbodimentBone bone)
+    {
+        Animator userAnimator = animators[bone.userId];
+        Transform transform = userAnimator.GetBoneTransform(bone.boneType.ConvertToBoneType().GetValueOrDefault());
+        transform.localRotation = bone.spatialPosition.localRotation;
+    }
 }
