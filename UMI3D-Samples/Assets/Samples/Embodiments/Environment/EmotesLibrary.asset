@@ -13,17 +13,7 @@ MonoBehaviour:
   m_Name: EmotesLibrary
   m_EditorClassIdentifier: 
   id: com.inetum.emotes
-  date:
-    _dateTime: 20/07/2022 12:53:26
-    day: 20
-    month: 7
-    year: 2022
-    hours: 12
-    minutes: 53
-    seconds: 26
-    setNow: 0
-    culture: en-US
-    format: dd/MM/yyyy  HH:mm:ss
+  version: 0.1
   variants:
   - name: default
     path: private\com.inetum.emotes\default
