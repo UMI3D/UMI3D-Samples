@@ -13,6 +13,8 @@ limitations under the License.
 
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.edk;
+
 using UnityEngine;
 
 public class SimpleRotation : MonoBehaviour
@@ -25,6 +27,18 @@ public class SimpleRotation : MonoBehaviour
     public Axes Axe;
 
     public float Speed;
+
+    [Header("Transaction settings")]
+    public bool selfManaged = false;
+    public float updateFrequency = 5;
+
+    private UMI3DNode node;
+    private float lastTime;
+
+    private void Start()
+    {
+        node = GetComponent<UMI3DNode>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -42,6 +56,16 @@ public class SimpleRotation : MonoBehaviour
                 break;
             default:
                 break;
+        }
+        if (selfManaged)
+        {
+            if ((Time.time - lastTime) > 1 / updateFrequency)
+            {
+                var t = new Transaction() { reliable = true };
+                t.AddIfNotNull(node.objectRotation.SetValue(transform.rotation));
+                t.Dispatch();
+                lastTime = Time.time;
+            }
         }
     }
 }

@@ -15,14 +15,13 @@ limitations under the License.
 */
 
 
-using System;
-using System.Collections.Generic;
-using umi3d.common;
-using UnityEditor;
+using umi3d.edk;
+
 using UnityEngine;
 
 namespace Assembly_CSharp // TODO: Complete and lowercase the namespace 
 {
+    [RequireComponent(typeof(UMI3DNode))]
     public class SimpleOscilation : MonoBehaviour
     {
         public enum Axes
@@ -35,13 +34,21 @@ namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
         public float Speed;
         public float Amplitude;
 
+        [Header("Transaction settings")]
+        public bool selfManaged = false;
+        public float updateFrequency = 5;
+
         private Vector3 startPosition;
         private float startTime;
+
+        private UMI3DNode node;
+        private float lastTime;
 
         private void Start()
         {
             startPosition = transform.position;
             startTime = Time.time;
+            node = GetComponent<UMI3DNode>();
         }
 
         void Update()
@@ -60,8 +67,18 @@ namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
                 default:
                     break;
             }
-        }
 
+            if (selfManaged)
+            {
+                if ((Time.time - lastTime) > 1 / updateFrequency)
+                {
+                    var t = new Transaction() { reliable = true };
+                    t.AddIfNotNull(node.objectPosition.SetValue(transform.position));
+                    t.Dispatch();
+                    lastTime = Time.time;
+                }
+            }
+        }
 
     }
 }
