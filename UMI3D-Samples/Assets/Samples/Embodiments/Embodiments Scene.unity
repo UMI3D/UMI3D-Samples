@@ -2887,7 +2887,7 @@ MonoBehaviour:
   forgeNatServerPort: 0
   forgeMaxNbPlayer: 32
   useRandomHttpPort: 0
-  httpPort: 50200
+  httpPort: 50043
   resourcesUrl: 
   iconServerUrl: 
   sessionId: 
