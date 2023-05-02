@@ -2994,16 +2994,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
-    - target: {fileID: 498512808110883438, guid: a327a3c5fe21b904381ab9e5957d8fed,
-        type: 3}
-      propertyPath: model.variants.Array.data[0].path
-      value: private\com.gfi.test_room\default\room\plot.obj
-      objectReference: {fileID: 0}
-    - target: {fileID: 498512808110883438, guid: a327a3c5fe21b904381ab9e5957d8fed,
-        type: 3}
-      propertyPath: model.variants.Array.data[0].extension
-      value: .obj
-      objectReference: {fileID: 0}
     - target: {fileID: 2083940091150961411, guid: a327a3c5fe21b904381ab9e5957d8fed,
         type: 3}
       propertyPath: m_Name
