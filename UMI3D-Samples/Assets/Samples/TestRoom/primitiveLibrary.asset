@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: primitiveLibrary
   m_EditorClassIdentifier: 
   id: com.gfi.primitive
-  version: 0.1
+  version: 0.1.1
   variants:
   - name: default
     path: private\com.gfi.primitive\default

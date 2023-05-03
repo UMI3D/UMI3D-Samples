@@ -28,7 +28,6 @@ using umi3d.edk.collaboration;
 using umi3d.edk.userCapture;
 using UnityEngine;
 using UnityEngine.XR;
-using static umi3d.edk.interaction.UMI3DForm;
 
 public class AvatarManager : MonoBehaviour
 {
@@ -36,6 +35,21 @@ public class AvatarManager : MonoBehaviour
     UMI3DResource Avatar;
     
     HashSet<UMI3DUser> Handled = new HashSet<UMI3DUser>();
+
+    public List<SkeletonData> skeletonsData = new();
+
+    [Serializable]
+    public class SkeletonData
+    {
+        [SerializeField]
+        public UMI3DResource SkeletonResource;
+
+        [SerializeField]
+        public UMI3DEmotesConfig EmoteConfig;
+
+        [SerializeField]
+        public List<string> animatorStateNames;
+    }
 
     [System.Serializable]
     public class Bind
@@ -64,84 +78,147 @@ public class AvatarManager : MonoBehaviour
 
     [SerializeField, EditorReadOnly]
     Vector3 rotationOffset;
+
     // Start is called before the first frame update
-    //void Start()
-    //{
-    //    UMI3DEmbodimentManager.Instance.NewEmbodiment.AddListener(NewAvatar);
-    //}
+    void Start()
+    {
+        //UMI3DEmbodimentManager.Instance.NewEmbodiment.AddListener(NewAvatar);
+        //TODO: find a way to start newavatar
+        UMI3DCollaborationServer.Instance.OnUserJoin.AddListener((user) => NewAvatar(user as UMI3DTrackedUser));
+    }
 
-    //void NewAvatar(UMI3DAvatarNode node)
-    //{
-    //    if (UMI3DCollaborationServer.Collaboration.GetUser(node.userId) != null && !Handled.Contains(UMI3DCollaborationServer.Collaboration.GetUser(node.userId)))
-    //    {
-    //        Handled.Add(UMI3DCollaborationServer.Collaboration.GetUser(node.userId));
-    //        StartCoroutine(_NewAvatar(UMI3DCollaborationServer.Collaboration.GetUser(node.userId)));
-    //    }
-    //}
+    void NewAvatar(UMI3DTrackedUser user)
+    {
+        if (UMI3DCollaborationServer.Collaboration.GetUser(user.Id()) != null && !Handled.Contains(UMI3DCollaborationServer.Collaboration.GetUser(user.Id())))
+        {
+            Handled.Add(UMI3DCollaborationServer.Collaboration.GetUser(user.Id()));
+            StartCoroutine(_NewAvatar(UMI3DCollaborationServer.Collaboration.GetUser(user.Id())));
+        }
+    }
 
-    //IEnumerator _NewAvatar(UMI3DCollaborationUser user)
-    //{
-    //    if (user == null) yield break;
-    //    var wait = new WaitForFixedUpdate();
+    IEnumerator _NewAvatar(UMI3DCollaborationUser user)
+    {
+        if (user == null) yield break;
+        var wait = new WaitForFixedUpdate();
 
-    //    UMI3DAvatarNode avatarnode = user.Avatar;
+        UMI3DNode SkeletonParentNode = UMI3DEnvironment.Instance.GetEntityInstance<UMI3DNode>(user.CurrentTrackingFrame.parentId);
 
-    //    while (avatarnode == null)
-    //    {
-    //        yield return wait;
-    //        avatarnode = user.Avatar;
-    //    }
+        //while (SkeletonParentNode == null)
+        //{
+        //    yield return wait;
+        //    SkeletonParentNode = UMI3DEnvironment.Instance.GetEntityInstance<UMI3DNode>(user.CurrentTrackingFrame.parentId);
+        //}
 
-    //    while (user.status.Equals(StatusType.READY))
-    //    {
-    //        yield return wait;
-    //    }
+        while (user.status.Equals(StatusType.READY))
+        {
+            yield return wait;
+        }
 
-    //    GameObject avatarModelnode = new GameObject("AvatarModel");
-    //    avatarModelnode.transform.SetParent(avatarnode.transform);
-    //    avatarModelnode.transform.localPosition = Vector3.zero;
-    //    avatarModelnode.transform.localRotation = Quaternion.identity;
+        LoadAvatar(user);
+    }
 
-    //    UMI3DModel avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
+    private void LoadAvatar(UMI3DCollaborationUser user)
+    {
+        Debug.Log("Load avatar");
+        List<Operation> ops = new();
 
-    //    avatarModel.objectModel.SetValue(Avatar);
-    //    avatarModel.objectScale.SetValue(UMI3DEmbodimentManager.Instance.embodimentSize[avatarnode.userId]);
+        GameObject avatarModelnode = new("AvatarModel");
+        //avatarModelnode.transform.SetParent(parentNode.transform);
+        avatarModelnode.transform.localPosition = Vector3.zero;
+        avatarModelnode.transform.localRotation = Quaternion.identity;
 
-    //    List<Operation> ops = new List<Operation>();
+        UMI3DModel avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
+        avatarModel.objectModel.SetValue(Avatar);
+        //avatarModel.objectScale.SetValue(UMI3DEmbodimentManager.Instance.embodimentSize[user.Id()]);
 
-    //    LoadEntity op = avatarModel.GetLoadEntity();
-    //    ops.Add(op);
-    //    BindingsTransactionManager.Instance.Dispatch(ops, true);
+        LoadEntity op = avatarModel.GetLoadEntity();
+        ops.Add(op);
 
-    //    StartCoroutine(Binding(avatarModel, avatarnode, user));
-    //}
+        foreach (var skeletonData in skeletonsData)
+        {
+            GameObject skeletonNode = new("Subskeleton");
+            //skeletonNode.transform.SetParent(parentNode.transform);
+            skeletonNode.transform.localPosition = Vector3.zero;
+            skeletonNode.transform.localRotation = Quaternion.identity;
 
-    //IEnumerator Binding(UMI3DModel avatarModel, UMI3DAvatarNode avatarnode, UMI3DUser user)
-    //{
-    //    List<Operation> ops = new List<Operation>();
+            UMI3DSkeletonNode skeleton = skeletonNode.AddComponent<UMI3DSkeletonNode>();
+            skeleton.objectModel.SetValue(skeletonData.SkeletonResource);
+            //skeleton.objectScale.SetValue(UMI3DEmbodimentManager.Instance.embodimentSize[user.Id()]);
+            ops.Add(skeleton.GetLoadEntity());
 
-    //    SetEntityProperty op;
-    //    if (bindRig)
-    //    {
-    //        foreach (Bind bind in binds.binds)
-    //        {
-    //            UMI3DBinding binding = new UMI3DBinding()
-    //            {
-    //                boneType = bind.boneType,
-    //                rigName = bind.rigName,
-    //                offsetRotation = Quaternion.Euler(bind.rotationOffset),
-    //                offsetPosition = bind.positionOffset,
-    //                node = avatarModel,
-    //                isBinded = true,
-    //                syncPosition = bind.boneType.Equals(BoneType.CenterFeet) || bind.boneType.Equals(BoneType.Hips)
-    //            };
+            // Create animations
+            List<UMI3DAbstractAnimation> animations = new();
+            foreach (var animatorStateName in skeletonData.animatorStateNames)
+            {
+                UMI3DAnimatorAnimation animation = skeletonNode.AddComponent<UMI3DAnimatorAnimation>();
+                animation.Register();
+                animation.objectNode.SetValue(skeleton);
+                animation.objectStateName.SetValue(animatorStateName);
+                animations.Add(animation);
+                ops.Add(animation.GetLoadEntity());
+            }
 
-    //            op = UMI3DEmbodimentManager.Instance.AddBinding(avatarnode, binding);
-    //            ops.Add(op);
-    //        }
-    //    }
-    //    BindingsTransactionManager.Instance.Dispatch(ops, true);
-    //    yield break;
-    //}
+            // Associate animation with emotes
+            if (skeletonData.EmoteConfig == null)
+                continue;
+
+            UMI3DCollaborationServer.Collaboration.emotesConfigs.Add(user.Id(), skeletonData.EmoteConfig);
+
+            int indexAnim = 0;
+            foreach (var emote in skeletonData.EmoteConfig.IncludedEmotes)
+            {
+                UMI3DAbstractAnimation animation = animations[indexAnim++];
+
+                if (string.IsNullOrEmpty(emote.label) && animation is UMI3DAnimatorAnimation animatorAnimation)
+                    emote.label = animatorAnimation.objectStateName.GetValue();
+
+                emote.AnimationId.SetValue(user, animation.Id());
+                emote.Available.SetValue(user, skeletonData.EmoteConfig.allAvailableAtStartByDefault || emote.availableAtStart);
+
+                ops.Add(animation.GetLoadEntity());
+            }
+            ops.Add(skeletonData.EmoteConfig.GetLoadEntity());
+        }
+        var transaction = new Transaction() { reliable = true };
+        transaction.AddIfNotNull(ops);
+        transaction.Dispatch();
+
+        Debug.Log("sent emoteconfig");
+
+        StartCoroutine(Binding(avatarModel, user));
+    }
+
+    IEnumerator Binding(UMI3DModel avatarModel, UMI3DTrackedUser user)
+    {
+        List<Operation> ops = new();
+
+        yield return new WaitForSeconds(10);
+
+        // TODO: Re-enable when bone API wil be working
+        //if (bindRig)
+        //{
+        //    var bindings = binds.binds.Select(bind => new RigBoneBinding(avatarModel.Id(), bind.boneType, user.Id())
+        //    {
+        //        users = new() { user },
+        //        rigName = bind.rigName,
+        //        offsetRotation = Quaternion.Euler(bind.rotationOffset),
+        //        offsetPosition = bind.positionOffset,
+        //        syncPosition = bind.boneType.Equals(BoneType.CenterFeet) || bind.boneType.Equals(BoneType.Hips),
+        //    }).Cast<AbstractSingleBinding>();
+
+        //    MultiBinding multiBinding = new(avatarModel.Id())
+        //    {
+        //        partialFit = false,
+        //        priority = 100,
+        //        bindings = bindings.ToList()
+        //    };
+
+        //    //ops.AddRange(BindingHelper.Instance.AddBinding(multiBinding));
+        //}
+        //var transaction = new Transaction() { reliable = true };
+        //transaction.AddIfNotNull(ops);
+        //transaction.Dispatch();
+        yield break;
+    }
 
 }
