@@ -31,12 +31,43 @@ using UnityEngine.XR;
 
 public class AvatarManager : MonoBehaviour
 {
-    [SerializeField, EditorReadOnly]
-    UMI3DResource Avatar;
-    
+    #region Fields
     HashSet<UMI3DUser> Handled = new HashSet<UMI3DUser>();
 
-    public List<EmotesSubskeletonDescription> emotesSkeletonsData = new();
+    #region Avatar Model
+    [Header("Avatar")]
+    [SerializeField, EditorReadOnly]
+    UMI3DResource AvatarModel;
+
+    [System.Serializable]
+    public class RigBindingData
+    {
+        [ConstEnum(typeof(BoneType), typeof(uint))]
+        public uint boneType;
+        public string rigName;
+        public Vector3 positionOffset;
+        public Vector3 rotationOffset;
+    }
+
+    [System.Serializable]
+    public class RigList
+    {
+        public List<RigBindingData> binds;
+    }
+
+    [SerializeField, EditorReadOnly]
+    bool bindRig;
+
+    [SerializeField, EditorReadOnly]
+    RigList Rigs;
+
+    #endregion Avatar Model
+
+    #region Emotes
+
+    [Header("Emotes")]
+    [SerializeField]
+    EmotesSubskeletonDescription emotesSubskeletonData = new();
 
     [Serializable]
     public class EmotesSubskeletonDescription
@@ -51,33 +82,9 @@ public class AvatarManager : MonoBehaviour
         public UMI3DEmotesConfig emoteConfig;
     }
 
-    [System.Serializable]
-    public class Bind
-    {
-        [ConstEnum(typeof(BoneType),typeof(uint))]
-        public uint boneType;
-        public string rigName;
-        public Vector3 positionOffset;
-        public Vector3 rotationOffset;
-    }
+    #endregion Emotes
 
-    [System.Serializable]
-    public class BindList
-    {
-        public List<Bind> binds;
-    }
-
-    [SerializeField, EditorReadOnly]
-    bool bindRig;
-
-    [SerializeField, EditorReadOnly]
-    BindList binds;
-
-    [SerializeField, EditorReadOnly]
-    Vector3 positionOffset;
-
-    [SerializeField, EditorReadOnly]
-    Vector3 rotationOffset;
+    #endregion Fields
 
     // Start is called before the first frame update
     void Start()
@@ -115,7 +122,7 @@ public class AvatarManager : MonoBehaviour
         t.AddIfNotNull(BindAvatar(trackedUser, avatarModel));
         if (trackedUser is UMI3DCollaborationUser collabUser)
         {
-            t.AddIfNotNull(LoadEmotes(collabUser, emotesSkeletonsData[0]));
+            t.AddIfNotNull(LoadEmotes(collabUser, emotesSubskeletonData));
         }
         t.Dispatch();
         UMI3DCollaborationServer.Instance.OnUserActive.RemoveListener(NewAvatar);
@@ -132,7 +139,7 @@ public class AvatarManager : MonoBehaviour
         avatarModelnode.transform.localRotation = Quaternion.identity;
 
         avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
-        avatarModel.objectModel.SetValue(Avatar);
+        avatarModel.objectModel.SetValue(AvatarModel);
         // TODO : Re-enable size
         //avatarModel.objectScale.SetValue(UMI3DEmbodimentManager.Instance.embodimentSize[user.Id()]);
 
@@ -145,7 +152,7 @@ public class AvatarManager : MonoBehaviour
 
         if (bindRig)
         {
-            var bindings = binds.binds.Select(bind => new RigBoneBinding(avatarModel.Id(), bind.boneType, user.Id())
+            var bindings = Rigs.binds.Select(bind => new RigBoneBinding(avatarModel.Id(), bind.boneType, user.Id())
             {
                 users = new() { user },
                 rigName = bind.rigName,
@@ -183,7 +190,7 @@ public class AvatarManager : MonoBehaviour
 
         // Create animations
         List<UMI3DAbstractAnimation> animations = new();
-        foreach (var animatorStateName in emoteSubskeleton.animatorStateNames)
+        foreach (var animatorStateName in emoteSubskeleton.animatorStateNames.Take(emoteSubskeleton.emoteConfig.IncludedEmotes.Count))
         {
             UMI3DAnimatorAnimation animation = skeletonNode.AddComponent<UMI3DAnimatorAnimation>();
             animation.Register();
