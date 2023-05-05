@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EmotesLibrary
   m_EditorClassIdentifier: 
   id: com.inetum.emotes
-  version: 0.1
+  version: 0.1.1
   variants:
   - name: default
     path: private\com.inetum.emotes\default
@@ -22,3 +22,4 @@ MonoBehaviour:
       size: 0
     formats:
     - png
+    - unity_standalone
