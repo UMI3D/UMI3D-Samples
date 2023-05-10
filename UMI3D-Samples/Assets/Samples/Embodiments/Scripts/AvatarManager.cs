@@ -153,9 +153,10 @@ public class AvatarManager : MonoBehaviour
             {
                 users = new() { user },
                 rigName = bind.rigName,
-                offsetRotation = Quaternion.Euler(bind.rotationOffset),
+                syncPosition = true,
                 offsetPosition = bind.positionOffset,
-                syncPosition = bind.boneType.Equals(BoneType.CenterFeet) || bind.boneType.Equals(BoneType.Hips),
+                syncRotation = true,
+                offsetRotation = Quaternion.Euler(bind.rotationOffset),
             }).Cast<AbstractSingleBinding>();
 
             MultiBinding multiBinding = new(avatarModel.Id())
