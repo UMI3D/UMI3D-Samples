@@ -36,6 +36,10 @@ public class AvatarManager : MonoBehaviour
 
     #region Avatar Model
     [Header("Avatar")]
+
+    [SerializeField]
+    UMI3DScene AvatarScene;
+
     [SerializeField, EditorReadOnly]
     UMI3DResource AvatarModel;
 
@@ -114,34 +118,27 @@ public class AvatarManager : MonoBehaviour
 
     void NewAvatar(UMI3DUser user)
     {
-        var trackedUser = user as UMI3DTrackedUser;
+        var collabUser = user as UMI3DCollaborationUser;
 
-       
         Transaction t = new() { reliable = true };
-        t.AddIfNotNull(LoadAvatar(trackedUser, out UMI3DModel avatarModel));
-        t.AddIfNotNull(BindAvatar(trackedUser, avatarModel));
-        if (trackedUser is UMI3DCollaborationUser collabUser)
-        {
-            t.AddIfNotNull(LoadEmotes(collabUser, emotesSubskeletonData));
-        }
+        t.AddIfNotNull(LoadAvatar(collabUser, out UMI3DModel avatarModel));
+        t.AddIfNotNull(BindAvatar(collabUser, avatarModel));
+        t.AddIfNotNull(LoadEmotes(collabUser, avatarModel, emotesSubskeletonData));
         t.Dispatch();
         UMI3DCollaborationServer.Instance.OnUserActive.RemoveListener(NewAvatar);
     }
 
-    private Operation LoadAvatar(UMI3DTrackedUser trackedUser, out UMI3DModel avatarModel)
+    private Operation LoadAvatar(UMI3DCollaborationUser user, out UMI3DModel avatarModel)
     {
-        Debug.Log("Load avatar");
+        GameObject avatarModelnode = new($"AvatarModel_User-{user.Id()}");
 
-        GameObject avatarModelnode = new("AvatarModel");
-        UMI3DNode skeletonParentNode = UMI3DEnvironment.Instance.GetEntityInstance<UMI3DNode>(trackedUser.CurrentTrackingFrame.parentId);
-        avatarModelnode.transform.SetParent(skeletonParentNode.transform);
+        avatarModelnode.transform.SetParent(AvatarScene.transform);
         avatarModelnode.transform.localPosition = Vector3.zero;
         avatarModelnode.transform.localRotation = Quaternion.identity;
 
         avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
         avatarModel.objectModel.SetValue(AvatarModel);
-        // TODO : Re-enable size
-        //avatarModel.objectScale.SetValue(UMI3DEmbodimentManager.Instance.embodimentSize[user.Id()]);
+        avatarModel.objectScale.SetValue(user.userSize.GetValue(user));
 
         return avatarModel.GetLoadEntity();
     }
@@ -174,13 +171,12 @@ public class AvatarManager : MonoBehaviour
         return ops;
     }
 
-    private List<Operation> LoadEmotes(UMI3DCollaborationUser user, EmotesSubskeletonDescription emoteSubskeleton)
+    private List<Operation> LoadEmotes(UMI3DCollaborationUser user, UMI3DNode avatarNode, EmotesSubskeletonDescription emoteSubskeleton)
     {
         List<Operation> ops = new();
 
         GameObject skeletonNode = new("Emote subskeleton");
-        UMI3DNode skeletonParentNode = UMI3DEnvironment.Instance.GetEntityInstance<UMI3DNode>(user.CurrentTrackingFrame.parentId);
-        skeletonNode.transform.SetParent(skeletonParentNode.transform);
+        skeletonNode.transform.SetParent(avatarNode.transform);
         skeletonNode.transform.localPosition = Vector3.zero;
         skeletonNode.transform.localRotation = Quaternion.identity;
 
