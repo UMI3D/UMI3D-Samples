@@ -140,6 +140,8 @@ public class AvatarManager : MonoBehaviour
         avatarModel.objectModel.SetValue(AvatarModel);
         avatarModel.objectScale.SetValue(user.userSize.GetValue(user));
 
+        SimpleModificationListener.Instance.RemoveNode(avatarModel);
+
         return avatarModel.GetLoadEntity();
     }
 
