@@ -32,7 +32,7 @@ using UnityEngine.XR;
 public class AvatarManager : MonoBehaviour
 {
     #region Fields
-    HashSet<UMI3DUser> Handled = new HashSet<UMI3DUser>();
+    Dictionary<UMI3DUser, UMI3DModel> HandledAvatars = new();
 
     #region Avatar Model
     [Header("Avatar")]
@@ -104,7 +104,7 @@ public class AvatarManager : MonoBehaviour
         if (user is not UMI3DTrackedUser trackedUser)
             return;
 
-        if (!Handled.Contains(UMI3DCollaborationServer.Collaboration.GetUser(user.Id())))
+        if (!HandledAvatars.ContainsKey(UMI3DCollaborationServer.Collaboration.GetUser(user.Id())))
         {
             UMI3DCollaborationServer.Instance.OnUserActive.AddListener(NewAvatar);
         }
@@ -112,8 +112,13 @@ public class AvatarManager : MonoBehaviour
 
     void Unhandle(UMI3DUser user)
     {
-        if (Handled.Contains(user))
-            Handled.Remove(user);
+        if (HandledAvatars.ContainsKey(user))
+        {
+            Transaction t = new() { reliable = true };
+            t.AddIfNotNull(HandledAvatars[user].GetDeleteEntity());
+            t.Dispatch();
+            HandledAvatars.Remove(user);
+        }
     }
 
     void NewAvatar(UMI3DUser user)
@@ -139,6 +144,8 @@ public class AvatarManager : MonoBehaviour
         avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
         avatarModel.objectModel.SetValue(AvatarModel);
         avatarModel.objectScale.SetValue(user.userSize.GetValue(user));
+
+        HandledAvatars[user] = avatarModel;
 
         SimpleModificationListener.Instance.RemoveNode(avatarModel);
 
