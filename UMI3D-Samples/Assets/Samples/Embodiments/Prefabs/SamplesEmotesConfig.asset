@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4febd3e9ac34c484da42dbb2899a8c34, type: 3}
-  m_Name: EmbodimentSceneEmotesConfig
+  m_Script: {fileID: 11500000, guid: cee36aa836f563248a9c6168f32868db, type: 3}
+  m_Name: SamplesEmotesConfig
   m_EditorClassIdentifier: 
-  allAvailableAtStartByDefault: 1
+  allAvailableAtStartByDefault: 0
   IncludedEmotes:
   - id: 0
     label: Hello
-    availableAtStart: 0
+    availableAtStart: 1
     iconResource:
       variants:
       - isLocalFile: 1
@@ -34,7 +34,7 @@ MonoBehaviour:
     registered: 0
   - id: 0
     label: Yes
-    availableAtStart: 0
+    availableAtStart: 1
     iconResource:
       variants:
       - isLocalFile: 1
@@ -52,7 +52,7 @@ MonoBehaviour:
     registered: 0
   - id: 0
     label: No
-    availableAtStart: 0
+    availableAtStart: 1
     iconResource:
       variants:
       - isLocalFile: 1
