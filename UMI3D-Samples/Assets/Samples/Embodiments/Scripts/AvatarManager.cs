@@ -178,18 +178,19 @@ public class AvatarManager : MonoBehaviour
     {
         List<Operation> ops = new();
 
+        // Create skeleton node for animations
         GameObject skeletonNode = new("Emote subskeleton");
         skeletonNode.transform.SetParent(avatarNode.transform);
         skeletonNode.transform.localPosition = Vector3.zero;
         skeletonNode.transform.localRotation = Quaternion.identity;
 
         UMI3DSkeletonNode skeleton = skeletonNode.AddComponent<UMI3DSkeletonNode>();
-        skeleton.objectModel.SetValue(emoteSubskeleton.emoteSubkeletonBundleResource);
-        ops.Add(skeleton.GetLoadEntity());
+
+        var usedAnimationState = emoteSubskeleton.animatorStateNames.Take(emoteSubskeleton.emoteConfig.IncludedEmotes.Count).ToList();
 
         // Create animations
         List<UMI3DAbstractAnimation> animations = new();
-        foreach (var animatorStateName in emoteSubskeleton.animatorStateNames.Take(emoteSubskeleton.emoteConfig.IncludedEmotes.Count))
+        foreach (var animatorStateName in usedAnimationState)
         {
             UMI3DAnimatorAnimation animation = skeletonNode.AddComponent<UMI3DAnimatorAnimation>();
             animation.Register();
@@ -198,6 +199,13 @@ public class AvatarManager : MonoBehaviour
             animations.Add(animation);
             ops.Add(animation.GetLoadEntity());
         }
+
+        // Create skeleton node as a UMI3D component
+        skeleton.objectModel.SetValue(emoteSubskeleton.emoteSubkeletonBundleResource);
+        skeleton.userId = user.Id();
+        skeleton.animationStates = usedAnimationState;
+        skeleton.relatedAnimationIds = animations.Select(x=>x.Id()).ToArray();
+        ops.Add(skeleton.GetLoadEntity());
 
         // Associate animation with emotes
         EmoteDispatcher.Instance.EmotesConfigs.Add(user.Id(), emoteSubskeleton.emoteConfig);
