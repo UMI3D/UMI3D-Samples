@@ -5907,10 +5907,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1528412417}
-  - component: {fileID: 1528412418}
   - component: {fileID: 1528412419}
   m_Layer: 0
-  m_Name: Embodiment manager
+  m_Name: AvatarManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5931,18 +5930,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1528412418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1528412416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce2cbb502d5bc514f9ce040afe8ecead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1528412419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6061,13 +6048,33 @@ MonoBehaviour:
       rigName: mixamorig:Spine
       positionOffset: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
+  sendWalkingAnimator: 1
+  movementSubskeletonData:
+    animatedSubkeletonBundleResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: private\com.gfi.avatar\default\walkinganimator.prefab.bundle
+        format: unity_standalone
+        extension: .bundle
+        isInBundle: 1
+        pathIfInBundle: Assets/WalkingAnimator.prefab
+        metrics:
+          resolution: 0
+          size: 78.162
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+    animatorStateNames:
+    - Walking (Blend tree)
+  maxSpeed: 0.5
+  sendEmotes: 1
   emotesSubskeletonData:
-    emoteSubkeletonBundleResource:
+    animatedSubkeletonBundleResource:
       variants:
       - isLocalFile: 1
         domain: 
         path: private\com.inetum.emotes\default\emoteanimatorbundle.prefab.bundle
-        format: unity_standalone
+        format: gltf
         extension: .bundle
         isInBundle: 1
         pathIfInBundle: Assets/Samples/Embodiments/Models/EmoteAnimator.prefab

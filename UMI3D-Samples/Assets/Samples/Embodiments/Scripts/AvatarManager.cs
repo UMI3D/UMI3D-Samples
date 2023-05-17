@@ -16,23 +16,32 @@ limitations under the License.
 
 using inetum.unityUtils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using umi3d.common;
-using umi3d.common.collaboration;
-using umi3d.common.interaction;
 using umi3d.common.userCapture;
 using umi3d.edk;
 using umi3d.edk.collaboration;
 using umi3d.edk.userCapture;
 using UnityEngine;
-using UnityEngine.XR;
 
 public class AvatarManager : MonoBehaviour
 {
     #region Fields
-    Dictionary<UMI3DUser, UMI3DModel> HandledAvatars = new();
+
+    Dictionary<UMI3DUser, HandledInfos> HandledAvatars = new();
+
+    class HandledInfos
+    {
+        public UMI3DModel avatar;
+        public UMI3DSkeletonNode emotesSkeletonNode;
+        public UMI3DSkeletonNode walkingSkeletonNode;
+        public Vector3 lastPosition;
+        public List<UMI3DAnimatorAnimation> emotesAnimations = new();
+        public UMI3DAnimatorAnimation walkingAnimation = new();
+    }
+
 
     #region Avatar Model
     [Header("Avatar")]
@@ -67,36 +76,77 @@ public class AvatarManager : MonoBehaviour
 
     #endregion Avatar Model
 
+    [Serializable]
+    public class SubskeletonDescription
+    {
+        [SerializeField]
+        public UMI3DResource animatedSubkeletonBundleResource;
+
+        [SerializeField]
+        public List<string> animatorStateNames;
+    }
+
+    #region MovementAnimation
+
+    [Header("Movement animation")]
+
+    [SerializeField]
+    bool sendWalkingAnimator;
+
+    [SerializeField]
+    SubskeletonDescription movementSubskeletonData;
+
+    [SerializeField]
+    public float maxSpeed = 1f;
+
+    #endregion
+
     #region Emotes
 
     [Header("Emotes")]
+
+    [SerializeField]
+    bool sendEmotes;
+
     [SerializeField]
     EmotesSubskeletonDescription emotesSubskeletonData = new();
 
     [Serializable]
-    public class EmotesSubskeletonDescription
+    public class EmotesSubskeletonDescription : SubskeletonDescription
     {
-        [SerializeField]
-        public UMI3DResource emoteSubkeletonBundleResource;
-
-        [SerializeField]
-        public List<string> animatorStateNames;
-
         [SerializeField]
         public UMI3DEmotesConfig emoteConfig;
     }
+
+
 
     #endregion Emotes
 
     #endregion Fields
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        //UMI3DEmbodimentManager.Instance.NewEmbodiment.AddListener(NewAvatar);
         //TODO: find a way to start newavatar
         UMI3DCollaborationServer.Instance.OnUserJoin.AddListener(Handle);
         UMI3DCollaborationServer.Instance.OnUserLeave.AddListener(Unhandle);
+        UMI3DForgeServer.avatarFrameEvent += OnUserFrame;
+    }
+
+    void OnUserFrame(UserTrackingFrameDto frameDto, ulong userId)
+    {
+        var user = UMI3DCollaborationServer.Instance.Users().First(x => x.Id() == frameDto.userId);
+        if (HandledAvatars.ContainsKey(user))
+        {
+            float speed = (frameDto.position - HandledAvatars[user].lastPosition).magnitude / maxSpeed;
+            if (HandledAvatars[user].walkingAnimation.objectParameters.GetValue().Count == 0)
+                return;
+            var op = HandledAvatars[user].walkingAnimation.objectParameters.SetValue("Speed", speed);
+            HandledAvatars[user].lastPosition = frameDto.position;
+            Transaction t = new();
+            t.AddIfNotNull(op);
+            t.Dispatch();
+        } 
     }
 
     void Handle(UMI3DUser user)
@@ -115,7 +165,33 @@ public class AvatarManager : MonoBehaviour
         if (HandledAvatars.ContainsKey(user))
         {
             Transaction t = new() { reliable = true };
-            t.AddIfNotNull(HandledAvatars[user].GetDeleteEntity());
+
+            // walking animation
+            if (sendWalkingAnimator)
+            {
+                t.AddIfNotNull(HandledAvatars[user].walkingAnimation.GetDeleteEntity());
+                t.AddIfNotNull(HandledAvatars[user].walkingSkeletonNode.GetDeleteEntity());
+                UnityEngine.Object.Destroy(HandledAvatars[user].walkingSkeletonNode.gameObject);
+            }
+
+            if (sendEmotes)
+            {
+                // emotes
+                foreach (var animation in HandledAvatars[user].emotesAnimations)
+                    t.AddIfNotNull(animation.GetDeleteEntity());
+                t.AddIfNotNull(HandledAvatars[user].emotesSkeletonNode.GetDeleteEntity());
+                UnityEngine.Object.Destroy(HandledAvatars[user].emotesSkeletonNode.gameObject);
+            }
+           
+            
+            // bindings
+            t.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(HandledAvatars[user].avatar.Id()));
+
+            // avatar model
+            t.AddIfNotNull(HandledAvatars[user].avatar.GetDeleteEntity());
+            
+            UnityEngine.Object.Destroy(HandledAvatars[user].avatar.gameObject);
+
             t.Dispatch();
             HandledAvatars.Remove(user);
         }
@@ -128,7 +204,10 @@ public class AvatarManager : MonoBehaviour
         Transaction t = new() { reliable = true };
         t.AddIfNotNull(LoadAvatar(collabUser, out UMI3DModel avatarModel));
         t.AddIfNotNull(BindAvatar(collabUser, avatarModel));
-        t.AddIfNotNull(LoadEmotes(collabUser, avatarModel, emotesSubskeletonData));
+        if (sendWalkingAnimator)
+            t.AddIfNotNull(LoadWalkingAimations(collabUser, avatarModel, movementSubskeletonData));
+        if (sendEmotes)
+            t.AddIfNotNull(LoadEmotes(collabUser, avatarModel, emotesSubskeletonData));
         t.Dispatch();
         UMI3DCollaborationServer.Instance.OnUserActive.RemoveListener(NewAvatar);
     }
@@ -145,7 +224,7 @@ public class AvatarManager : MonoBehaviour
         avatarModel.objectModel.SetValue(AvatarModel);
         avatarModel.objectScale.SetValue(user.userSize.GetValue(user));
 
-        HandledAvatars[user] = avatarModel;
+        HandledAvatars[user] = new HandledInfos() { avatar = avatarModel };
 
         SimpleModificationListener.Instance.RemoveNode(avatarModel);
 
@@ -174,9 +253,48 @@ public class AvatarManager : MonoBehaviour
                 priority = 100,
                 bindings = bindings.ToList()
             };
-
+            
             ops.AddRange(BindingHelper.Instance.AddBinding(multiBinding));
         }
+
+        return ops;
+    }
+
+    private List<Operation> LoadWalkingAimations(UMI3DCollaborationUser user, UMI3DNode avatarNode, SubskeletonDescription walkingSubskeleton)
+    {
+        List<Operation> ops = new();
+
+        // Create skeleton node for animations
+        GameObject subskeletonNodeGo = new("Movement animation subskeleton");
+        subskeletonNodeGo.transform.SetParent(avatarNode.transform);
+        subskeletonNodeGo.transform.localPosition = Vector3.zero;
+        subskeletonNodeGo.transform.localRotation = Quaternion.identity;
+
+        UMI3DSkeletonNode skeletonNode = subskeletonNodeGo.AddComponent<UMI3DSkeletonNode>();
+
+        List<UMI3DAbstractAnimation> animations = new();
+        foreach (var animationState in walkingSubskeleton.animatorStateNames)
+        {
+            UMI3DAnimatorAnimation animation = subskeletonNodeGo.AddComponent<UMI3DAnimatorAnimation>();
+            animation.Register();
+            animation.objectNode.SetValue(skeletonNode);
+            animation.objectLooping.SetValue(true);
+            animation.objectPlaying.SetValue(true);
+            animation.objectParameters.Add("Speed", 0);
+            animation.objectStateName.SetValue(animationState);
+            HandledAvatars[user].walkingAnimation = animation;
+            ops.Add(animation.GetLoadEntity());
+            animations.Add(animation);
+        }
+
+        skeletonNode.objectModel.SetValue(walkingSubskeleton.animatedSubkeletonBundleResource);
+        skeletonNode.userId = user.Id();
+        skeletonNode.animationStates = walkingSubskeleton.animatorStateNames;
+        skeletonNode.relatedAnimationIds = animations.Select(x => x.Id()).ToArray();
+
+        HandledAvatars[user].walkingSkeletonNode = skeletonNode;
+
+        ops.Add(skeletonNode.GetLoadEntity());
 
         return ops;
     }
@@ -186,12 +304,12 @@ public class AvatarManager : MonoBehaviour
         List<Operation> ops = new();
 
         // Create skeleton node for animations
-        GameObject skeletonNode = new("Emote subskeleton");
-        skeletonNode.transform.SetParent(avatarNode.transform);
-        skeletonNode.transform.localPosition = Vector3.zero;
-        skeletonNode.transform.localRotation = Quaternion.identity;
+        GameObject subskeletonGo = new("Emote animation subskeleton");
+        subskeletonGo.transform.SetParent(avatarNode.transform);
+        subskeletonGo.transform.localPosition = Vector3.zero;
+        subskeletonGo.transform.localRotation = Quaternion.identity;
 
-        UMI3DSkeletonNode skeleton = skeletonNode.AddComponent<UMI3DSkeletonNode>();
+        UMI3DSkeletonNode skeletonNode = subskeletonGo.AddComponent<UMI3DSkeletonNode>();
 
         var usedAnimationState = emoteSubskeleton.animatorStateNames.Take(emoteSubskeleton.emoteConfig.IncludedEmotes.Count).ToList();
 
@@ -199,20 +317,23 @@ public class AvatarManager : MonoBehaviour
         List<UMI3DAbstractAnimation> animations = new();
         foreach (var animatorStateName in usedAnimationState)
         {
-            UMI3DAnimatorAnimation animation = skeletonNode.AddComponent<UMI3DAnimatorAnimation>();
+            UMI3DAnimatorAnimation animation = subskeletonGo.AddComponent<UMI3DAnimatorAnimation>();
             animation.Register();
-            animation.objectNode.SetValue(skeleton);
+            animation.objectNode.SetValue(skeletonNode);
             animation.objectStateName.SetValue(animatorStateName);
+            animation.objectPlaying.SetValue(false);
             animations.Add(animation);
+            HandledAvatars[user].emotesAnimations.Add(animation);
             ops.Add(animation.GetLoadEntity());
         }
 
         // Create skeleton node as a UMI3D component
-        skeleton.objectModel.SetValue(emoteSubskeleton.emoteSubkeletonBundleResource);
-        skeleton.userId = user.Id();
-        skeleton.animationStates = usedAnimationState;
-        skeleton.relatedAnimationIds = animations.Select(x=>x.Id()).ToArray();
-        ops.Add(skeleton.GetLoadEntity());
+        skeletonNode.objectModel.SetValue(emoteSubskeleton.animatedSubkeletonBundleResource);
+        skeletonNode.userId = user.Id();
+        skeletonNode.animationStates = usedAnimationState;
+        skeletonNode.relatedAnimationIds = animations.Select(x=>x.Id()).ToArray();
+        HandledAvatars[user].emotesSkeletonNode = skeletonNode;
+        ops.Add(skeletonNode.GetLoadEntity());
 
         // Associate animation with emotes
         EmoteDispatcher.Instance.EmotesConfigs.Add(user.Id(), emoteSubskeleton.emoteConfig);
