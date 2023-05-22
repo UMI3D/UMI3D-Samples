@@ -16,8 +16,8 @@ limitations under the License.
 
 using System.Collections.Generic;
 using umi3d.edk;
+using umi3d.common;
 using UnityEngine;
-using static umi3d.common.NotificationDto;
 
 public class SendNotificationOnEvent : MonoBehaviour
 {

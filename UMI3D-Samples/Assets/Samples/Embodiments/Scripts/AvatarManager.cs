@@ -101,7 +101,7 @@ public class AvatarManager : MonoBehaviour
         if (user == null) yield break;
         var wait = new WaitForFixedUpdate();
 
-        UMI3DNode SkeletonParentNode = UMI3DEnvironment.Instance.GetEntityInstance<UMI3DNode>(user.CurrentTrackingFrame.parentId);
+        UMI3DNode SkeletonParentNode = UMI3DEnvironment.GetEntityInstance<UMI3DNode>(user.CurrentTrackingFrame.parentId);
 
         //while (SkeletonParentNode == null)
         //{

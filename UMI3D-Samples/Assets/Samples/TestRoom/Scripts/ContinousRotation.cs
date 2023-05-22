@@ -37,7 +37,7 @@ public class ContinousRotation : MonoBehaviour
         _animation = GetComponent<umi3d.edk.UMI3DNodeAnimation>();
         node = GetComponent<umi3d.edk.UMI3DNode>();
 
-        //ToUMI3DSerializable.ToSerializableVector4()
+        //ToUMI3DSerializable.ToVector4Dto()
         SetRotation();
     }
 

@@ -73,7 +73,7 @@ public class BindingsRollers : MonoBehaviour
         {
             syncPosition = true,
             syncRotation = true,
-            offsetRotation = (SerializableVector4)Quaternion.Euler(0, 80.7f, 0),
+            offsetRotation = Quaternion.Euler(0, 80.7f, 0),
             offsetPosition = new Vector3(0.034f, 0, 0.065f),
             users = UMI3DServer.Instance.UserSet(),
         };
@@ -82,7 +82,7 @@ public class BindingsRollers : MonoBehaviour
         {
             syncPosition = true,
             syncRotation = true,
-            offsetRotation = (SerializableVector4)Quaternion.Euler(0, 94.42f, 0),
+            offsetRotation = Quaternion.Euler(0, 94.42f, 0),
             offsetPosition = new Vector3(-0.034f, 0, 0.065f),
             users = UMI3DServer.Instance.UserSet(),
         };
