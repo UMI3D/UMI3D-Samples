@@ -289,6 +289,7 @@ public class AvatarManager : MonoBehaviour
 
         skeletonNode.objectModel.SetValue(walkingSubskeleton.animatedSubkeletonBundleResource);
         skeletonNode.userId = user.Id();
+        skeletonNode.priority = 10;
         skeletonNode.animationStates = walkingSubskeleton.animatorStateNames;
         skeletonNode.relatedAnimationIds = animations.Select(x => x.Id()).ToArray();
 
@@ -330,6 +331,7 @@ public class AvatarManager : MonoBehaviour
         // Create skeleton node as a UMI3D component
         skeletonNode.objectModel.SetValue(emoteSubskeleton.animatedSubkeletonBundleResource);
         skeletonNode.userId = user.Id();
+        skeletonNode.priority = 100;
         skeletonNode.animationStates = usedAnimationState;
         skeletonNode.relatedAnimationIds = animations.Select(x=>x.Id()).ToArray();
         HandledAvatars[user].emotesSkeletonNode = skeletonNode;
