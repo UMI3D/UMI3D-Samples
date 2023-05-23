@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,9 @@ limitations under the License.
 */
 
 using System.Collections.Generic;
+using umi3d.edk;
 
-namespace umi3d.common
+public class SceneSO
 {
-    [System.Serializable]
-    public class GlTFEnvironmentDto : AbstractEntityDto
-    {
-
-        public GlTFAsset asset { get; set; } = new GlTFAsset();
-
-        public List<GlTFSceneDto> scenes { get; set; } = new List<GlTFSceneDto>();
-
-        public object extensions { get; set; } = new GlTFEnvironmentExtensions();
-    }
+    public List<AssetLibrary> libraries { get; set; }
 }

@@ -18,7 +18,9 @@ using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using umi3d.common;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -28,7 +30,7 @@ namespace umi3d.edk
     /// Root node of any UMI3D enviroment.
     /// </summary>
     /// As there is only one envionment node, it could be called as a manager.
-    public class UMI3DEnvironment : SingleBehaviour<UMI3DEnvironment>
+    public class UMI3DEnvironment : SingleBehaviour<UMI3DEnvironment>, ISavable<EnvironmentSO>
     {
         private const DebugScope scope = DebugScope.EDK | DebugScope.Collaboration;
 
@@ -108,8 +110,11 @@ namespace umi3d.edk
                 id = UMI3DGlobalID.EnvironementId
             };
             env.scenes.AddRange(scenes.Where(s => s.LoadOnConnection(user)).Select(s => s.ToGlTFNodeDto(user)));
-            env.extensions.umi3d = CreateDto();
-            WriteProperties(env.extensions.umi3d, user);
+            if (env.extensions is GlTFEnvironmentExtensions ext)
+            {
+                ext.umi3d = CreateDto();
+                WriteProperties(ext.umi3d, user);
+            }
             return env;
         }
 
@@ -284,6 +289,58 @@ namespace umi3d.edk
         private UMI3DResource defaultMaterial = null;
 
         #endregion
+
+        EnvironmentSO ISavable<EnvironmentSO>.Save(EnvironmentSO data)
+        {
+            data.useDto = useDto;
+            data.name = environmentName;
+            
+            data.defaultStartPosition = defaultStartPosition.Dto();
+            data.defaultStartOrientation = defaultStartOrientation.Dto();
+
+            data.globalLibraries = globalLibraries;
+            data.preloadedScenes = preloadedScenes;
+
+            data.mode = (int)mode;
+            data.skyColor = skyColor.Dto();
+            data.horizontalColor = horizontalColor.Dto();
+            data.groundColor = groundColor.Dto();
+            data.ambientIntensity = ambientIntensity;
+            data.skyboxType = (int)skyboxType;
+
+            data.skyboxImage = skyboxImage;
+            data.skyboxRotation = skyboxRotation;
+
+            data.defaultMaterial = defaultMaterial;
+
+            return data;
+        }
+
+        Task<bool> ISavable<EnvironmentSO>.Load(EnvironmentSO data)
+        {
+            useDto = data.useDto;
+            environmentName = data.name;
+
+            defaultStartPosition = data.defaultStartPosition.Struct();
+            defaultStartOrientation = data.defaultStartOrientation.Struct();
+
+            globalLibraries = data.globalLibraries;
+            preloadedScenes = data.preloadedScenes;
+
+            RenderSettings.ambientMode =  (AmbientMode)data.mode;
+            RenderSettings.ambientSkyColor = data.skyColor.Struct();
+            RenderSettings.ambientEquatorColor = data.horizontalColor.Struct();
+            RenderSettings.ambientGroundColor = data.groundColor.Struct();
+            RenderSettings.ambientIntensity = data.ambientIntensity;
+            skyboxType = (SkyboxType)data.skyboxType;
+
+            skyboxImage = data.skyboxImage;
+            skyboxRotation = data.skyboxRotation;
+
+            defaultMaterial = data.defaultMaterial;
+
+            return Task.FromResult(true);
+        }
 
         #region entities
 

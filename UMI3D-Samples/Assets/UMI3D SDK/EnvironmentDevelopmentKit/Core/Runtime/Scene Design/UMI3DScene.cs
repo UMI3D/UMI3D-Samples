@@ -17,6 +17,7 @@ limitations under the License.
 using inetum.unityUtils;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine;
 
@@ -27,7 +28,7 @@ namespace umi3d.edk
     /// </summary>
     [DisallowMultipleComponent]
     [SelectionBase]
-    public class UMI3DScene : UMI3DAbstractNode
+    public class UMI3DScene : UMI3DAbstractNode, ISavable<SceneSO>
     {
 
         #region fields
@@ -75,7 +76,7 @@ namespace umi3d.edk
                 name = gameObject.name
             };
             nodes = GetAllChildrenInThisScene(user);
-            dto.extensions.umi3d = ToUMI3DSceneNodeDto(user);
+            (dto.extensions as GlTFSceneExtensions).umi3d = ToUMI3DSceneNodeDto(user);
             WriteCollections(dto, user);
 
             nodes.Clear();
@@ -195,7 +196,7 @@ namespace umi3d.edk
                 //Get new animations
                 IEnumerable<UMI3DAbstractAnimationDto> animations = node.GetAnimationsFor(user).Where(a => !animationIds.Contains(a.id));
                 //Add them to the glTF scene
-                scene.extensions.umi3d.animations.AddRange(animations);
+                (scene.extensions as GlTFSceneExtensions).umi3d.animations.AddRange(animations);
                 //remember their ids
                 animationIds.AddRange(animations.Select(a => a.id));
             }
@@ -207,6 +208,18 @@ namespace umi3d.edk
         public override IEntity ToEntityDto(UMI3DUser user)
         {
             return ToGlTFNodeDto(user);
+        }
+
+        SceneSO ISavable<SceneSO>.Save(SceneSO data)
+        {
+            data.libraries = libraries;
+            return data;
+        }
+
+        Task<bool> ISavable<SceneSO>.Load(SceneSO data)
+        {
+            libraries = data.libraries;
+            return Task.FromResult(true);
         }
     }
 }

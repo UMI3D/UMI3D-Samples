@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using UnityEngine;
 
 namespace inetum.unityUtils
@@ -25,10 +26,15 @@ namespace inetum.unityUtils
         public static A GetOrAddComponent<A>(this GameObject gameObject) where A : Component
         {
             System.Type type = typeof(A);
+            return GetOrAddComponent(gameObject,type) as A;
+        }
+
+        public static object GetOrAddComponent(this GameObject gameObject, Type type)
+        {
             Component _comp = gameObject.GetComponent(type);
             if (_comp == null)
                 _comp = gameObject.AddComponent(type);
-            return _comp as A;
+            return _comp;
         }
 
     }
