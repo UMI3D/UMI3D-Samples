@@ -90,6 +90,7 @@ public class MaterialUpdateColor : MonoBehaviour
         Transaction transaction = new Transaction();
         transaction.AddIfNotNull(plot.objectMaterialsOverrided.SetValue(true));
         var mat = ScriptableObject.CreateInstance<PBRMaterial>();
+        mat.alphaMode = MaterialSO.AlphaMode.OPAQUE;
         mat.baseColorFactor = color;
         // add mat on resources 
         transaction.AddIfNotNull(mat.GetLoadEntity());
@@ -110,6 +111,7 @@ public class MaterialUpdateColor : MonoBehaviour
         Transaction transaction = new Transaction();
         transaction.AddIfNotNull(plot.objectMaterialsOverrided.SetValue(true));
         var mat = ScriptableObject.CreateInstance<PBRMaterial>();
+        mat.alphaMode = MaterialSO.AlphaMode.OPAQUE;
         mat.baseColorFactor = color;
         // add mat on resources 
         transaction.AddIfNotNull(mat.GetLoadEntity());
@@ -153,6 +155,48 @@ public class MaterialUpdateColor : MonoBehaviour
             isMaterialAdded = true;
         }
     }
+
+
+    private List<MaterialOverrider> overriderListAdditif = new();
+    private PBRMaterial additivMat;
+    private MaterialOverrider addMaterialOverrider;
+    public void AddMultipleMaterial(UMI3DModel model)
+    {
+        Transaction transaction = new Transaction();
+        modelsToReset.Add(model);
+        if (additivMat == null)
+        {
+            additivMat = ScriptableObject.CreateInstance<PBRMaterial>();
+
+            /* other way to do the same thing 
+            toggleEmissiveMat.shaderProperties.Add("_EMISSION", true);
+            toggleEmissiveMat.shaderProperties.Add("_EmissionColor", ToUMI3DSerializable.ToSerializableColor(UnityEngine.Random.ColorHSV(), null));
+            */
+            additivMat.objectBaseColorFactor.SetValue(new Color (0,0,1,0.1f));
+            additivMat.alphaMode = MaterialSO.AlphaMode.BLEND;
+
+            transaction.AddIfNotNull(additivMat.GetLoadEntity());
+            UMI3DEnvironment.Instance.GetComponentInChildren<UMI3DScene>().PreloadedMaterials.Add(additivMat);
+            addMaterialOverrider = new MaterialOverrider()
+            {
+                overrideAllMaterial = false,
+                newMaterial = additivMat,
+                overidedMaterials = new() { "AddMat" },
+                addMaterialIfNotExists = true
+            };
+            transaction.AddIfNotNull(model.objectMaterialsOverrided.SetValue(true));
+            overriderListAdditif.Add(addMaterialOverrider);
+            transaction.AddIfNotNull(model.objectMaterialOverriders.SetValue(overriderListAdditif));
+        }
+        else
+        {
+            transaction.AddIfNotNull(model.objectMaterialsOverrided.SetValue(true)); // needed after reset 
+            transaction.AddIfNotNull(model.objectMaterialOverriders.Add(addMaterialOverrider));
+
+        }
+        transaction.Dispatch();
+
+    }
     public void RemoveMaterial(UMI3DModel model)
     {
         if (isMaterialAdded)
@@ -166,6 +210,7 @@ public class MaterialUpdateColor : MonoBehaviour
 
     //Shader properties by dictionary
     private OriginalMaterial originalMatForEnvColoring;
+    private List<MaterialOverrider> overiderList = new();
     public void ActiveEnvColoringProperty(UMI3DModel model)
     {
         Transaction transaction = new Transaction();
@@ -173,17 +218,63 @@ public class MaterialUpdateColor : MonoBehaviour
         if(originalMatForEnvColoring == null)
         {
             originalMatForEnvColoring = ScriptableObject.CreateInstance<OriginalMaterial>();
-            originalMatForEnvColoring.shaderProperties.Add("_ENVIRONMENT_COLORING", true);
-            originalMatForEnvColoring.shaderProperties.Add("_EnvironmentColorThreshold", 2f);
-            originalMatForEnvColoring.shaderProperties.Add("_EnvironmentColorIntensity", 1f);
+            originalMatForEnvColoring.shaderProperties.Add("_EMISSION", true);
+            originalMatForEnvColoring.shaderProperties.Add("_EmissionColor",  ToUMI3DSerializable.ToSerializableColor(UnityEngine.Random.ColorHSV(), null));
 
             transaction.AddIfNotNull(originalMatForEnvColoring.GetLoadEntity());
             UMI3DEnvironment.Instance.GetComponentInChildren<UMI3DScene>().PreloadedMaterials.Add(originalMatForEnvColoring);
+
+            transaction.AddIfNotNull(model.objectMaterialsOverrided.SetValue(true));
+            overiderList.Add(new MaterialOverrider() { overrideAllMaterial = true, newMaterial = originalMatForEnvColoring });
+            transaction.AddIfNotNull(model.objectMaterialOverriders.SetValue(overiderList));
         }
-        transaction.AddIfNotNull(model.objectMaterialsOverrided.SetValue(true));
-        transaction.AddIfNotNull(model.objectMaterialOverriders.Add(new MaterialOverrider() {overrideAllMaterial = true, newMaterial = originalMatForEnvColoring}));
+        else
+        {
+            transaction.AddIfNotNull(model.objectMaterialsOverrided.SetValue(true)); // needed after reset 
+            transaction.AddIfNotNull(model.objectMaterialOverriders.SetValue(overiderList));
+
+            transaction.AddIfNotNull(originalMatForEnvColoring.objectShaderProperties.SetValue("_EmissionColor", ToUMI3DSerializable.ToSerializableColor(UnityEngine.Random.ColorHSV(),null)));
+        }
         transaction.Dispatch();
     }
+
+
+    private List<MaterialOverrider> overiderListForToggle = new();
+    private PBRMaterial toggleEmissiveMat;
+    public void ToggleEmissive(UMI3DModel model)
+    {
+        Transaction transaction = new Transaction();
+        modelsToReset.Add(model);
+        if (toggleEmissiveMat == null)
+        {
+            toggleEmissiveMat = ScriptableObject.CreateInstance<PBRMaterial>();
+
+            /* other way to do the same thing 
+            toggleEmissiveMat.shaderProperties.Add("_EMISSION", true);
+            toggleEmissiveMat.shaderProperties.Add("_EmissionColor", ToUMI3DSerializable.ToSerializableColor(UnityEngine.Random.ColorHSV(), null));
+            */
+            toggleEmissiveMat.objectEmissiveFactor.SetValue(UnityEngine.Random.ColorHSV());
+
+            transaction.AddIfNotNull(toggleEmissiveMat.GetLoadEntity());
+            UMI3DEnvironment.Instance.GetComponentInChildren<UMI3DScene>().PreloadedMaterials.Add(toggleEmissiveMat);
+
+            transaction.AddIfNotNull(model.objectMaterialsOverrided.SetValue(true));
+            overiderListForToggle.Add(new MaterialOverrider() { overrideAllMaterial = true, newMaterial = toggleEmissiveMat });
+            transaction.AddIfNotNull(model.objectMaterialOverriders.SetValue(overiderListForToggle));
+        }
+        else
+        {
+            transaction.AddIfNotNull(model.objectMaterialsOverrided.SetValue(true)); // needed after reset 
+            transaction.AddIfNotNull(model.objectMaterialOverriders.SetValue(overiderListForToggle));
+
+            //transaction.AddIfNotNull(toggleEmissiveMat.objectShaderProperties.SetValue("_EmissionColor", ToUMI3DSerializable.ToSerializableColor(UnityEngine.Random.ColorHSV(), null)));
+            transaction.AddIfNotNull(toggleEmissiveMat.objectEmissiveFactor.SetValue(UnityEngine.Random.ColorHSV()));
+
+        }
+        transaction.Dispatch();
+    }
+
+
 
     //Reset
     private List<Tuple<PBRMaterial, Color>> materialsToReset = new List<Tuple<PBRMaterial, Color>>();

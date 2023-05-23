@@ -34,7 +34,7 @@ sysinfo.txt
 # Builds
 *.apk
 /UMI3D-Samples/Logs/
-/UserSettings/
+[Uu]serSettings/
 
 /UMI3D-Samples/UserSettings/Layouts/default-2021.dwlt
 /UMI3D-Samples/UserSettings/EditorUserSettings.asset
