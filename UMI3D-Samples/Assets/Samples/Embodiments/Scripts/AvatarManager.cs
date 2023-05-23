@@ -130,6 +130,8 @@ public class AvatarManager : MonoBehaviour
         UMI3DForgeServer.avatarFrameEvent += OnUserFrame;
     }
 
+    private Queue<float> speedQueue = new();
+
     private void OnUserFrame(UserTrackingFrameDto frameDto, ulong userId)
     {
         var user = UMI3DCollaborationServer.Instance.Users().First(x => x.Id() == frameDto.userId);
@@ -138,7 +140,13 @@ public class AvatarManager : MonoBehaviour
             float speed = (frameDto.position - HandledAvatars[user].lastPosition).magnitude / maxSpeed;
             if (HandledAvatars[user].walkingAnimation.objectParameters.GetValue().Count == 0)
                 return;
-            var op = HandledAvatars[user].walkingAnimation.objectParameters.SetValue("Speed", speed);
+
+            speedQueue.Enqueue(speed);
+
+            if (speedQueue.Count > 10)
+                speedQueue.Dequeue();
+
+            var op = HandledAvatars[user].walkingAnimation.objectParameters.SetValue("Speed", (float)speedQueue.Average());
             HandledAvatars[user].lastPosition = frameDto.position;
             Transaction t = new();
             t.AddIfNotNull(op);
