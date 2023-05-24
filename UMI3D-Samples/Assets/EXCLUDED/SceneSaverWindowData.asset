@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb007c49f56a66e44ac0d32385d97042, type: 3}
+  m_Name: SceneSaverWindowData
+  m_EditorClassIdentifier: 
+  tmp: "{\r\n  \"$type\": \"umi3d.common.GlTFEnvironmentDto, UMI3D.Common.Core\",\r\n 
+    \"asset\": {\r\n    \"$type\": \"umi3d.common.GlTFAsset, UMI3D.Common.Core\",\r\n   
+    \"version\": \"2.0\",\r\n    \"generator\": \"UMI3D@2.6.b.230428\",\r\n    \"copyright\":
+    \"2019 (c) Gfi Informatique\"\r\n  },\r\n  \"scenes\": {\r\n    \"$type\": \"System.Collections.Generic.List`1[[umi3d.common.GlTFSceneDto,
+    UMI3D.Common.Core]], mscorlib\",\r\n    \"$values\": [\r\n      {\r\n       
+    \"$type\": \"umi3d.common.GlTFSceneDto, UMI3D.Common.Core\",\r\n        \"name\":
+    \"Scene1\",\r\n        \"nodes\": {\r\n          \"$type\": \"System.Collections.Generic.List`1[[umi3d.common.GlTFNodeDto,
+    UMI3D.Common.Core]], mscorlib\",\r\n          \"$values\": []\r\n        },\r\n       
+    \"materials\": {\r\n          \"$type\": \"System.Collections.Generic.List`1[[umi3d.common.GlTFMaterialDto,
+    UMI3D.Common.Core]], mscorlib\",\r\n          \"$values\": []\r\n        },\r\n       
+    \"extensions\": {\r\n          \"$type\": \"ComponentExtensionSO, UMI3D.EDK.Core\",\r\n         
+    \"name\": \"umi3d.edk.UMI3DScene\",\r\n          \"data\": {\r\n            \"$type\":
+    \"SceneSO, UMI3D.EDK.Core\",\r\n            \"libraries\": {\r\n             
+    \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.AssetLibrary, UMI3D.EDK.Core]],
+    mscorlib\",\r\n              \"$values\": [\r\n                {\r\n                 
+    \"$type\": \"umi3d.edk.AssetLibrary, UMI3D.EDK.Core\",\r\n                  \"id\":
+    \"com.gfi.primitive\",\r\n                  \"version\": \"0.1.1\",\r\n                 
+    \"variants\": {\r\n                    \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.UMI3DLocalAssetDirectory,
+    UMI3D.EDK.Core]], mscorlib\",\r\n                    \"$values\": [\r\n                     
+    {\r\n                        \"$type\": \"umi3d.edk.UMI3DLocalAssetDirectory,
+    UMI3D.EDK.Core\",\r\n                        \"name\": \"default\",\r\n                       
+    \"path\": \"private\\\\com.gfi.primitive\\\\default\",\r\n                       
+    \"metrics\": {\r\n                          \"$type\": \"umi3d.edk.UMI3DLocalAssetDirectory+AssetMetric,
+    UMI3D.EDK.Core\",\r\n                          \"resolution\": 1,\r\n                         
+    \"size\": 0.0\r\n                        },\r\n                        \"formats\":
+    {\r\n                          \"$type\": \"System.Collections.Generic.List`1[[System.String,
+    mscorlib]], mscorlib\",\r\n                          \"$values\": [\r\n                           
+    \"obj\"\r\n                          ]\r\n                        }\r\n                     
+    }\r\n                    ]\r\n                  },\r\n                  \"idVersion\":
+    \"com.gfi.primitive:0.1.1\",\r\n                  \"name\": \"primitiveLibrary\",\r\n                 
+    \"hideFlags\": 0\r\n                },\r\n                {\r\n                 
+    \"$type\": \"umi3d.edk.AssetLibrary, UMI3D.EDK.Core\",\r\n                  \"id\":
+    \"com.gfi.test_room\",\r\n                  \"version\": \"0.1\",\r\n                 
+    \"variants\": {\r\n                    \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.UMI3DLocalAssetDirectory,
+    UMI3D.EDK.Core]], mscorlib\",\r\n                    \"$values\": [\r\n                     
+    {\r\n                        \"$type\": \"umi3d.edk.UMI3DLocalAssetDirectory,
+    UMI3D.EDK.Core\",\r\n                        \"name\": \"default\",\r\n                       
+    \"path\": \"private\\\\com.gfi.test_room\\\\default\",\r\n                       
+    \"metrics\": {\r\n                          \"$type\": \"umi3d.edk.UMI3DLocalAssetDirectory+AssetMetric,
+    UMI3D.EDK.Core\",\r\n                          \"resolution\": 1,\r\n                         
+    \"size\": 0.0\r\n                        },\r\n                        \"formats\":
+    {\r\n                          \"$type\": \"System.Collections.Generic.List`1[[System.String,
+    mscorlib]], mscorlib\",\r\n                          \"$values\": []\r\n                       
+    }\r\n                      }\r\n                    ]\r\n                  },\r\n                 
+    \"idVersion\": \"com.gfi.test_room:0.1\",\r\n                  \"name\": \"TestRoomLibrary\",\r\n                 
+    \"hideFlags\": 0\r\n                }\r\n              ]\r\n            }\r\n         
+    }\r\n        }\r\n      },\r\n      {\r\n        \"$type\": \"umi3d.common.GlTFSceneDto,
+    UMI3D.Common.Core\",\r\n        \"name\": \"Scene_room\",\r\n        \"nodes\":
+    {\r\n          \"$type\": \"System.Collections.Generic.List`1[[umi3d.common.GlTFNodeDto,
+    UMI3D.Common.Core]], mscorlib\",\r\n          \"$values\": []\r\n        },\r\n       
+    \"materials\": {\r\n          \"$type\": \"System.Collections.Generic.List`1[[umi3d.common.GlTFMaterialDto,
+    UMI3D.Common.Core]], mscorlib\",\r\n          \"$values\": []\r\n        },\r\n       
+    \"extensions\": {\r\n          \"$type\": \"ComponentExtensionSO, UMI3D.EDK.Core\",\r\n         
+    \"name\": \"umi3d.edk.UMI3DScene\",\r\n          \"data\": {\r\n            \"$type\":
+    \"SceneSO, UMI3D.EDK.Core\",\r\n            \"libraries\": {\r\n             
+    \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.AssetLibrary, UMI3D.EDK.Core]],
+    mscorlib\",\r\n              \"$values\": [\r\n                {\r\n                 
+    \"$type\": \"umi3d.edk.AssetLibrary, UMI3D.EDK.Core\",\r\n                  \"id\":
+    \"com.gfi.test_room\",\r\n                  \"version\": \"0.1\",\r\n                 
+    \"variants\": {\r\n                    \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.UMI3DLocalAssetDirectory,
+    UMI3D.EDK.Core]], mscorlib\",\r\n                    \"$values\": [\r\n                     
+    {\r\n                        \"$type\": \"umi3d.edk.UMI3DLocalAssetDirectory,
+    UMI3D.EDK.Core\",\r\n                        \"name\": \"default\",\r\n                       
+    \"path\": \"private\\\\com.gfi.test_room\\\\default\",\r\n                       
+    \"metrics\": {\r\n                          \"$type\": \"umi3d.edk.UMI3DLocalAssetDirectory+AssetMetric,
+    UMI3D.EDK.Core\",\r\n                          \"resolution\": 1,\r\n                         
+    \"size\": 0.0\r\n                        },\r\n                        \"formats\":
+    {\r\n                          \"$type\": \"System.Collections.Generic.List`1[[System.String,
+    mscorlib]], mscorlib\",\r\n                          \"$values\": []\r\n                       
+    }\r\n                      }\r\n                    ]\r\n                  },\r\n                 
+    \"idVersion\": \"com.gfi.test_room:0.1\",\r\n                  \"name\": \"TestRoomLibrary\",\r\n                 
+    \"hideFlags\": 0\r\n                }\r\n              ]\r\n            }\r\n         
+    }\r\n        }\r\n      },\r\n      {\r\n        \"$type\": \"umi3d.common.GlTFSceneDto,
+    UMI3D.Common.Core\",\r\n        \"name\": \"Scene_Avatar\",\r\n        \"nodes\":
+    {\r\n          \"$type\": \"System.Collections.Generic.List`1[[umi3d.common.GlTFNodeDto,
+    UMI3D.Common.Core]], mscorlib\",\r\n          \"$values\": []\r\n        },\r\n       
+    \"materials\": {\r\n          \"$type\": \"System.Collections.Generic.List`1[[umi3d.common.GlTFMaterialDto,
+    UMI3D.Common.Core]], mscorlib\",\r\n          \"$values\": []\r\n        },\r\n       
+    \"extensions\": {\r\n          \"$type\": \"ComponentExtensionSO, UMI3D.EDK.Core\",\r\n         
+    \"name\": \"umi3d.edk.UMI3DScene\",\r\n          \"data\": {\r\n            \"$type\":
+    \"SceneSO, UMI3D.EDK.Core\",\r\n            \"libraries\": {\r\n             
+    \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.AssetLibrary, UMI3D.EDK.Core]],
+    mscorlib\",\r\n              \"$values\": []\r\n            }\r\n          }\r\n       
+    }\r\n      }\r\n    ]\r\n  },\r\n  \"extensions\": {\r\n    \"$type\": \"ComponentExtensionSO,
+    UMI3D.EDK.Core\",\r\n    \"name\": \"umi3d.edk.collaboration.UMI3DCollaborationEnvironment\",\r\n   
+    \"data\": {\r\n      \"$type\": \"EnvironmentSO, UMI3D.EDK.Core\",\r\n      \"useDto\":
+    false,\r\n      \"name\": \"test\",\r\n      \"defaultStartPosition\": {\r\n       
+    \"$type\": \"umi3d.common.Vector3Dto, UMI3D.Common.Core\",\r\n        \"X\":
+    0.0,\r\n        \"Y\": 0.0,\r\n        \"Z\": 0.0\r\n      },\r\n      \"defaultStartOrientation\":
+    {\r\n        \"$type\": \"umi3d.common.Vector3Dto, UMI3D.Common.Core\",\r\n       
+    \"X\": 0.0,\r\n        \"Y\": 0.0,\r\n        \"Z\": 0.0\r\n      },\r\n     
+    \"globalLibraries\": {\r\n        \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.AssetLibrary,
+    UMI3D.EDK.Core]], mscorlib\",\r\n        \"$values\": [\r\n          {\r\n           
+    \"$type\": \"umi3d.edk.AssetLibrary, UMI3D.EDK.Core\",\r\n            \"id\":
+    \"com.gfi.test_room\",\r\n            \"version\": \"0.1\",\r\n            \"variants\":
+    {\r\n              \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.UMI3DLocalAssetDirectory,
+    UMI3D.EDK.Core]], mscorlib\",\r\n              \"$values\": [\r\n               
+    {\r\n                  \"$type\": \"umi3d.edk.UMI3DLocalAssetDirectory, UMI3D.EDK.Core\",\r\n                 
+    \"name\": \"default\",\r\n                  \"path\": \"private\\\\com.gfi.test_room\\\\default\",\r\n                 
+    \"metrics\": {\r\n                    \"$type\": \"umi3d.edk.UMI3DLocalAssetDirectory+AssetMetric,
+    UMI3D.EDK.Core\",\r\n                    \"resolution\": 1,\r\n                   
+    \"size\": 0.0\r\n                  },\r\n                  \"formats\": {\r\n                   
+    \"$type\": \"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\r\n                   
+    \"$values\": []\r\n                  }\r\n                }\r\n             
+    ]\r\n            },\r\n            \"idVersion\": \"com.gfi.test_room:0.1\",\r\n           
+    \"name\": \"TestRoomLibrary\",\r\n            \"hideFlags\": 0\r\n          }\r\n       
+    ]\r\n      },\r\n      \"preloadedScenes\": {\r\n        \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.UMI3DResource,
+    UMI3D.EDK.Core]], mscorlib\",\r\n        \"$values\": []\r\n      },\r\n     
+    \"mode\": 1,\r\n      \"skyColor\": {\r\n        \"$type\": \"umi3d.common.ColorDto,
+    UMI3D.Common.Core\",\r\n        \"R\": 0.509434,\r\n        \"G\": 0.5048434,\r\n       
+    \"B\": 0.425329328,\r\n        \"A\": 1.0\r\n      },\r\n      \"horizontalColor\":
+    {\r\n        \"$type\": \"umi3d.common.ColorDto, UMI3D.Common.Core\",\r\n       
+    \"R\": 0.114,\r\n        \"G\": 0.125,\r\n        \"B\": 0.133,\r\n        \"A\":
+    1.0\r\n      },\r\n      \"groundColor\": {\r\n        \"$type\": \"umi3d.common.ColorDto,
+    UMI3D.Common.Core\",\r\n        \"R\": 0.047,\r\n        \"G\": 0.043,\r\n       
+    \"B\": 0.035,\r\n        \"A\": 1.0\r\n      },\r\n      \"ambientIntensity\":
+    1.0,\r\n      \"skyboxType\": 0,\r\n      \"skyboxImage\": {\r\n        \"$type\":
+    \"umi3d.edk.UMI3DResource, UMI3D.EDK.Core\",\r\n        \"variants\": {\r\n         
+    \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.UMI3DResourceFile,
+    UMI3D.EDK.Core]], mscorlib\",\r\n          \"$values\": []\r\n        }\r\n     
+    },\r\n      \"skyboxRotation\": 0.0,\r\n      \"defaultMaterial\": {\r\n       
+    \"$type\": \"umi3d.edk.UMI3DResource, UMI3D.EDK.Core\",\r\n        \"variants\":
+    {\r\n          \"$type\": \"System.Collections.Generic.List`1[[umi3d.edk.UMI3DResourceFile,
+    UMI3D.EDK.Core]], mscorlib\",\r\n          \"$values\": []\r\n        }\r\n     
+    }\r\n    }\r\n  },\r\n  \"id\": 0\r\n}"

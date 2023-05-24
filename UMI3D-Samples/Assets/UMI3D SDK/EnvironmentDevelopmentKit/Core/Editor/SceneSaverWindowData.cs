@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,14 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+#if UNITY_EDITOR
 
-namespace umi3d.common
+namespace umi3d.edk.editor
 {
-    [System.Serializable]
-    public class GlTFAsset
+    using UnityEngine;
+
+    //[CreateAssetMenu(fileName = "UpdateHelperData", menuName = "Build Helper/Build Helper Data", order = 1)]
+    public class SceneSaverWindowData : ScriptableObject
     {
-        public string version { get; set; } = "2.0";
-        public string generator { get; set; } = "UMI3D@" + UMI3DVersion.version;
-        public string copyright { get; set; } = "2019 (c) Inetum";
+        //public List<ProjectData> projects = new List<ProjectData>();
+        [TextArea(3,40)]
+        public string tmp;
     }
 }
+#endif
