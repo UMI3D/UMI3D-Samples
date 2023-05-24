@@ -40,7 +40,7 @@ public class AvatarManager : MonoBehaviour
         public UMI3DSkeletonNode walkingSkeletonNode;
         public Vector3 lastPosition;
         public List<UMI3DAnimatorAnimation> emotesAnimations = new();
-        public UMI3DAnimatorAnimation walkingAnimation = new();
+        public UMI3DAnimatorAnimation walkingAnimation;
     }
 
     #region Avatar Model
@@ -93,7 +93,7 @@ public class AvatarManager : MonoBehaviour
     [SerializeField]
     private bool sendWalkingAnimator;
 
-    [SerializeField]
+    [SerializeField, EditorReadOnly]
     private SubskeletonDescription movementSubskeletonData;
 
     [SerializeField]
@@ -107,7 +107,7 @@ public class AvatarManager : MonoBehaviour
     [SerializeField]
     private bool sendEmotes;
 
-    [SerializeField]
+    [SerializeField, EditorReadOnly]
     private EmotesSubskeletonDescription emotesSubskeletonData = new();
 
     [Serializable]
@@ -137,8 +137,10 @@ public class AvatarManager : MonoBehaviour
         var user = UMI3DCollaborationServer.Instance.Users().First(x => x.Id() == frameDto.userId);
         if (HandledAvatars.ContainsKey(user))
         {
-            float speed = (frameDto.position - HandledAvatars[user].lastPosition).magnitude / maxSpeed;
-            if (HandledAvatars[user].walkingAnimation.objectParameters.GetValue().Count == 0)
+            float speed = (frameDto.position.Struct() - HandledAvatars[user].lastPosition).magnitude / maxSpeed;
+            HandledAvatars[user].lastPosition = frameDto.position.Struct();
+
+            if (HandledAvatars[user].walkingAnimation == null || HandledAvatars[user].walkingAnimation.objectParameters.GetValue().Count == 0)
                 return;
 
             speedQueue.Enqueue(speed);
@@ -146,11 +148,16 @@ public class AvatarManager : MonoBehaviour
             if (speedQueue.Count > 10)
                 speedQueue.Dequeue();
 
-            var op = HandledAvatars[user].walkingAnimation.objectParameters.SetValue("Speed", (float)speedQueue.Average());
-            HandledAvatars[user].lastPosition = frameDto.position;
-            Transaction t = new();
-            t.AddIfNotNull(op);
-            t.Dispatch();
+            var previousSpeed = (float)HandledAvatars[user].walkingAnimation.objectParameters.GetValue("Speed");
+            var newSpeed = speedQueue.Average();
+            if (Math.Abs(previousSpeed - newSpeed) > 1e-1)
+            {
+                var op = HandledAvatars[user].walkingAnimation.objectParameters.SetValue("Speed", newSpeed);
+
+                Transaction t = new();
+                t.AddIfNotNull(op);
+                t.Dispatch();
+            }
         }
     }
 
@@ -207,7 +214,8 @@ public class AvatarManager : MonoBehaviour
 
         Transaction t = new() { reliable = true };
         t.AddIfNotNull(LoadAvatar(collabUser, out UMI3DModel avatarModel));
-        t.AddIfNotNull(BindAvatar(collabUser, avatarModel));
+        if (bindRig)
+            t.AddIfNotNull(BindAvatar(collabUser, avatarModel));
         if (sendWalkingAnimator)
             t.AddIfNotNull(LoadWalkingAimations(collabUser, avatarModel, movementSubskeletonData));
         if (sendEmotes)
@@ -226,7 +234,7 @@ public class AvatarManager : MonoBehaviour
 
         avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
         avatarModel.objectModel.SetValue(AvatarModel);
-        avatarModel.objectScale.SetValue(user.userSize.GetValue(user));
+        avatarModel.objectScale.SetValue(user.userSize.GetValue(user).Struct());
 
         HandledAvatars[user] = new HandledInfos() { avatar = avatarModel };
 
@@ -284,7 +292,7 @@ public class AvatarManager : MonoBehaviour
             animation.objectNode.SetValue(skeletonNode);
             animation.objectLooping.SetValue(true);
             animation.objectPlaying.SetValue(true);
-            animation.objectParameters.Add("Speed", 0);
+            animation.objectParameters.Add("Speed", 0f);
             animation.objectStateName.SetValue(animationState);
             HandledAvatars[user].walkingAnimation = animation;
             ops.Add(animation.GetLoadEntity());
