@@ -4442,7 +4442,9 @@ MonoBehaviour:
   UMI3DAnchor: {fileID: 0}
   immersiveOnly: 0
   VolumeId: 0
-  libraries: []
+  libraries:
+  - {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+  - {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
   materialIds: 
   animationIds: 
   materialSOs: []
@@ -5905,9 +5907,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1528412417}
-  - component: {fileID: 1528412418}
+  - component: {fileID: 1528412419}
   m_Layer: 0
-  m_Name: Embodiment manager
+  m_Name: AvatarManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5928,7 +5930,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1528412418
+--- !u!114 &1528412419
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5937,9 +5939,157 @@ MonoBehaviour:
   m_GameObject: {fileID: 1528412416}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce2cbb502d5bc514f9ce040afe8ecead, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ad6a97d852faa4f81ef6bc5a58af69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AvatarScene: {fileID: 1183297983}
+  AvatarModel:
+    variants:
+    - isLocalFile: 1
+      domain: 
+      path: private\com.gfi.avatar\default\unitskeleton.prefab.bundle
+      format: unity_standalone
+      extension: .bundle
+      isInBundle: 1
+      pathIfInBundle: Assets/Samples/Embodiments/Models/UnitSkeleton.prefab
+      metrics:
+        resolution: 0
+        size: 1432.743
+      isInLibrary: 1
+      libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+  bindRig: 1
+  Rigs:
+    binds:
+    - boneType: 13
+      rigName: mixamorig:Hips
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 7
+      rigName: mixamorig:LeftUpLeg
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 9
+      rigName: mixamorig:LeftLeg
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 4
+      rigName: mixamorig:LeftFoot
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 8
+      rigName: mixamorig:LeftToeBase
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 17
+      rigName: mixamorig:RightUpLeg
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 19
+      rigName: mixamorig:RightLeg
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 14
+      rigName: mixamorig:RightFoot
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 18
+      rigName: mixamorig:RightToeBase
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 24
+      rigName: mixamorig:Spine1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 23
+      rigName: mixamorig:Spine2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 10
+      rigName: mixamorig:LeftShoulder
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 11
+      rigName: mixamorig:LeftArm
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 5
+      rigName: mixamorig:LeftForeArm
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 6
+      rigName: mixamorig:LeftHand
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 12
+      rigName: mixamorig:Neck
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 3
+      rigName: mixamorig:Head
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 20
+      rigName: mixamorig:RightShoulder
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 21
+      rigName: mixamorig:RightArm
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 15
+      rigName: mixamorig:RightForeArm
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 16
+      rigName: mixamorig:RightHand
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 25
+      rigName: mixamorig:Spine
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+  sendWalkingAnimator: 1
+  movementSubskeletonData:
+    animatedSubkeletonBundleResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: private\com.gfi.avatar\default\walkinganimator.prefab.bundle
+        format: unity_standalone
+        extension: .bundle
+        isInBundle: 1
+        pathIfInBundle: Assets/WalkingAnimator.prefab
+        metrics:
+          resolution: 0
+          size: 78.162
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+    animatorStateNames:
+    - Walking (Blend tree)
+  maxSpeed: 0.5
+  sendEmotes: 1
+  emotesSubskeletonData:
+    animatedSubkeletonBundleResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: private\com.inetum.emotes\default\emoteanimatorbundle.prefab.bundle
+        format: gltf
+        extension: .bundle
+        isInBundle: 1
+        pathIfInBundle: Assets/Samples/Embodiments/Models/EmoteAnimator.prefab
+        metrics:
+          resolution: 0
+          size: 231.378
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+    animatorStateNames:
+    - Waving
+    - Yes
+    - No
+    - Dancing
+    - Dive Roll
+    emoteConfig: {fileID: 11400000, guid: 757f65e158d2523429d16f68d9d81109, type: 2}
 --- !u!4 &1532318487 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 201602353761364307, guid: fc37607fd0d1cbe418719468011efbf6,

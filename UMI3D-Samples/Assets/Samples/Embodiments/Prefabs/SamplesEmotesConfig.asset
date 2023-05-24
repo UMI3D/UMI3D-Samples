@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee36aa836f563248a9c6168f32868db, type: 3}
+  m_Name: SamplesEmotesConfig
+  m_EditorClassIdentifier: 
+  allAvailableAtStartByDefault: 0
+  IncludedEmotes:
+  - id: 0
+    label: Hello
+    availableAtStart: 1
+    iconResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: private\com.inetum.emotes\default\Emote_Waving.png
+        format: png
+        extension: .png
+        isInBundle: 0
+        pathIfInBundle: 
+        metrics:
+          resolution: 0
+          size: 1.5
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+    registered: 0
+  - id: 0
+    label: Yes
+    availableAtStart: 1
+    iconResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: private\com.inetum.emotes\default\Emote_Yes.png
+        format: png
+        extension: .png
+        isInBundle: 0
+        pathIfInBundle: 
+        metrics:
+          resolution: 0
+          size: 1.457
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+    registered: 0
+  - id: 0
+    label: No
+    availableAtStart: 1
+    iconResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: private\com.inetum.emotes\default\EMOTE_NO.png
+        format: png
+        extension: .png
+        isInBundle: 0
+        pathIfInBundle: 
+        metrics:
+          resolution: 0
+          size: 1.522
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+    registered: 0
+  - id: 0
+    label: Dance
+    availableAtStart: 0
+    iconResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: private\com.inetum.emotes\default\EMOTE_DANCING.png
+        format: png
+        extension: .png
+        isInBundle: 0
+        pathIfInBundle: 
+        metrics:
+          resolution: 0
+          size: 1.224
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+    registered: 0

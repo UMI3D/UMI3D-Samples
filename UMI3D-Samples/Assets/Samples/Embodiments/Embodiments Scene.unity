@@ -1894,35 +1894,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15ad6a97d852faa4f81ef6bc5a58af69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Avatar:
+  AvatarModel:
     variants:
     - isLocalFile: 1
       domain: 
-      path: private\com.gfi.avatar\default\unitskeleton-testanim.prefab.bundle
+      path: private\com.gfi.avatar\default\unitskeleton.prefab.bundle
       format: unity_standalone
       extension: .bundle
       isInBundle: 1
       pathIfInBundle: Assets/Samples/Embodiments/Models/UnitSkeleton.prefab
       metrics:
         resolution: 0
-        size: 1430.699
+        size: 1432.743
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
-    - isLocalFile: 1
-      domain: 
-      path: private\com.gfi.avatar\android\unitskeleton.prefab.bundle
-      format: unity_android
-      extension: .bundle
-      isInBundle: 1
-      pathIfInBundle: Assets/Samples/Embodiments/Models/UnitSkeleton.prefab
-      metrics:
-        resolution: 0
-        size: 1655.312
-      isInLibrary: 1
-      libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
-  skeletonsData: []
   bindRig: 1
-  binds:
+  Rigs:
     binds:
     - boneType: 13
       rigName: mixamorig:Hips
@@ -2016,8 +2003,28 @@ MonoBehaviour:
       rigName: mixamorig:Spine
       positionOffset: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
-  positionOffset: {x: 0, y: 0, z: 0}
-  rotationOffset: {x: 0, y: 0, z: 0}
+  emotesSubskeletonData:
+    emoteSubkeletonBundleResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: private\com.inetum.emotes\default\emoteanimatorbundle.prefab.bundle
+        format: unity_standalone
+        extension: .bundle
+        isInBundle: 1
+        pathIfInBundle: Assets/Samples/Embodiments/Models/EmoteAnimator.prefab
+        metrics:
+          resolution: 0
+          size: 231.378
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+    animatorStateNames:
+    - Waving
+    - Yes
+    - No
+    - Dancing
+    - Dive Roll
+    emoteConfig: {fileID: 11400000, guid: c4eb22d068d9e37458697461a1b01b1a, type: 2}
 --- !u!1 &1628678761
 GameObject:
   m_ObjectHideFlags: 0
