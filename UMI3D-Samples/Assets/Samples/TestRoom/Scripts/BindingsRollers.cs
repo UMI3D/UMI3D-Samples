@@ -46,16 +46,13 @@ public class BindingsRollers : MonoBehaviour
     private Vector3 ResetPosition;
     private Quaternion ResetRotation;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Listener.SetNodes.AddListener(() => Listener.RemoveNode(VehicleModel));
-    }
+    private IBindingService bindingHelperServer;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-
+        bindingHelperServer = BindingManager.Instance;
+        Listener = SimpleModificationListener.Exists ? SimpleModificationListener.Instance : null;
+        Listener?.SetNodes.AddListener(() => Listener.RemoveNode(VehicleModel));
     }
 
     public void BindRollers(umi3d.edk.interaction.AbstractInteraction.InteractionEventContent content)
@@ -69,28 +66,26 @@ public class BindingsRollers : MonoBehaviour
         //ResetPosition = tempUser.Avatar.transform.localPosition;
         //ResetRotation = tempUser.Avatar.transform.localRotation;
 
-        BoneBinding LeftBinding = new BoneBinding(LeftRoller.GetComponent<UMI3DNode>().Id(), BoneType.LeftAnkle, tempUser.Id())
+        BoneBinding LeftBinding = new BoneBinding(LeftRoller.GetComponent<UMI3DNode>().Id(), tempUser.Id(), BoneType.LeftAnkle)
         {
             syncPosition = true,
             syncRotation = true,
             offsetRotation = Quaternion.Euler(0, 80.7f, 0),
             offsetPosition = new Vector3(0.034f, 0, 0.065f),
-            users = UMI3DServer.Instance.UserSet(),
         };
 
-        BoneBinding RightBinding = new BoneBinding(RightRoller.GetComponent<UMI3DNode>().Id(), BoneType.RightAnkle, tempUser.Id())
+        BoneBinding RightBinding = new BoneBinding(RightRoller.GetComponent<UMI3DNode>().Id(), tempUser.Id(), BoneType.RightAnkle)
         {
             syncPosition = true,
             syncRotation = true,
             offsetRotation = Quaternion.Euler(0, 94.42f, 0),
             offsetPosition = new Vector3(-0.034f, 0, 0.065f),
-            users = UMI3DServer.Instance.UserSet(),
         };
 
         rollerBindings.Add(LeftBinding);
         rollerBindings.Add(RightBinding);
 
-        var op = BindingHelper.Instance.AddBindingRange(rollerBindings);
+        var op = bindingHelperServer.AddBindingRange(rollerBindings);
 
         Transaction transaction = new();
         transaction.AddIfNotNull(op);
@@ -116,8 +111,8 @@ public class BindingsRollers : MonoBehaviour
             reliable = true
         };
 
-        transaction.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(LeftRoller.GetComponent<UMI3DNode>().Id()));
-        transaction.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(RightRoller.GetComponent<UMI3DNode>().Id()));
+        transaction.AddIfNotNull(bindingHelperServer.RemoveAllBindings(LeftRoller.GetComponent<UMI3DNode>().Id()));
+        transaction.AddIfNotNull(bindingHelperServer.RemoveAllBindings(RightRoller.GetComponent<UMI3DNode>().Id()));
 
         UMI3DServer.Dispatch(transaction);
         tempUser = null;

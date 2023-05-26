@@ -12,12 +12,12 @@ public class BindingWindmills : MonoBehaviour
 
     private bool arebound;
 
-    private IBindingHelper bindingHelperServer;
+    private IBindingService bindingHelperServer;
     private UMI3DServer umi3dServerService;
 
     private void Start()
     {
-        bindingHelperServer = BindingHelper.Instance;
+        bindingHelperServer = BindingManager.Instance;
         umi3dServerService = UMI3DServer.Instance;
     }
 
@@ -46,12 +46,11 @@ public class BindingWindmills : MonoBehaviour
         {
             NodeBinding binding = new(node.Id(), mainWindmill.Id())
             {
-                users = umi3dServerService.UserSet(),
                 syncRotation = true,
                 offsetRotation = Quaternion.Inverse(mainWindmill.transform.rotation) * node.objectRotation.GetValue()
             };
 
-            var op = BindingHelper.Instance.AddBinding(binding);
+            var op = bindingHelperServer.AddBinding(binding);
             t.AddIfNotNull(op);
         }
 
