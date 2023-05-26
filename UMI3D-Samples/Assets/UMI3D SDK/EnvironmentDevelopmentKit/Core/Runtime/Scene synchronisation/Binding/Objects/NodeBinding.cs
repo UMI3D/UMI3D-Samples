@@ -26,35 +26,37 @@ namespace umi3d.edk
         /// <summary>
         /// Node to which the object is attached upon.
         /// </summary>
-        public ulong nodeId;
+        public ulong parentNodeId;
 
-        public NodeBinding(ulong boundNodeId, ulong nodeId) : base(boundNodeId)
+        public NodeBinding(ulong boundNodeId, ulong parentNodeId) : base(boundNodeId)
         {
-            this.nodeId = nodeId;
+            this.parentNodeId = parentNodeId;
         }
 
         /// <inheritdoc/>
-        public override BindingDto ToDto()
+        public override IEntity ToEntityDto(UMI3DUser user)
         {
             AbstractBindingDataDto bindingDataDto;
 
             bindingDataDto = new NodeBindingDataDto
             {
-                nodeId= nodeId,
-                offSetPosition= offsetPosition.Dto(),
-                offSetRotation= offsetRotation.Dto(),
-                offSetScale= offsetScale.Dto(),
-                partialFit= partialFit,
-                priority= priority,
-                syncPosition= syncPosition,
-                syncRotation= syncRotation,
-                syncScale= syncScale,
-                anchorPosition= anchor.Dto()
+                parentNodeId = parentNodeId,
+                offSetPosition = offsetPosition.Dto(),
+                offSetRotation = offsetRotation.Dto(),
+                offSetScale = offsetScale.Dto(),
+                partialFit = partialFit,
+                priority = priority,
+                syncPosition = syncPosition,
+                syncRotation = syncRotation,
+                syncScale = syncScale,
+                anchorPosition = anchor.Dto()
             };
 
-            var bindingDto = new BindingDto{
-                boundNodeId= base.boundNodeId,
-                data= bindingDataDto
+            var bindingDto = new BindingDto
+            {
+                id = Id(),
+                boundNodeId = base.boundNodeId,
+                data = bindingDataDto
             };
 
             return bindingDto;

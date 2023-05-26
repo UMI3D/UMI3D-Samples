@@ -35,34 +35,26 @@ namespace umi3d.edk
         {
         }
 
-        public override BindingDto ToDto()
+        /// <inheritdoc/>
+        public override IEntity ToEntityDto(UMI3DUser user)
         {
             MultiBindingDataDto bindingDataDto;
 
-            bindingDataDto = new MultiBindingDataDto() {
-                Bindings= bindings.Select(x => x.ToDto().data as AbstractSimpleBindingDataDto).ToArray(),
-                priority= priority,
-                partialFit= partialFit
+            bindingDataDto = new MultiBindingDataDto()
+            {
+                Bindings = bindings.Select(x => (x.ToEntityDto(user) as BindingDto).data as AbstractSimpleBindingDataDto).ToArray(),
+                priority = priority,
+                partialFit = partialFit
             };
 
             var bindingDto = new BindingDto()
             {
+                id = Id(),
                 boundNodeId = boundNodeId,
                 data = bindingDataDto
             };
 
             return bindingDto;
-        }
-
-        public override object Clone()
-        {
-            var binding = (MultiBinding)base.Clone();
-            binding.bindings = new List<AbstractSingleBinding>();
-            foreach (var bindingInMulti in this.bindings)
-            {
-                binding.bindings.Add((AbstractSingleBinding)bindingInMulti.Clone());
-            }
-            return binding;
         }
     }
 }

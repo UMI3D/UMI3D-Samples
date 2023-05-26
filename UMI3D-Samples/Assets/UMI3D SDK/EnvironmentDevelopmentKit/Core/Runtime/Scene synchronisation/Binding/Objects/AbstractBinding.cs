@@ -14,16 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+using umi3d.edk.core;
+
+namespace umi3d.edk
 {
     /// <summary>
-    /// DTO used to remove a binding.
+    /// Operation binding a node and one or several objects.
     /// </summary>
-    public class RemoveBindingDto : AbstractOperationDto
+    public abstract class AbstractBinding : AbstractLoadableEntity
     {
         /// <summary>
-        /// Id of the node to unbound.
+        /// Node that is bound to another object.
         /// </summary>
-        public ulong boundNodeId { get; set; }
+        public ulong boundNodeId;
+
+        /// <summary>
+        /// Could the binding allow to be partially applied?
+        /// </summary>
+        public bool partialFit = true;
+
+        /// <summary>
+        /// Priority to apply the binding.
+        /// </summary>
+        public int priority = 0;
+
+        public AbstractBinding(ulong boundNodeId) : base()
+        {
+            this.boundNodeId = boundNodeId;
+        }
     }
 }
