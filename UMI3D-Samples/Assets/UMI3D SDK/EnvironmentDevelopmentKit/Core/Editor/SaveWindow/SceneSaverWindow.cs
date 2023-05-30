@@ -65,17 +65,11 @@ namespace umi3d.edk.editor
                 {
                     GlTFEnvironmentDto glTFEnvironmentDto = new GlTFEnvironmentDto()
                     {
-                        extensions = (env as ISavable).Save()
+                        extensions = (env as ISavable).Save(),
+                        id = (ulong)SaveReference.GetId(env)
+
                     };
-                    foreach (var obj in gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DScene>()))
-                    {
-                        var dto = new GlTFSceneDto
-                        {
-                            name = obj.name,
-                            extensions = (obj as ISavable)?.Save()
-                        };
-                        glTFEnvironmentDto.scenes.Add(dto);
-                    }
+                    SaveScenes(glTFEnvironmentDto);
 
                     draw.data.tmp = glTFEnvironmentDto.ToJson();
                 }
@@ -98,6 +92,63 @@ namespace umi3d.edk.editor
             gameobjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
             draw = new ScriptableLoader<SceneSaverWindowData>(fileName);
         }
+
+        void SaveScenes(GlTFEnvironmentDto glTFEnvironmentDto)
+        {
+            foreach (var obj in gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DScene>()))
+            {
+                var glTFSceneDto = new GlTFSceneDto
+                {
+                    name = obj.name,
+                    extensions = (obj as ISavable)?.Save(),
+
+                };
+
+                SaveNodes(glTFSceneDto,obj.transform);
+
+
+                glTFEnvironmentDto.scenes.Add(glTFSceneDto);
+            }
+        }
+        List<int> SaveNodes(GlTFSceneDto glTFSceneDto, Transform node)
+        {
+            var l = new List<int>();
+            foreach(Transform t in node)
+            {
+                if(t == node.transform || t.GetComponent<UMI3DScene>() != null)
+                    continue;
+
+                GlTFNodeDto glTFNodeDto = new()
+                {
+                    name = t.name,
+                    position = t.localPosition.Dto(),
+                    rotation = t.localRotation.Dto(),
+                    scale = t.localScale.Dto(),
+                    extensions = new NodeExtension()
+                    {
+                        sceneIndex = glTFSceneDto.nodes.Count,
+                        id = SaveReference.GetId(t),
+                        extensions = t.GetComponents<ISavable>().Select(s => s.Save()).ToList()
+                    }
+                };
+
+                l.Add(glTFSceneDto.nodes.Count);
+                glTFSceneDto.nodes.Add(glTFNodeDto);
+                glTFNodeDto.children = SaveNodes(glTFSceneDto, t);
+            }
+            return l;
+        }
+
     }
+
+    public class NodeExtension
+    {
+        public int sceneIndex;
+        public long id;
+        public List<ComponentExtensionSO> extensions = new List<ComponentExtensionSO>();
+    }
+
+
+
 }
 #endif

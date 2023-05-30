@@ -271,8 +271,10 @@ namespace umi3d.edk
                 scale = objectScale.GetValue(user).Dto(),
                 rotation = objectRotation.GetValue(user).Dto()
             };
-            dto.extensions.umi3d = ToUMI3DNodeDto(user);
-            dto.extensions.KHR_lights_punctual = objectLight.GetValue(user)?.ToDto(user);
+            var ext = dto.extensions as GlTFNodeExtensions;
+
+            ext.umi3d = ToUMI3DNodeDto(user);
+            ext.KHR_lights_punctual = objectLight.GetValue(user)?.ToDto(user);
 
             return dto;
         }

@@ -54,6 +54,6 @@ namespace umi3d.common
         /// <summary>
         /// glTF extensions available for that node.
         /// </summary>
-        public GlTFNodeExtensions extensions { get; set; } = new GlTFNodeExtensions();
+        public object extensions { get; set; } = new GlTFNodeExtensions();
     }
 }

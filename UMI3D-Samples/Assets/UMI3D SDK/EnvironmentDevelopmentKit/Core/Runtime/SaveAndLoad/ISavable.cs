@@ -23,6 +23,7 @@ using System.Linq;
 using umi3d.common;
 using Newtonsoft.Json;
 using inetum.unityUtils;
+using umi3d.edk;
 
 public interface ISavable
 {
@@ -32,7 +33,7 @@ public interface ISavable
 
 public interface ISavable<Data> : ISavable where Data : class, new()
 {
-    ComponentExtensionSO ISavable.Save() => new ComponentExtensionSO() { name = this.GetType().FullName, data = Save(new Data()) };
+    ComponentExtensionSO ISavable.Save() => new ComponentExtensionSO() { name = this.GetType().FullName, data = Save(new Data()), id = SaveReference.GetId(this) };
     Task<bool> ISavable.Load(object data) => Load(data as Data);
 
     Data Save(Data data);
@@ -41,6 +42,7 @@ public interface ISavable<Data> : ISavable where Data : class, new()
 
 public class ComponentExtensionSO
 {
+    public long id { get; set; }
     public string name { get; set; }
     public object data { get; set; }
 }
