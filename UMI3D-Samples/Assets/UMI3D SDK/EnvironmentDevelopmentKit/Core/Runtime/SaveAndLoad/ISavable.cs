@@ -25,20 +25,20 @@ using Newtonsoft.Json;
 using inetum.unityUtils;
 using umi3d.edk;
 
-public interface ISavable
-{
-    ComponentExtensionSO Save();
-    Task<bool> Load(object data);
-}
+//public interface ISavable
+//{
+//    ComponentExtensionSO Save(SaveReference references);
+//    Task<bool> Load(object data);
+//}
 
-public interface ISavable<Data> : ISavable where Data : class, new()
-{
-    ComponentExtensionSO ISavable.Save() => new ComponentExtensionSO() { name = this.GetType().FullName, data = Save(new Data()), id = SaveReference.GetId(this) };
-    Task<bool> ISavable.Load(object data) => Load(data as Data);
+//public interface ISavable<Data> : ISavable where Data : class, new()
+//{
+//    ComponentExtensionSO ISavable.Save(SaveReference references) => new ComponentExtensionSO() { name = this.GetType().FullName, data = Save(new Data(),references), id = references.GetId(this) };
+//    Task<bool> ISavable.Load(object data) => Load(data as Data);
 
-    Data Save(Data data);
-    Task<bool> Load(Data data);
-}
+//    Data Save(Data data, SaveReference references);
+//    Task<bool> Load(Data data);
+//}
 
 public class ComponentExtensionSO
 {
@@ -50,46 +50,5 @@ public class ComponentExtensionSO
 public static class ComponentExtensionSOLoader
 {
 
-    public static object Load(GameObject gameObject, string json)
-    {
-        var cp = ComponentExtensionSOLoader.FromJson(json);
-        return ComponentExtensionSOLoader.Load(gameObject, cp);
-    }
 
-    public static object LoadOrUpdate(GameObject gameObject, ComponentExtensionSO extension)
-    {
-        var cp = gameObject.GetOrAddComponent(extension.Type());
-        (cp as ISavable).Load(extension.data);
-        return cp;
-    }
-
-    public static object Load(GameObject gameObject, ComponentExtensionSO extension)
-    {
-        var cp = gameObject.AddComponent(extension.Type());
-        (cp as ISavable).Load(extension.data);
-        return cp;
-    }
-
-    static Type Type(this ComponentExtensionSO extension)
-    {
-        return AppDomain.CurrentDomain.GetAssemblies()
-            .Select(a => a.GetType(extension.name))
-            .FirstOrDefault(t => t != null);
-    }
-
-    public static string ToJson(this ComponentExtensionSO dto, TypeNameHandling typeNameHandling = TypeNameHandling.All)
-    {
-        return JsonConvert.SerializeObject(dto, Formatting.Indented, new JsonSerializerSettings
-        {
-            TypeNameHandling = typeNameHandling
-        });
-    }
-
-    public static ComponentExtensionSO FromJson(string json)
-    {
-        return JsonConvert.DeserializeObject<ComponentExtensionSO>(json, new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.All
-        });
-    }
 }

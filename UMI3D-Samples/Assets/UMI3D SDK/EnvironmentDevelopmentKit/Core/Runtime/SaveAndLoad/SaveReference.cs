@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-#if UNITY_EDITOR
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -21,20 +22,26 @@ using System.Threading.Tasks;
 
 namespace umi3d.edk
 {
-    public static class SaveReference
+    public class SaveReference
     {
-        static Dictionary<long,object> entities = new Dictionary<long, object>();
+        public void Clear()
+        {
+            entities.Clear();
+            lastId = 0;
+        }
 
-        static private long NewID()
+        Dictionary<long,object> entities = new Dictionary<long, object>();
+
+        private long NewID()
         {
             long id = LongRandom();
             while (entities.ContainsValue(id)) id = LongRandom();
             return id;
         }
 
-        static private ulong lastId = 0;
+        private ulong lastId = 0;
 
-        static private long LongRandom()
+        private long LongRandom()
         {
             ulong longRand = lastId++;
             if (longRand > long.MaxValue)
@@ -42,7 +49,7 @@ namespace umi3d.edk
             return  (long)longRand;
         }
 
-        static public long GetId(object entity)
+        public long GetId(object entity)
         {
             if(entities.ContainsValue(entity))
                 return entities.First(p => p.Value == entity).Key;
@@ -52,13 +59,33 @@ namespace umi3d.edk
             return id;
         }
 
-        static public async Task<E> GetEntity<E> (long id, List<CancellationToken> tokens) where E : class 
+        public long GetId(object entity, long id)
+        {
+            if (entities.ContainsValue(entity))
+                return entities.First(p => p.Value == entity).Key;
+
+            if (entities.ContainsKey(id))
+            {
+                UnityEngine.Debug.Log($"id:{id} {entities[id]} != {entity}");
+
+                throw new Exception("Id already in collection");
+            }
+
+            entities.Add(id, entity);
+            return id;
+        }
+
+
+        public async Task<E> GetEntity<E> (long id, List<CancellationToken> tokens = null) where E : class 
         {
             return (await GetEntity(id,tokens)) as E;
         }
 
-        static public async Task<object> GetEntity(long id, List<CancellationToken> tokens)
+        public async Task<object> GetEntity(long id, List<CancellationToken> tokens = null)
         {
+            if (tokens == null)
+                tokens = new();
+
             while (!entities.ContainsKey(id) && !tokens.Any(token => token.IsCancellationRequested))
             {
                 await Task.Yield();
@@ -68,8 +95,4 @@ namespace umi3d.edk
             return entities[id];
         }
     }
-
-
-
 }
-#endif

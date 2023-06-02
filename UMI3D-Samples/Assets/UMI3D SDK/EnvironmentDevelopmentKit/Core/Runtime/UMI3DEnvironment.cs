@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
+using umi3d.edk.save;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -30,7 +31,7 @@ namespace umi3d.edk
     /// Root node of any UMI3D enviroment.
     /// </summary>
     /// As there is only one envionment node, it could be called as a manager.
-    public class UMI3DEnvironment : SingleBehaviour<UMI3DEnvironment>, ISavable<EnvironmentSO>
+    public class UMI3DEnvironment : SingleBehaviour<UMI3DEnvironment>, UMI3DSceneLoaderModule<UMI3DEnvironment,EnvironmentSO>
     {
         private const DebugScope scope = DebugScope.EDK | DebugScope.Collaboration;
 
@@ -290,54 +291,54 @@ namespace umi3d.edk
 
         #endregion
 
-        EnvironmentSO ISavable<EnvironmentSO>.Save(EnvironmentSO data)
+        public EnvironmentSO Save(UMI3DEnvironment obj, EnvironmentSO data, SaveReference references)
         {
-            data.useDto = useDto;
-            data.name = environmentName;
-            
-            data.defaultStartPosition = defaultStartPosition.Dto();
-            data.defaultStartOrientation = defaultStartOrientation.Dto();
+            data.useDto = obj.useDto;
+            data.name = obj.environmentName;
 
-            data.globalLibraries = globalLibraries;
-            data.preloadedScenes = preloadedScenes;
+            data.defaultStartPosition = obj.defaultStartPosition.Dto();
+            data.defaultStartOrientation = obj.defaultStartOrientation.Dto();
 
-            data.mode = (int)mode;
-            data.skyColor = skyColor.Dto();
-            data.horizontalColor = horizontalColor.Dto();
-            data.groundColor = groundColor.Dto();
-            data.ambientIntensity = ambientIntensity;
-            data.skyboxType = (int)skyboxType;
+            data.globalLibraries = obj.globalLibraries;
+            data.preloadedScenes = obj.preloadedScenes;
 
-            data.skyboxImage = skyboxImage;
-            data.skyboxRotation = skyboxRotation;
+            data.mode = (int)obj.mode;
+            data.skyColor = obj.skyColor.Dto();
+            data.horizontalColor = obj.horizontalColor.Dto();
+            data.groundColor = obj.groundColor.Dto();
+            data.ambientIntensity = obj.ambientIntensity;
+            data.skyboxType = (int)obj.skyboxType;
 
-            data.defaultMaterial = defaultMaterial;
+            data.skyboxImage = obj.skyboxImage;
+            data.skyboxRotation = obj.skyboxRotation;
+
+            data.defaultMaterial = obj.defaultMaterial;
 
             return data;
         }
 
-        Task<bool> ISavable<EnvironmentSO>.Load(EnvironmentSO data)
+        public Task<bool> Load(UMI3DEnvironment obj, EnvironmentSO data)
         {
-            useDto = data.useDto;
-            environmentName = data.name;
+            obj.useDto = data.useDto;
+            obj.environmentName = data.name;
 
-            defaultStartPosition = data.defaultStartPosition.Struct();
-            defaultStartOrientation = data.defaultStartOrientation.Struct();
+            obj.defaultStartPosition = data.defaultStartPosition.Struct();
+            obj.defaultStartOrientation = data.defaultStartOrientation.Struct();
 
-            globalLibraries = data.globalLibraries;
-            preloadedScenes = data.preloadedScenes;
+            obj.globalLibraries = data.globalLibraries;
+            obj.preloadedScenes = data.preloadedScenes;
 
-            RenderSettings.ambientMode =  (AmbientMode)data.mode;
+            RenderSettings.ambientMode = (AmbientMode)data.mode;
             RenderSettings.ambientSkyColor = data.skyColor.Struct();
             RenderSettings.ambientEquatorColor = data.horizontalColor.Struct();
             RenderSettings.ambientGroundColor = data.groundColor.Struct();
             RenderSettings.ambientIntensity = data.ambientIntensity;
-            skyboxType = (SkyboxType)data.skyboxType;
+            obj.skyboxType = (SkyboxType)data.skyboxType;
 
-            skyboxImage = data.skyboxImage;
-            skyboxRotation = data.skyboxRotation;
+            obj.skyboxImage = data.skyboxImage;
+            obj.skyboxRotation = data.skyboxRotation;
 
-            defaultMaterial = data.defaultMaterial;
+            obj.defaultMaterial = data.defaultMaterial;
 
             return Task.FromResult(true);
         }

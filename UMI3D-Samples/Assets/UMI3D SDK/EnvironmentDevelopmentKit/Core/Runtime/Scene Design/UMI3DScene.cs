@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
+using umi3d.edk.save;
 using UnityEngine;
 
 namespace umi3d.edk
@@ -28,7 +29,7 @@ namespace umi3d.edk
     /// </summary>
     [DisallowMultipleComponent]
     [SelectionBase]
-    public class UMI3DScene : UMI3DAbstractNode, ISavable<SceneSO>
+    public class UMI3DScene : UMI3DAbstractNode, UMI3DSceneLoaderModule<UMI3DScene, SceneSO>
     {
 
         #region fields
@@ -210,15 +211,15 @@ namespace umi3d.edk
             return ToGlTFNodeDto(user);
         }
 
-        SceneSO ISavable<SceneSO>.Save(SceneSO data)
+        SceneSO UMI3DSceneLoaderModule<UMI3DScene, SceneSO>.Save(UMI3DScene obj, SceneSO data, SaveReference references)
         {
-            data.libraries = libraries;
+            data.libraries = obj.libraries;
             return data;
         }
 
-        Task<bool> ISavable<SceneSO>.Load(SceneSO data)
+        Task<bool> UMI3DSceneLoaderModule<UMI3DScene, SceneSO>.Load(UMI3DScene obj, SceneSO data)
         {
-            libraries = data.libraries;
+            obj.libraries = data.libraries;
             return Task.FromResult(true);
         }
     }

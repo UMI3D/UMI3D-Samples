@@ -14,75 +14,55 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 #if UNITY_EDITOR
-using inetum.unityUtils;
 using inetum.unityUtils.editor;
-using System.Collections;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.common;
+using umi3d.edk.save;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace umi3d.edk.editor
 {
     public class SceneSaverWindow : InitedWindow<SceneSaverWindow>
     {
-        const string fileName = "SceneSaverWindowData";
-        ScriptableLoader<SceneSaverWindowData> draw;
-
-        UnityEngine.GameObject[] gameobjects;
+        private const string fileName = "SceneSaverWindowData";
+        private ScriptableLoader<SceneSaverWindowData> draw;
+        private UnityEngine.GameObject[] gameobjects;
 
         [MenuItem("UMI3D/Scene Save")]
-        static void Open()
+        private static void Open()
         {
             OpenWindow();
         }
 
         protected override void Draw()
         {
-            if (GUILayout.Button("Load TMP"))
-            {
-                var dto = UMI3DDtoSerializer.FromJson(draw.data.tmp);
-                if(dto is GlTFEnvironmentDto environmentDto)
-                {
-                    var env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null)?.gameObject ?? new GameObject("UMI3DEnvironment");
-                    if (environmentDto.extensions is ComponentExtensionSO ce)
-                    {
-                        ComponentExtensionSOLoader.LoadOrUpdate(env, ce);
-                    }
-                    else
-                    {
-                        env.GetOrAddComponent<UMI3DEnvironment>();
-                    }
-                }
-            }
-
 
             if (GUILayout.Button("Save environment"))
             {
-                var env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null);
+                SaveReference references = new SaveReference();
+                UMI3DEnvironment env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null);
                 if (env != null)
                 {
-                    GlTFEnvironmentDto glTFEnvironmentDto = new GlTFEnvironmentDto()
-                    {
-                        extensions = (env as ISavable).Save(),
-                        id = (ulong)SaveReference.GetId(env)
-
-                    };
-                    SaveScenes(glTFEnvironmentDto);
-
-                    draw.data.tmp = glTFEnvironmentDto.ToJson();
+                    SaveEnvironment(env, references);
                 }
             }
 
-
-            foreach (var obj in gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DScene>()))
+            if (GUILayout.Button("Load TMP"))
             {
-                if (GUILayout.Button(obj.name))
+                SaveReference references = new SaveReference();
+                UMI3DDto dto = UMI3DDtoSerializer.FromJson(draw.data.tmp);
+                if (dto is GlTFEnvironmentDto environmentDto)
                 {
-                    draw.data.tmp = (obj as ISavable).Save().ToJson();
+                    LoadEnvironment(environmentDto, references);
+                    EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
                 }
             }
+
+
 
             draw.editor.DrawDefaultInspector();
         }
@@ -93,29 +73,61 @@ namespace umi3d.edk.editor
             draw = new ScriptableLoader<SceneSaverWindowData>(fileName);
         }
 
-        void SaveScenes(GlTFEnvironmentDto glTFEnvironmentDto)
+
+    }
+
+    public class SceneSaver
+    {
+        private void SaveEnvironment(UMI3DEnvironment env, SaveReference references)
         {
-            foreach (var obj in gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DScene>()))
+            var ext = new NodeExtension()
             {
+                sceneIndex = -1,
+                id = references.GetId(env.gameObject),
+                extensions = env.gameObject.GetComponentExtensionSOs(references).ToList()
+            };
+
+            var glTFEnvironmentDto = new GlTFEnvironmentDto()
+            {
+                extensions = ext,
+                id = (ulong)ext.id
+            };
+
+            SaveScenes(glTFEnvironmentDto, references);
+
+            draw.data.tmp = glTFEnvironmentDto.ToJson();
+        }
+
+        private void SaveScenes(GlTFEnvironmentDto glTFEnvironmentDto, List<UMI3DScene> scenes, SaveReference references)
+        {
+            foreach (UMI3DScene obj in gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DScene>()))
+            {
+                var ext = new NodeExtension()
+                {
+                    sceneIndex = -1,
+                    id = references.GetId(obj.gameObject),
+                    extensions = obj.gameObject.GetComponentExtensionSOs(references).ToList()
+                };
+
                 var glTFSceneDto = new GlTFSceneDto
                 {
                     name = obj.name,
-                    extensions = (obj as ISavable)?.Save(),
-
+                    extensions = ext,
                 };
 
-                SaveNodes(glTFSceneDto,obj.transform);
+                SaveNodes(glTFSceneDto, obj.transform, references);
 
 
                 glTFEnvironmentDto.scenes.Add(glTFSceneDto);
             }
         }
-        List<int> SaveNodes(GlTFSceneDto glTFSceneDto, Transform node)
+
+        private List<int> SaveNodes(GlTFSceneDto glTFSceneDto, Transform node, SaveReference references)
         {
             var l = new List<int>();
-            foreach(Transform t in node)
+            foreach (Transform t in node)
             {
-                if(t == node.transform || t.GetComponent<UMI3DScene>() != null)
+                if (t == node.transform || t.GetComponent<UMI3DScene>() != null)
                     continue;
 
                 GlTFNodeDto glTFNodeDto = new()
@@ -127,27 +139,120 @@ namespace umi3d.edk.editor
                     extensions = new NodeExtension()
                     {
                         sceneIndex = glTFSceneDto.nodes.Count,
-                        id = SaveReference.GetId(t),
-                        extensions = t.GetComponents<ISavable>().Select(s => s.Save()).ToList()
+                        id = references.GetId(t.gameObject),
+                        extensions = t.GetComponentExtensionSOs(references).ToList()
                     }
                 };
 
                 l.Add(glTFSceneDto.nodes.Count);
                 glTFSceneDto.nodes.Add(glTFNodeDto);
-                glTFNodeDto.children = SaveNodes(glTFSceneDto, t);
+                glTFNodeDto.children = SaveNodes(glTFSceneDto, t, references);
             }
             return l;
         }
 
-    }
+        private void LoadEnvironment(GlTFEnvironmentDto environmentDto, SaveReference references)
+        {
+            GameObject env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null)?.gameObject ?? new GameObject("UMI3DEnvironment");
+            if (environmentDto.extensions is NodeExtension nodeExt)
+            {
+                foreach (ComponentExtensionSO ext in nodeExt.extensions)
+                {
+                    references.GetId(env, nodeExt.id);
+                    switch (ext)
+                    {
+                        case ComponentExtensionSO ce:
+                            UMI3DSceneLoader.LoadOrUpdate(env, ce);
+                            break;
+                        default:
+                            UnityEngine.Debug.Log(ext);
+                            break;
+                    }
+                }
+            }
+            foreach (GlTFSceneDto g in environmentDto.scenes)
+            {
+                LoadScene(g, env, references);
+            }
+        }
 
-    public class NodeExtension
-    {
-        public int sceneIndex;
-        public long id;
-        public List<ComponentExtensionSO> extensions = new List<ComponentExtensionSO>();
-    }
+        private void LoadScene(GlTFSceneDto glTFSceneDto, GameObject environment, SaveReference references)
+        {
+            var scene = new GameObject(glTFSceneDto.name);
+            scene.transform.SetParent(environment.transform);
 
+            if (glTFSceneDto.extensions is NodeExtension nodeExt)
+            {
+                references.GetId(scene, nodeExt.id);
+
+                foreach (ComponentExtensionSO ext in nodeExt.extensions)
+                {
+                    switch (ext)
+                    {
+                        case ComponentExtensionSO ce:
+                            UMI3DSceneLoader.LoadOrUpdate(scene, ce);
+                            break;
+                        default:
+                            UnityEngine.Debug.Log(ext);
+                            break;
+                    }
+                }
+            }
+
+            foreach (GlTFNodeDto node in glTFSceneDto.nodes)
+                LoadNode(node, scene, references);
+
+            foreach (GlTFNodeDto node in glTFSceneDto.nodes)
+                SetNode(glTFSceneDto, node, scene, references);
+        }
+
+        private void LoadNode(GlTFNodeDto glTFNodeDto, GameObject parent, SaveReference references)
+        {
+            var node = new GameObject(glTFNodeDto.name);
+            node.transform.SetParent(parent.transform);
+
+            if (glTFNodeDto.extensions is NodeExtension nodeExt)
+            {
+                references.GetId(node, nodeExt.id);
+                foreach (ComponentExtensionSO ext in nodeExt.extensions)
+                {
+                    switch (ext)
+                    {
+                        case ComponentExtensionSO ce:
+                            UMI3DSceneLoader.LoadOrUpdate(node, ce);
+                            break;
+                        default:
+                            UnityEngine.Debug.Log(ext);
+                            break;
+                    }
+                }
+            }
+            node.transform.position = glTFNodeDto.position.Struct();
+            node.transform.rotation = glTFNodeDto.rotation.Quaternion();
+            node.transform.localScale = glTFNodeDto.scale.Struct();
+        }
+
+        private async void SetNode(GlTFSceneDto glTFSceneDto, GlTFNodeDto glTFNodeDto, GameObject parent, SaveReference references)
+        {
+            GameObject node = null;
+            if (glTFNodeDto.extensions is NodeExtension ext)
+            {
+                node = await references.GetEntity<GameObject>(ext.id);
+            }
+            if (node == null)
+                throw new System.Exception("No node found");
+
+            foreach (int child in glTFNodeDto.children)
+            {
+                if (glTFSceneDto.nodes[child].extensions is NodeExtension ext2)
+                {
+                    GameObject n = await references.GetEntity<GameObject>(ext2.id);
+
+                    n.transform.SetParent(node.transform, false);
+                }
+            }
+        }
+    }
 
 
 }
