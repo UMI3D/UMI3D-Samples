@@ -60,8 +60,6 @@ namespace umi3d.edk
                 };
 
                 SaveNodes(glTFSceneDto, obj.transform, references);
-
-
                 glTFEnvironmentDto.scenes.Add(glTFSceneDto);
             }
         }

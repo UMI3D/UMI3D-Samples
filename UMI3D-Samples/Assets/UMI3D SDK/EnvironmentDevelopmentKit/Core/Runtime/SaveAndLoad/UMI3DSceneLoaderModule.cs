@@ -95,9 +95,78 @@ namespace umi3d.edk.save
 
         public static IEnumerable<ComponentExtensionSO> GetComponents(GameObject gameObject, SaveReference references)
         {
-            return gameObject.GetComponents<Component>().Select(s => new ComponentExtensionSO() { name = s.GetType().FullName, data = Save(s, references), id = references.GetId(s) }).Where(s => s!= null);
+            return gameObject.GetComponents<Component>()
+                .OrderBy(OrderComponent)
+                .Select(s => new ComponentExtensionSO() { name = s.GetType().FullName, data = Save(s, references), id = references.GetId(s) });
         }
 
+        static int OrderComponent(Component component)
+        {
+            return OrderComponent(component.GetType());
+        }
+
+        static int OrderComponent(Type component)
+        {
+            var attributes = component.GetCustomAttributes(typeof(RequireComponent), true);
+            if (attributes.Length > 0)
+            {
+                var max = 0;
+                foreach(var required in attributes.Select(a => a as RequireComponent))
+                {
+                    if (required.m_Type0 != null)
+                    {
+                        var m = OrderComponent(required.m_Type0);
+                        if (max < m)
+                            max = m;
+                    }
+                    if (required.m_Type1 != null)
+                    {
+                        var m = OrderComponent(required.m_Type0);
+                        if (max < m)
+                            max = m;
+                    }
+                    if (required.m_Type2 != null)
+                    {
+                        var m = OrderComponent(required.m_Type0);
+                        if (max < m)
+                            max = m;
+                    }
+                }
+
+                return max + 1;
+            }
+            return 0;
+        }
+
+        static void OrderComponent(Type component, List<Type> antiCircularLoop, ref int max)
+        {
+            var m = OrderComponent(component, antiCircularLoop);
+            if(m > max)
+                max = m;
+        }
+
+        static int OrderComponent(Type component, List<Type> antiCircularLoop)
+        {
+            if (component == null)
+                return 0;
+            if (antiCircularLoop.Contains(component))
+                return int.MaxValue;
+            antiCircularLoop.Add(component);
+
+            var attributes = component.GetCustomAttributes(typeof(RequireComponent), true);
+            if (attributes.Length > 0)
+            {
+                var max = 0;
+                foreach (var required in attributes.Select(a => a as RequireComponent))
+                {
+                    OrderComponent(required.m_Type0, antiCircularLoop.ToList(), ref max);
+                    OrderComponent(required.m_Type1, antiCircularLoop.ToList(), ref max);
+                    OrderComponent(required.m_Type2, antiCircularLoop.ToList(), ref max);
+                }
+                return max + 1;
+            }
+            return 0;
+        }
 
 
 
