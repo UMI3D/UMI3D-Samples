@@ -30,6 +30,13 @@ public class BindingPlanets : MonoBehaviour
     public bool syncPosition;
     public bool syncRotation;
 
+    private IBindingService bindingHelperServer;
+
+    private void Start()
+    {
+        bindingHelperServer = BindingManager.Instance;
+    }
+
     public void TriggerOrbiting()
     {
         if (!isOrbiting)
@@ -42,14 +49,13 @@ public class BindingPlanets : MonoBehaviour
     {
         NodeBinding binding = new(child.Id(), parent.Id())
         {
-            users = UMI3DServer.Instance.UserSet(),
             syncPosition = syncPosition,
             offsetPosition = child.transform.position - parent.transform.position,
             syncRotation = syncRotation,
             offsetRotation = Quaternion.Inverse(parent.transform.rotation) * child.transform.rotation,
         };
 
-        var op = BindingHelper.Instance.AddBinding(binding);
+        var op = bindingHelperServer.AddBinding(binding);
 
         Transaction t = new()
         {
@@ -63,7 +69,7 @@ public class BindingPlanets : MonoBehaviour
 
     private void EndOrbiting()
     {
-        var op = BindingHelper.Instance.RemoveAllBindings(child.Id());
+        var op = bindingHelperServer.RemoveAllBindings(child.Id());
 
         Transaction t = new()
         {

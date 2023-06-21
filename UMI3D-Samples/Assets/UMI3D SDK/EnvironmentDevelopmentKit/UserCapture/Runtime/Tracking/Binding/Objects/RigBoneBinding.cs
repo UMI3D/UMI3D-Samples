@@ -29,12 +29,13 @@ namespace umi3d.edk.userCapture
         /// </summary>
         public string rigName = "";
 
-        public RigBoneBinding(ulong boundNodeId, uint boneType, ulong userId) : base(boundNodeId, boneType, userId)
+        public RigBoneBinding(ulong boundNodeId, string rigName, ulong userId, uint boneType) : base(boundNodeId, userId, boneType)
         {
+            this.rigName = rigName;
         }
 
         /// <inheritdoc/>
-        public override BindingDto ToDto()
+        public override IEntity ToEntityDto(UMI3DUser user)
         {
             AbstractBindingDataDto bindingDataDto;
 
@@ -60,6 +61,7 @@ namespace umi3d.edk.userCapture
 
             BindingDto bindingDto = new BindingDto()
             {
+                id = Id(),
                 boundNodeId = boundNodeId,
                 data = bindingDataDto
             };

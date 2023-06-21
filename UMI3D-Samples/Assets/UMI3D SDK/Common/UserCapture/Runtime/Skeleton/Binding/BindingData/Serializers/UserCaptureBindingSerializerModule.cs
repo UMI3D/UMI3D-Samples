@@ -14,37 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-
-namespace umi3d.common
+namespace umi3d.common.userCapture
 {
-    public class UMI3DBindingSerializerModule : UMI3DSerializerModule
+    /// <summary>
+    /// Serializer for <see cref="BoneBindingDataDto"/> and <see cref="RigBoneBindingDataDto"/>.
+    /// Also redefine <see cref="MultiBindingDataDto"/> serialization that use that latter DTOs.
+    /// </summary>
+    public class UserCaptureBindingSerializerModule : BindingSerializerModule
     {
-        protected readonly Dictionary<Type, IUMI3DSerializerSubModule> bindingSerializers = new()
+        public UserCaptureBindingSerializerModule() : base()
         {
-            { typeof(BindingDto),           new BindingSerializer()},
-            { typeof(RemoveBindingDto),     new RemoveBindingSerializer()},
-            { typeof(MultiBindingDataDto),  new MultiBindingDataSerializer()},
-            { typeof(NodeBindingDataDto),   new NodeBindingDataSerializer()}
-        };
+            bindingSerializers.Add(typeof(BoneBindingDataDto), new BoneBindingSerializer());
+            bindingSerializers.Add(typeof(RigBoneBindingDataDto), new RigBoneBindingSerializer());
+        }
 
         /// <summary>
-        /// Index that indicate what is the data type of of a binding.
+        /// Indices used to resolve the inheritance when serializing/deserializing.
         /// </summary>
-        /// Serialization indices are used to support the polymorphism of one of the data field in a binding.
-        protected static class BindingSerializationIndices
+        protected static class UserCaptureBindingSerializationIndices
         {
-            public const int MULTI_BINDING_INDEX = 0;
-            public const int NODE_BINDING_INDEX = 1;
+            public const int BONE_BINDING_INDEX = 2;
+            public const int RIGGED_BONE_BINDING_INDEX = 3;
         }
 
-        protected IUMI3DSerializerSubModule<T> GetSerializer<T>()
-        {
-            return bindingSerializers[typeof(T)] as IUMI3DSerializerSubModule<T>;
-        }
-
-        public virtual bool Read<T>(ByteContainer container, out bool readable, out T result)
+        /// <inheritdoc/>
+        public override bool Read<T>(ByteContainer container, out bool readable, out T result)
         {
             readable = true;
             if (bindingSerializers.ContainsKey(typeof(T)))
@@ -57,7 +51,7 @@ namespace umi3d.common
             //specific case of multibinding, to refacto by improving serializer
             else if (typeof(T) == typeof(AbstractBindingDataDto) || typeof(T) == typeof(AbstractSimpleBindingDataDto))
             {
-                readable &= UMI3DSerializer.TryRead(container, out int multibindingSerializerIndex); // not used because can only have node bindig, but must be read
+                readable &= UMI3DSerializer.TryRead(container, out int multibindingSerializerIndex);
 
                 switch (multibindingSerializerIndex)
                 {
@@ -73,6 +67,21 @@ namespace umi3d.common
                             result = (T)System.Convert.ChangeType(dataDto, typeof(NodeBindingDataDto));
                             return readable;
                         }
+                    case UserCaptureBindingSerializationIndices.BONE_BINDING_INDEX:
+                        {
+                            readable &= GetSerializer<BoneBindingDataDto>().Read(container, out BoneBindingDataDto dataDto);
+                            result = (T)System.Convert.ChangeType(dataDto, typeof(BoneBindingDataDto));
+                            return readable;
+                        }
+                    case UserCaptureBindingSerializationIndices.RIGGED_BONE_BINDING_INDEX:
+                        {
+                            readable &= GetSerializer<RigBoneBindingDataDto>().Read(container, out RigBoneBindingDataDto dataDto);
+                            result = (T)System.Convert.ChangeType(dataDto, typeof(RigBoneBindingDataDto));
+                            return readable;
+                        }
+                    default:
+                        result = default;
+                        return readable;
                 }
             }
             readable = false;
@@ -80,7 +89,8 @@ namespace umi3d.common
             return readable;
         }
 
-        public virtual bool Write<T>(T value, out Bytable bytable, params object[] parameters)
+        /// <inheritdoc/>
+        public override bool Write<T>(T value, out Bytable bytable, params object[] parameters)
         {
             if (bindingSerializers.ContainsKey(typeof(T)))
             {
@@ -96,6 +106,10 @@ namespace umi3d.common
                                             + UMI3DSerializer.Write(value as MultiBindingDataDto),
                     NodeBindingDataDto => UMI3DSerializer.Write(BindingSerializationIndices.NODE_BINDING_INDEX)
                                             + UMI3DSerializer.Write(value as NodeBindingDataDto),
+                    RigBoneBindingDataDto => UMI3DSerializer.Write(UserCaptureBindingSerializationIndices.RIGGED_BONE_BINDING_INDEX)
+                                            + UMI3DSerializer.Write(value as RigBoneBindingDataDto),
+                    BoneBindingDataDto => UMI3DSerializer.Write(UserCaptureBindingSerializationIndices.BONE_BINDING_INDEX)
+                                            + UMI3DSerializer.Write(value as BoneBindingDataDto),
                     _ => default
                 };
 
@@ -112,16 +126,6 @@ namespace umi3d.common
                 bytable = default;
                 return false;
             }
-        }
-
-        public virtual bool? IsCountable<T>()
-        {
-            if (
-                typeof(T) == typeof(AbstractBindingDataDto)
-                || typeof(T) == typeof(AbstractSimpleBindingDataDto)
-                )
-                return true;
-            return null;
         }
     }
 }

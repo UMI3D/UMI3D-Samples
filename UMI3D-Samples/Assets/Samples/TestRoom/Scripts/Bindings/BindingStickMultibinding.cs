@@ -28,8 +28,11 @@ public class BindingStickMultibinding : MonoBehaviour
     private bool boundLeft;
     private bool boundRight;
 
+    private IBindingService bindingHelperServer;
+
     private void Start()
     {
+        bindingHelperServer = BindingManager.Instance;
         baseMaterial = StickMiddle.objectMaterialOverriders.GetValue(0).newMaterial;
     }
 
@@ -44,40 +47,23 @@ public class BindingStickMultibinding : MonoBehaviour
                 offsetPosition = StickMiddle.objectPosition.GetValue() - StickLeft.objectPosition.GetValue(),
             };
 
-            if (!boundRight)
-            {
-                t.AddIfNotNull(BindingHelper.Instance.AddBinding(bindingLeft));
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { addMaterialIfNotExists = true, newMaterial = StickLeft.objectMaterialOverriders[0].newMaterial }));
-            }
-            else
-            {
-                t.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(StickMiddle.Id()));
-
-                var multi = new MultiBinding(StickMiddle.Id())
-                {
-                    bindings = new() { bindingLeft, bindingRight }
-                };
-
-                t.AddIfNotNull(BindingHelper.Instance.AddBinding(multi));
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { addMaterialIfNotExists = true, newMaterial = mixMaterial }));
-            }
-                
+            t.AddIfNotNull(bindingHelperServer.AddBinding(bindingLeft));
             boundLeft = true;
+
+            if (!boundRight)
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = StickLeft.objectMaterialOverriders[0].newMaterial }));
+            else
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = mixMaterial }));
         }
         else
         {
-            t.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(StickMiddle.Id()));
-            if (!boundRight)
-            {
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { addMaterialIfNotExists = true, newMaterial = baseMaterial }));
-            }
-            else
-            {
-                t.AddIfNotNull(BindingHelper.Instance.AddBinding(bindingRight));
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { addMaterialIfNotExists = true, newMaterial = StickRight.objectMaterialOverriders[0].newMaterial }));
-            }
-            
+            t.AddIfNotNull(bindingHelperServer.RemoveBinding(bindingLeft));
             boundLeft = false;
+
+            if (!boundRight)
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = baseMaterial }));
+            else
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = StickRight.objectMaterialOverriders[0].newMaterial }));
         }
         t.Dispatch();
     }
@@ -91,43 +77,26 @@ public class BindingStickMultibinding : MonoBehaviour
             bindingRight = new NodeBinding(StickMiddle.Id(), StickRight.Id())
             {
                 syncPosition = true,
-                offsetPosition = StickMiddle.objectPosition.GetValue() - StickRight.objectPosition.GetValue(),
+                offsetPosition = StickMiddle.objectPosition.GetValue() - StickRight.objectPosition.GetValue()
             };
 
-            if (!boundLeft)
-            {
-                t.AddIfNotNull(BindingHelper.Instance.AddBinding(bindingRight));
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { addMaterialIfNotExists = true, newMaterial = StickRight.objectMaterialOverriders[0].newMaterial }));
-            }
-            else
-            {
-                t.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(StickMiddle.Id()));
-
-                var multi = new MultiBinding(StickMiddle.Id())
-                {
-                    bindings = new() { bindingLeft, bindingRight }
-                };
-
-                t.AddIfNotNull(BindingHelper.Instance.AddBinding(multi));
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { addMaterialIfNotExists = true, newMaterial = mixMaterial }));
-            }
-                
+            t.AddIfNotNull(bindingHelperServer.AddBinding(bindingRight));
             boundRight = true;
+
+            if (!boundLeft)
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = StickRight.objectMaterialOverriders[0].newMaterial }));
+            else
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = mixMaterial })); 
         }
         else
         {
-            t.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(StickMiddle.Id()));
-            if (!boundLeft)
-            {
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { addMaterialIfNotExists = true, newMaterial = baseMaterial }));
-            }
-            else
-            {
-                t.AddIfNotNull(BindingHelper.Instance.AddBinding(bindingLeft));
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { addMaterialIfNotExists = true, newMaterial = StickLeft.objectMaterialOverriders[0].newMaterial }));
-            }
-
+            t.AddIfNotNull(bindingHelperServer.RemoveBinding(bindingRight));
             boundRight = false;
+
+            if (!boundLeft)
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true,  newMaterial = baseMaterial }));
+            else
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = StickLeft.objectMaterialOverriders[0].newMaterial }));
         }
         t.Dispatch();
     }

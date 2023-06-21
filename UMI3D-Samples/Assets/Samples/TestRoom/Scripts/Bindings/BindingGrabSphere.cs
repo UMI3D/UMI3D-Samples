@@ -58,10 +58,14 @@ public class BindingGrabSphere : MonoBehaviour
 
     #endregion
 
+    private IBindingService bindingHelperServer;
+
     #region Methods
 
     void Start()
     {
+        bindingHelperServer = BindingManager.Instance;
+
         originalPos = transform.localPosition;
         originalRot = transform.localRotation;
 
@@ -95,7 +99,7 @@ public class BindingGrabSphere : MonoBehaviour
 
             ownerUserID = user.Id();
 
-            binding = new BoneBinding(node.Id(), bonetype, ownerUserID)
+            binding = new BoneBinding(node.Id(), ownerUserID, bonetype)
             {
                 syncPosition = true,
                 offsetPosition = localPosOffset,
@@ -103,7 +107,7 @@ public class BindingGrabSphere : MonoBehaviour
                 offsetRotation = localRotOffset,
             };
 
-            var ops = BindingHelper.Instance.AddBinding(binding);
+            var ops = bindingHelperServer.AddBinding(binding);
 
             Transaction transaction = new() { reliable = true };
             transaction.AddIfNotNull(ops);
@@ -118,7 +122,7 @@ public class BindingGrabSphere : MonoBehaviour
 
             Transaction transaction = new() { reliable = true };
 
-            transaction.AddIfNotNull(BindingHelper.Instance.RemoveBinding(binding));
+            transaction.AddIfNotNull(bindingHelperServer.RemoveBinding(binding));
             transaction.AddIfNotNull(node.objectPosition.SetValue(originalPos));
             transaction.AddIfNotNull(node.objectRotation.SetValue(originalRot));
 

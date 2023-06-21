@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+namespace umi3d.common.userCapture
 {
     /// <summary>
-    /// DTO to enable/disable bindings computations on a client.
+    /// Bone binding data dto, required to load a bone binding.
     /// </summary>
-    public class UpdateBindingsActivationDto : AbstractOperationDto
+    [System.Serializable]
+    public class BoneBindingDataDto : AbstractSimpleBindingDataDto
     {
         /// <summary>
-        /// Global stettings for bindings activation on a browser.
+        /// The user to which the object i going to be binded ID
         /// </summary>
-        public bool areBindingsActivated { get; set; }
+        public ulong userId { get; set; }
+
+        /// <summary>
+        /// The bone to which the object is going to be binded
+        /// </summary>
+        public uint boneType { get; set; }
     }
 }

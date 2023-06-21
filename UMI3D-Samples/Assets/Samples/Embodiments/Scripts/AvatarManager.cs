@@ -121,18 +121,20 @@ public class AvatarManager : MonoBehaviour
 
     #endregion Fields
 
-    // Start is called before the first frame update
+    private IBindingService bindingHelperServer;
+
     private void Start()
     {
         //TODO: find a way to start newavatar
+        bindingHelperServer = BindingManager.Instance;
         UMI3DCollaborationServer.Instance.OnUserJoin.AddListener(Handle);
         UMI3DCollaborationServer.Instance.OnUserLeave.AddListener(Unhandle);
-        UMI3DForgeServer.avatarFrameEvent += OnUserFrame;
+        UMI3DForgeServer.avatarFrameEvent += UpdateAvatarWalkingSpeed;
     }
 
     private Queue<float> speedQueue = new();
 
-    private void OnUserFrame(UserTrackingFrameDto frameDto, ulong userId)
+    private void UpdateAvatarWalkingSpeed(UserTrackingFrameDto frameDto, ulong userId)
     {
         var user = UMI3DCollaborationServer.Instance.Users().First(x => x.Id() == frameDto.userId);
         if (HandledAvatars.ContainsKey(user))
@@ -168,7 +170,7 @@ public class AvatarManager : MonoBehaviour
 
         if (!HandledAvatars.ContainsKey(UMI3DCollaborationServer.Collaboration.GetUser(user.Id())))
         {
-            UMI3DCollaborationServer.Instance.OnUserActive.AddListener(NewAvatar);
+            UMI3DCollaborationServer.Instance.OnUserActive.AddListener(SendAvatar);
         }
     }
 
@@ -196,7 +198,7 @@ public class AvatarManager : MonoBehaviour
             }
 
             // bindings
-            t.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(HandledAvatars[user].avatar.Id()));
+            t.AddIfNotNull(bindingHelperServer.RemoveAllBindings(HandledAvatars[user].avatar.Id()));
 
             // avatar model
             t.AddIfNotNull(HandledAvatars[user].avatar.GetDeleteEntity());
@@ -208,23 +210,23 @@ public class AvatarManager : MonoBehaviour
         }
     }
 
-    private void NewAvatar(UMI3DUser user)
+    private void SendAvatar(UMI3DUser user)
     {
         var collabUser = user as UMI3DCollaborationUser;
 
         Transaction t = new() { reliable = true };
-        t.AddIfNotNull(LoadAvatar(collabUser, out UMI3DModel avatarModel));
+        t.AddIfNotNull(SendAvatarModel(collabUser, out UMI3DModel avatarModel));
         if (bindRig)
             t.AddIfNotNull(BindAvatar(collabUser, avatarModel));
         if (sendWalkingAnimator)
-            t.AddIfNotNull(LoadWalkingAimations(collabUser, avatarModel, movementSubskeletonData));
+            t.AddIfNotNull(SendWalkingAnimations(collabUser, avatarModel, movementSubskeletonData));
         if (sendEmotes)
-            t.AddIfNotNull(LoadEmotes(collabUser, avatarModel, emotesSubskeletonData));
+            t.AddIfNotNull(SendEmotes(collabUser, avatarModel, emotesSubskeletonData));
         t.Dispatch();
-        UMI3DCollaborationServer.Instance.OnUserActive.RemoveListener(NewAvatar);
+        UMI3DCollaborationServer.Instance.OnUserActive.RemoveListener(SendAvatar);
     }
 
-    private Operation LoadAvatar(UMI3DCollaborationUser user, out UMI3DModel avatarModel)
+    private Operation SendAvatarModel(UMI3DCollaborationUser user, out UMI3DModel avatarModel)
     {
         GameObject avatarModelnode = new($"AvatarModel_User-{user.Id()}");
 
@@ -249,10 +251,8 @@ public class AvatarManager : MonoBehaviour
 
         if (bindRig)
         {
-            var bindings = Rigs.binds.Select(bind => new RigBoneBinding(avatarModel.Id(), bind.boneType, user.Id())
+            var bindings = Rigs.binds.Select(bind => new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
             {
-                users = new() { user },
-                rigName = bind.rigName,
                 syncPosition = true,
                 offsetPosition = bind.positionOffset,
                 syncRotation = true,
@@ -266,13 +266,13 @@ public class AvatarManager : MonoBehaviour
                 bindings = bindings.ToList()
             };
 
-            ops.AddRange(BindingHelper.Instance.AddBinding(multiBinding));
+            ops.AddRange(bindingHelperServer.AddBinding(multiBinding));
         }
 
         return ops;
     }
 
-    private List<Operation> LoadWalkingAimations(UMI3DCollaborationUser user, UMI3DNode avatarNode, SubskeletonDescription walkingSubskeleton)
+    private List<Operation> SendWalkingAnimations(UMI3DCollaborationUser user, UMI3DNode avatarNode, SubskeletonDescription walkingSubskeleton)
     {
         List<Operation> ops = new();
 
@@ -312,7 +312,7 @@ public class AvatarManager : MonoBehaviour
         return ops;
     }
 
-    private List<Operation> LoadEmotes(UMI3DCollaborationUser user, UMI3DNode avatarNode, EmotesSubskeletonDescription emoteSubskeleton)
+    private List<Operation> SendEmotes(UMI3DCollaborationUser user, UMI3DNode avatarNode, EmotesSubskeletonDescription emoteSubskeleton)
     {
         List<Operation> ops = new();
 

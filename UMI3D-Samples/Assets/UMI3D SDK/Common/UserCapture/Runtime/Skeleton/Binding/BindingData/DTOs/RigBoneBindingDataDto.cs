@@ -16,17 +16,15 @@ limitations under the License.
 
 namespace umi3d.common.userCapture
 {
+    /// <summary>
+    /// Rig-Bone binding data, required to load a binding between a bone and a model rig.
+    /// </summary>
     [System.Serializable]
-    public class BoneBindingDataDto : AbstractSimpleBindingDataDto
+    public class RigBoneBindingDataDto : BoneBindingDataDto
     {
         /// <summary>
-        /// The user to which the object i going to be binded ID
+        /// Name of the rig
         /// </summary>
-        public ulong userId { get; set; }
-
-        /// <summary>
-        /// The bone to which the object is going to be binded
-        /// </summary>
-        public uint boneType { get; set; }
+        public string rigName { get; set; }
     }
 }
