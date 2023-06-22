@@ -38,7 +38,6 @@ public class AvatarManager : MonoBehaviour
         public UMI3DModel avatar;
         public UMI3DSkeletonNode emotesSkeletonNode;
         public UMI3DSkeletonNode walkingSkeletonNode;
-        public Vector3 lastPosition;
         public List<UMI3DAnimatorAnimation> emotesAnimations = new();
         public UMI3DAnimatorAnimation walkingAnimation;
     }
@@ -127,11 +126,9 @@ public class AvatarManager : MonoBehaviour
     {
         //TODO: find a way to start newavatar
         bindingHelperServer = BindingManager.Instance;
-        UMI3DCollaborationServer.Instance.OnUserJoin.AddListener(Handle);
+        UMI3DCollaborationServer.Instance.OnUserActive.AddListener(Handle);
         UMI3DCollaborationServer.Instance.OnUserLeave.AddListener(Unhandle);
     }
-
-    private Queue<float> speedQueue = new();
 
     private void Handle(UMI3DUser user)
     {
@@ -140,7 +137,8 @@ public class AvatarManager : MonoBehaviour
 
         if (!HandledAvatars.ContainsKey(UMI3DCollaborationServer.Collaboration.GetUser(user.Id())))
         {
-            UMI3DCollaborationServer.Instance.OnUserActive.AddListener(SendAvatar);
+            HandledAvatars.Add(user, new());
+            SendAvatar(trackedUser);
         }
     }
 
@@ -155,6 +153,7 @@ public class AvatarManager : MonoBehaviour
             {
                 t.AddIfNotNull(HandledAvatars[user].walkingAnimation.GetDeleteEntity());
                 t.AddIfNotNull(HandledAvatars[user].walkingSkeletonNode.GetDeleteEntity());
+                UnityEngine.Object.Destroy(HandledAvatars[user].walkingAnimation);
                 UnityEngine.Object.Destroy(HandledAvatars[user].walkingSkeletonNode.gameObject);
             }
 
@@ -186,6 +185,7 @@ public class AvatarManager : MonoBehaviour
 
         Transaction t = new() { reliable = true };
         t.AddIfNotNull(SendAvatarModel(collabUser, out UMI3DModel avatarModel));
+
         if (bindRig)
             t.AddIfNotNull(BindAvatar(collabUser, avatarModel));
         if (sendWalkingAnimator)
@@ -193,7 +193,6 @@ public class AvatarManager : MonoBehaviour
         if (sendEmotes)
             t.AddIfNotNull(SendEmotes(collabUser, avatarModel, emotesSubskeletonData));
         t.Dispatch();
-        UMI3DCollaborationServer.Instance.OnUserActive.RemoveListener(SendAvatar);
     }
 
     private Operation SendAvatarModel(UMI3DCollaborationUser user, out UMI3DModel avatarModel)
@@ -205,12 +204,12 @@ public class AvatarManager : MonoBehaviour
         avatarModelnode.transform.localRotation = Quaternion.identity;
 
         avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
+        SimpleModificationListener.Instance.RemoveNode(avatarModel);
+
         avatarModel.objectModel.SetValue(AvatarModel);
         avatarModel.objectScale.SetValue(user.userSize.GetValue(user).Struct());
 
-        HandledAvatars[user] = new HandledInfos() { avatar = avatarModel };
-
-        SimpleModificationListener.Instance.RemoveNode(avatarModel);
+        HandledAvatars[user].avatar = avatarModel;
 
         return avatarModel.GetLoadEntity();
     }
@@ -221,13 +220,14 @@ public class AvatarManager : MonoBehaviour
 
         if (bindRig)
         {
-            var bindings = Rigs.binds.Select(bind => new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
-            {
-                syncPosition = true,
-                offsetPosition = bind.positionOffset,
-                syncRotation = true,
-                offsetRotation = Quaternion.Euler(bind.rotationOffset),
-            }).Cast<AbstractSingleBinding>();
+            var bindings = Rigs.binds.Select(bind => 
+                new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
+                {
+                    syncPosition = true,
+                    offsetPosition = bind.positionOffset,
+                    syncRotation = true,
+                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
+                }).Cast<AbstractSingleBinding>();
 
             MultiBinding multiBinding = new(avatarModel.Id())
             {
@@ -253,6 +253,7 @@ public class AvatarManager : MonoBehaviour
         subskeletonNodeGo.transform.localRotation = Quaternion.identity;
 
         UMI3DSkeletonNode skeletonNode = subskeletonNodeGo.AddComponent<UMI3DSkeletonNode>();
+        SimpleModificationListener.Instance.RemoveNode(skeletonNode);
 
         List<UMI3DAbstractAnimation> animations = new();
         foreach (var animationState in walkingSubskeleton.animatorStateNames)
@@ -264,6 +265,7 @@ public class AvatarManager : MonoBehaviour
             animation.objectPlaying.SetValue(true);
             animation.objectParameters.Add("SPEED_X_Y", 0f);
             animation.objectStateName.SetValue(animationState);
+
             HandledAvatars[user].walkingAnimation = animation;
             ops.Add(animation.GetLoadEntity());
             animations.Add(animation);
@@ -294,6 +296,7 @@ public class AvatarManager : MonoBehaviour
         subskeletonGo.transform.localRotation = Quaternion.identity;
 
         UMI3DSkeletonNode skeletonNode = subskeletonGo.AddComponent<UMI3DSkeletonNode>();
+        SimpleModificationListener.Instance.RemoveNode(skeletonNode);
 
         var usedAnimationState = emoteSubskeleton.animatorStateNames.Take(emoteSubskeleton.emoteConfig.IncludedEmotes.Count).ToList();
 
@@ -307,6 +310,7 @@ public class AvatarManager : MonoBehaviour
             animation.objectStateName.SetValue(animatorStateName);
             animation.objectPlaying.SetValue(false);
             animations.Add(animation);
+
             HandledAvatars[user].emotesAnimations.Add(animation);
             ops.Add(animation.GetLoadEntity());
         }
@@ -317,11 +321,12 @@ public class AvatarManager : MonoBehaviour
         skeletonNode.priority = 100;
         skeletonNode.animationStates = usedAnimationState;
         skeletonNode.relatedAnimationIds = animations.Select(x => x.Id()).ToArray();
+
         HandledAvatars[user].emotesSkeletonNode = skeletonNode;
         ops.Add(skeletonNode.GetLoadEntity());
 
         // Associate animation with emotes
-        EmoteDispatcher.Instance.EmotesConfigs.Add(user.Id(), emoteSubskeleton.emoteConfig);
+        EmoteDispatcher.Instance.EmotesConfigs[user.Id()] = emoteSubskeleton.emoteConfig;
 
         int indexAnim = 0;
         foreach (var emote in emoteSubskeleton.emoteConfig.IncludedEmotes)
@@ -336,7 +341,8 @@ public class AvatarManager : MonoBehaviour
 
             ops.Add(animation.GetLoadEntity());
         }
-        ops.Add(emoteSubskeleton.emoteConfig.GetLoadEntity());
+
+        ops.Add(emoteSubskeleton.emoteConfig.GetLoadEntity(new() { user }));
 
         return ops;
     }
