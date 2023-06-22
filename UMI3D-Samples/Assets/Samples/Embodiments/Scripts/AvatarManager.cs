@@ -129,39 +129,9 @@ public class AvatarManager : MonoBehaviour
         bindingHelperServer = BindingManager.Instance;
         UMI3DCollaborationServer.Instance.OnUserJoin.AddListener(Handle);
         UMI3DCollaborationServer.Instance.OnUserLeave.AddListener(Unhandle);
-        UMI3DForgeServer.avatarFrameEvent += UpdateAvatarWalkingSpeed;
     }
 
     private Queue<float> speedQueue = new();
-
-    private void UpdateAvatarWalkingSpeed(UserTrackingFrameDto frameDto, ulong userId)
-    {
-        var user = UMI3DCollaborationServer.Instance.Users().First(x => x.Id() == frameDto.userId);
-        if (HandledAvatars.ContainsKey(user))
-        {
-            float speed = (frameDto.position.Struct() - HandledAvatars[user].lastPosition).magnitude / maxSpeed;
-            HandledAvatars[user].lastPosition = frameDto.position.Struct();
-
-            if (HandledAvatars[user].walkingAnimation == null || HandledAvatars[user].walkingAnimation.objectParameters.GetValue().Count == 0)
-                return;
-
-            speedQueue.Enqueue(speed);
-
-            if (speedQueue.Count > 10)
-                speedQueue.Dequeue();
-
-            var previousSpeed = (float)HandledAvatars[user].walkingAnimation.objectParameters.GetValue("Speed");
-            var newSpeed = speedQueue.Average();
-            if (Math.Abs(previousSpeed - newSpeed) > 1e-1)
-            {
-                var op = HandledAvatars[user].walkingAnimation.objectParameters.SetValue("Speed", newSpeed);
-
-                Transaction t = new();
-                t.AddIfNotNull(op);
-                t.Dispatch();
-            }
-        }
-    }
 
     private void Handle(UMI3DUser user)
     {
@@ -292,7 +262,7 @@ public class AvatarManager : MonoBehaviour
             animation.objectNode.SetValue(skeletonNode);
             animation.objectLooping.SetValue(true);
             animation.objectPlaying.SetValue(true);
-            animation.objectParameters.Add("Speed", 0f);
+            animation.objectParameters.Add("SPEED_X_Y", 0f);
             animation.objectStateName.SetValue(animationState);
             HandledAvatars[user].walkingAnimation = animation;
             ops.Add(animation.GetLoadEntity());
@@ -303,6 +273,7 @@ public class AvatarManager : MonoBehaviour
         skeletonNode.userId = user.Id();
         skeletonNode.priority = 10;
         skeletonNode.animationStates = walkingSubskeleton.animatorStateNames;
+        skeletonNode.animatorSelfTrackedParameters = new uint[1] { (uint)SkeletonAnimatorParameterKeys.SPEED_X_Y };
         skeletonNode.relatedAnimationIds = animations.Select(x => x.Id()).ToArray();
 
         HandledAvatars[user].walkingSkeletonNode = skeletonNode;
