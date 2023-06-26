@@ -5162,7 +5162,6 @@ GameObject:
   - component: {fileID: 1274528702}
   - component: {fileID: 1274528700}
   - component: {fileID: 1274528701}
-  - component: {fileID: 1274528703}
   m_Layer: 0
   m_Name: UMI3DEnvironment
   m_TagString: Untagged
@@ -5226,23 +5225,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1274528703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274528699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2bf8200172b58f4baf05f80904c4fea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 0
-  max: 0
-  SetNodes:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1294359969
 GameObject:
   m_ObjectHideFlags: 0
@@ -5940,7 +5922,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1528412416}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15ad6a97d852faa4f81ef6bc5a58af69, type: 3}
   m_Name: 
@@ -9216,7 +9198,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 103469935608539469, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_RootOrder
@@ -9281,12 +9263,12 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 103469936817692320, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd7d8c1b1f5904d4e917cb98322ae4c0, type: 3}
 --- !u!1001 &201602352833198660
@@ -9903,7 +9885,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 5269527785894036185, guid: 2b7b70a2502ea194aae6806ffb51f44f,
         type: 3}
       propertyPath: hasCollider
