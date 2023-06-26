@@ -1,5 +1,5 @@
-﻿/*
-Copyright 2019 - 2021 Inetum
+/*
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using umi3d.edk.userCapture;
 
-namespace umi3d.edk.userCapture
+namespace umi3d.common.collaboration
 {
-    public class UMI3DAvatarViewpointHelper : MonoBehaviour {}
+    public class UMI3DPoseOverrideFieldContainer : UMI3DPoseContainer, IPoseOverriderFieldContainer
+    {
+        [SerializeField] private List<OverriderContainerField> allPoseOverriders = new List<OverriderContainerField>();
+        public List<OverriderContainerField> GetAllPoseOverriders()
+        {
+            return allPoseOverriders;
+        }
+    }
 }
+
