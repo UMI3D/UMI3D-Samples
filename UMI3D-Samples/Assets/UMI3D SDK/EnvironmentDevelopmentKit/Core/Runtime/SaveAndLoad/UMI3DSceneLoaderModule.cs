@@ -26,10 +26,12 @@ namespace umi3d.edk.save
     public class UMI3DSceneLoader : Singleton<UMI3DSceneLoader>
     {
         List<UMI3DSceneLoaderModule> modules;
+        UMI3DSceneLoaderModule defaultLoader;
 
         public UMI3DSceneLoader():base()
         {
             modules = UMI3DSceneLoaderModuleUtils.GetModules().ToList();
+            defaultLoader = new LastLoader();
         }
 
         static public void Restart()
@@ -51,6 +53,24 @@ namespace umi3d.edk.save
             return default;
         }
 
+        public static object DefaultSave<T>(T obj, SaveReference references)
+        {
+            if (Instance.defaultLoader.Save<T>(obj, out object data, references))
+            {
+                //UnityEngine.Debug.Log($"{obj} => {Instance.defaultLoader.ToString()} {(Instance.defaultLoader as UMI3DSceneLoaderContainer)?.type}");
+                return data;
+            }
+            return default;
+        }
+
+        public static async Task<bool> DefaultLoad<T, Data>(T obj, Data data)
+        {
+            if (await Instance.defaultLoader.Load(obj, data))
+            {
+                return true;
+            }
+            return false;
+        }
 
         public static async Task<bool> Load<T, Data>(T obj, Data data)
         {
@@ -76,14 +96,16 @@ namespace umi3d.edk.save
             if (type == null)
                 return null;
             var cp = gameObject.GetOrAddComponent(type);
-            await Load(cp, extension.data);
+            await DefaultLoad(cp, extension.data);
+            await Load(cp, extension.customData);
             return cp;
         }
 
         public static async Task<object> Load(GameObject gameObject, ComponentExtensionSO extension)
         {
             var cp = gameObject.AddComponent(extension.Type());
-            await Load(cp, extension.data);
+            await DefaultLoad(cp, extension.data);
+            await Load(cp, extension.customData);
             return cp;
         }
 
@@ -99,7 +121,7 @@ namespace umi3d.edk.save
         {
             return gameObject.GetComponents<Component>()
                 .OrderBy(OrderComponent)
-                .Select(s => new ComponentExtensionSO() { name = s.GetType().FullName, data = Save(s, references), id = references.GetId(s) });
+                .Select(s => new ComponentExtensionSO() { name = s.GetType().FullName, data = DefaultSave(s, references), customData = Save(s, references), id = references.GetId(s) });
         }
 
         static int OrderComponent(Component component)
@@ -174,7 +196,8 @@ namespace umi3d.edk.save
 
     }
 
-    [UMI3DSceneLoaderOrder(int.MinValue)]
+   // [UMI3DSceneLoaderOrder(int.MinValue)]
+    [UMI3DSceneLoaderIgnore]
     public class LastLoader : UMI3DSceneLoaderModule
     {
         Task<bool> UMI3DSceneLoaderModule.Load<T>(T obj, object data)

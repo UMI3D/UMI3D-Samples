@@ -45,6 +45,7 @@ public class ComponentExtensionSO
     public long id { get; set; }
     public string name { get; set; }
     public object data { get; set; }
+    public object customData { get; set; }
 }
 
 public static class ComponentExtensionSOLoader
