@@ -16,7 +16,9 @@ limitations under the License.
 
 using inetum.unityUtils;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using umi3d.common;
+using umi3d.edk.save;
 using UnityEngine;
 
 namespace umi3d.edk
@@ -133,5 +135,30 @@ namespace umi3d.edk
                 + UMI3DSerializer.Write(objectActive.GetValue(user))
                 + UMI3DSerializer.WriteCollection(objectMaterialOverriders.GetValue(user));
         }
+
+        public class AbstractRenderedNodeSaveLoader: NodeSaveLoader, UMI3DSceneLoaderModule<AbstractRenderedNode, RenderedNodeSO>
+        {
+            RenderedNodeSO UMI3DSceneLoaderModule<AbstractRenderedNode, RenderedNodeSO>.Save(AbstractRenderedNode obj, RenderedNodeSO data, SaveReference references)
+            {
+                base.Save(obj, data, references);
+                data.overrideModelMaterials = obj.overrideModelMaterials;
+                data.castShadow = obj.castShadow;
+                data.active = obj.active;
+                data.materialsOverrider = obj.materialsOverrider;
+                return data;
+            }
+
+            async Task<bool> UMI3DSceneLoaderModule<AbstractRenderedNode, RenderedNodeSO>.Load(AbstractRenderedNode obj, RenderedNodeSO data, SaveReference references)
+            {
+                await base.Load(obj, data, references);
+                obj.overrideModelMaterials = data.overrideModelMaterials;
+                obj.castShadow = data.castShadow;
+                obj.active = data.active;
+                obj.materialsOverrider = data.materialsOverrider;
+                return true;
+            }
+        }
+
+
     }
 }

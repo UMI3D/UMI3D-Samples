@@ -55,7 +55,7 @@ namespace umi3d.edk
         public Vector3 offsetScale = Vector3.zero;
 
         /// <summary>
-        /// Anchor for rotation when position and rotation synchronisation are active. <br/>
+        /// AnchorId for rotation when position and rotation synchronisation are active. <br/>
         /// Value is given in the parent object referential.
         /// </summary>
         public Vector3 anchor = Vector3.zero;

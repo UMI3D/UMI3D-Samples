@@ -21,9 +21,9 @@ using UnityEngine;
 namespace umi3d.edk
 {
     /// <summary>
-    /// Anchor of a node in the real world, if any, for AR scene design.
+    /// AnchorId of a node in the real world, if any, for AR scene design.
     /// </summary>
-    /// Objects that posses an Anchor are placed according to their anchor in the real world, instaed of its position in the scene.
+    /// Objects that posses an AnchorId are placed according to their anchor in the real world, instaed of its position in the scene.
     public class UMI3DAnchor : MonoBehaviour
     {
         /// <summary>

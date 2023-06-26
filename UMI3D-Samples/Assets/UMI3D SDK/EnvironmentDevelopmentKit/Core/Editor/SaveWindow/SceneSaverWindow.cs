@@ -14,10 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 #if UNITY_EDITOR
+using Codice.CM.SEIDInfo;
+using inetum.unityUtils;
 using inetum.unityUtils.editor;
 using NUnit.Framework;
+using System;
 using System.Linq;
 using umi3d.common;
+using umi3d.edk.save;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -38,6 +42,10 @@ namespace umi3d.edk.editor
 
         protected override void Draw()
         {
+            if (GUILayout.Button("Test"))
+            {
+                UMI3DSceneLoaderModuleUtils.GetModulesType().Debug();
+            }
 
             if (GUILayout.Button("Save environment"))
             {
@@ -71,6 +79,13 @@ namespace umi3d.edk.editor
         }
 
 
+        class A { }
+        class B : A ,IB1,IB2 { }
+        class C : B{ }
+        class D : C { }
+
+        interface IB1 { }
+        interface IB2 { }
     }
 
 

@@ -18,7 +18,9 @@ using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using umi3d.common;
+using umi3d.edk.save;
 using UnityEngine;
 
 namespace umi3d.edk
@@ -561,6 +563,48 @@ namespace umi3d.edk
             }
         }
 #endif
+
+        public class NodeSaveLoader : AbstractNodeSaveLoader, UMI3DSceneLoaderModule<UMI3DNode, NodeSO>
+        {
+            public NodeSO Save(UMI3DNode obj, NodeSO data, SaveReference references)
+            {
+                base.Save(obj, data, references);
+                data.nodeName = obj.nodeName;
+                data.xBillboard = obj.xBillboard;
+                data.yBillboard = obj.yBillboard;
+                data.hasCollider = obj.hasCollider;
+                data.colliderType = obj.colliderType;
+                data.convex = obj.convex;
+                data.colliderCenter = obj.colliderCenter;
+                data.colliderRadius = obj.colliderRadius;
+                data.colliderBoxSize = obj.colliderBoxSize;
+                data.colliderHeight = obj.colliderHeight;
+                data.colliderDirection = obj.colliderDirection;
+                data.isMeshCustom = obj.isMeshCustom;
+                data.customMeshCollider = obj.customMeshCollider;
+                return data;
+            }
+
+            public async Task<bool> Load(UMI3DNode obj, NodeSO data, SaveReference references)
+            {
+                await base.Load(obj, data, references);
+                obj.nodeName = data.nodeName;
+                obj.xBillboard = data.xBillboard;
+                obj.yBillboard= data.yBillboard;
+                obj.hasCollider = data.hasCollider;
+                obj.colliderType = data.colliderType;
+                obj.convex = data.convex;
+                obj.colliderCenter = data.colliderCenter;
+                obj.colliderRadius = data.colliderRadius;
+                obj.colliderBoxSize = data.colliderBoxSize;
+                obj.colliderHeight = data.colliderHeight;
+                obj.colliderDirection = data.colliderDirection;
+                obj.isMeshCustom = data.isMeshCustom;
+                obj.customMeshCollider = data.customMeshCollider;
+                return true;
+            }
+        }
+
     }
 }
 

@@ -29,7 +29,7 @@ namespace umi3d.edk
     /// </summary>
     [DisallowMultipleComponent]
     [SelectionBase]
-    public class UMI3DScene : UMI3DAbstractNode, UMI3DSceneLoaderModule<UMI3DScene, SceneSO>
+    public class UMI3DScene : UMI3DAbstractNode
     {
 
         #region fields
@@ -211,13 +211,18 @@ namespace umi3d.edk
             return ToGlTFNodeDto(user);
         }
 
+
+    }
+
+    public class SceneSaveLoader : UMI3DSceneLoaderModule<UMI3DScene, SceneSO>
+    {
         SceneSO UMI3DSceneLoaderModule<UMI3DScene, SceneSO>.Save(UMI3DScene obj, SceneSO data, SaveReference references)
         {
             data.libraries = obj.libraries;
             return data;
         }
 
-        Task<bool> UMI3DSceneLoaderModule<UMI3DScene, SceneSO>.Load(UMI3DScene obj, SceneSO data)
+        Task<bool> UMI3DSceneLoaderModule<UMI3DScene, SceneSO>.Load(UMI3DScene obj, SceneSO data, SaveReference references)
         {
             obj.libraries = data.libraries;
             return Task.FromResult(true);

@@ -17,7 +17,9 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using umi3d.common;
+using umi3d.edk.save;
 using UnityEngine;
 
 namespace umi3d.edk
@@ -336,5 +338,23 @@ namespace umi3d.edk
             return materialsOverrider.ConvertAll(mat => mat.newMaterial.ToDto());
 
         }
+
+        public class ModelSaveLoader : AbstractRenderedNodeSaveLoader, UMI3DSceneLoaderModule<UMI3DModel, ModelSO>
+        {
+            public ModelSO Save(UMI3DModel obj, ModelSO data, SaveReference references)
+            {
+                base.Save(obj, data, references);
+                UnityEngine.Debug.Log("Save model");
+                return data;
+            }
+
+            public async Task<bool> Load(UMI3DModel obj, ModelSO data, SaveReference references)
+            {
+                await base.Load(obj, data, references);
+
+                return true;
+            }
+        }
+
     }
 }

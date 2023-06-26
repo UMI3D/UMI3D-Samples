@@ -75,6 +75,10 @@ namespace umi3d.edk
             return id;
         }
 
+        public E GetEntitySync<E>(long id) where E : class
+        {
+            return ( GetEntitySync(id)) as E;
+        }
 
         public async Task<E> GetEntity<E> (long id, List<CancellationToken> tokens = null) where E : class 
         {
@@ -92,6 +96,15 @@ namespace umi3d.edk
             }
             if (tokens.Any(token => token.IsCancellationRequested))
                 return default;
+            return entities[id];
+        }
+
+        public object GetEntitySync(long id)
+        {
+            if (!entities.ContainsKey(id))
+            {
+                return default;
+            }
             return entities[id];
         }
     }

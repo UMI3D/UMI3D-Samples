@@ -31,7 +31,7 @@ namespace umi3d.edk
     /// Root node of any UMI3D enviroment.
     /// </summary>
     /// As there is only one envionment node, it could be called as a manager.
-    public class UMI3DEnvironment : SingleBehaviour<UMI3DEnvironment>, UMI3DSceneLoaderModule<UMI3DEnvironment,EnvironmentSO>
+    public class UMI3DEnvironment : SingleBehaviour<UMI3DEnvironment>
     {
         private const DebugScope scope = DebugScope.EDK | DebugScope.Collaboration;
 
@@ -291,57 +291,7 @@ namespace umi3d.edk
 
         #endregion
 
-        public EnvironmentSO Save(UMI3DEnvironment obj, EnvironmentSO data, SaveReference references)
-        {
-            data.useDto = obj.useDto;
-            data.name = obj.environmentName;
 
-            data.defaultStartPosition = obj.defaultStartPosition.Dto();
-            data.defaultStartOrientation = obj.defaultStartOrientation.Dto();
-
-            data.globalLibraries = obj.globalLibraries;
-            data.preloadedScenes = obj.preloadedScenes;
-
-            data.mode = (int)obj.mode;
-            data.skyColor = obj.skyColor.Dto();
-            data.horizontalColor = obj.horizontalColor.Dto();
-            data.groundColor = obj.groundColor.Dto();
-            data.ambientIntensity = obj.ambientIntensity;
-            data.skyboxType = (int)obj.skyboxType;
-
-            data.skyboxImage = obj.skyboxImage;
-            data.skyboxRotation = obj.skyboxRotation;
-
-            data.defaultMaterial = obj.defaultMaterial;
-
-            return data;
-        }
-
-        public Task<bool> Load(UMI3DEnvironment obj, EnvironmentSO data)
-        {
-            obj.useDto = data.useDto;
-            obj.environmentName = data.name;
-
-            obj.defaultStartPosition = data.defaultStartPosition.Struct();
-            obj.defaultStartOrientation = data.defaultStartOrientation.Struct();
-
-            obj.globalLibraries = data.globalLibraries;
-            obj.preloadedScenes = data.preloadedScenes;
-
-            RenderSettings.ambientMode = (AmbientMode)data.mode;
-            RenderSettings.ambientSkyColor = data.skyColor.Struct();
-            RenderSettings.ambientEquatorColor = data.horizontalColor.Struct();
-            RenderSettings.ambientGroundColor = data.groundColor.Struct();
-            RenderSettings.ambientIntensity = data.ambientIntensity;
-            obj.skyboxType = (SkyboxType)data.skyboxType;
-
-            obj.skyboxImage = data.skyboxImage;
-            obj.skyboxRotation = data.skyboxRotation;
-
-            obj.defaultMaterial = data.defaultMaterial;
-
-            return Task.FromResult(true);
-        }
 
         #region entities
 
@@ -620,5 +570,60 @@ namespace umi3d.edk
         }
 
         #endregion
+
+        public class EnvironmentSaveLoader : UMI3DSceneLoaderModule<UMI3DEnvironment, EnvironmentSO>
+        {
+            public EnvironmentSO Save(UMI3DEnvironment obj, EnvironmentSO data, SaveReference references)
+            {
+                data.useDto = obj.useDto;
+                data.name = obj.environmentName;
+
+                data.defaultStartPosition = obj.defaultStartPosition.Dto();
+                data.defaultStartOrientation = obj.defaultStartOrientation.Dto();
+
+                data.globalLibraries = obj.globalLibraries;
+                data.preloadedScenes = obj.preloadedScenes;
+
+                data.mode = (int)obj.mode;
+                data.skyColor = obj.skyColor.Dto();
+                data.horizontalColor = obj.horizontalColor.Dto();
+                data.groundColor = obj.groundColor.Dto();
+                data.ambientIntensity = obj.ambientIntensity;
+                data.skyboxType = (int)obj.skyboxType;
+
+                data.skyboxImage = obj.skyboxImage;
+                data.skyboxRotation = obj.skyboxRotation;
+
+                data.defaultMaterial = obj.defaultMaterial;
+
+                return data;
+            }
+
+            public Task<bool> Load(UMI3DEnvironment obj, EnvironmentSO data, SaveReference references)
+            {
+                obj.useDto = data.useDto;
+                obj.environmentName = data.name;
+
+                obj.defaultStartPosition = data.defaultStartPosition.Struct();
+                obj.defaultStartOrientation = data.defaultStartOrientation.Struct();
+
+                obj.globalLibraries = data.globalLibraries;
+                obj.preloadedScenes = data.preloadedScenes;
+
+                RenderSettings.ambientMode = (AmbientMode)data.mode;
+                RenderSettings.ambientSkyColor = data.skyColor.Struct();
+                RenderSettings.ambientEquatorColor = data.horizontalColor.Struct();
+                RenderSettings.ambientGroundColor = data.groundColor.Struct();
+                RenderSettings.ambientIntensity = data.ambientIntensity;
+                obj.skyboxType = (SkyboxType)data.skyboxType;
+
+                obj.skyboxImage = data.skyboxImage;
+                obj.skyboxRotation = data.skyboxRotation;
+
+                obj.defaultMaterial = data.defaultMaterial;
+
+                return Task.FromResult(true);
+            }
+        }
     }
 }

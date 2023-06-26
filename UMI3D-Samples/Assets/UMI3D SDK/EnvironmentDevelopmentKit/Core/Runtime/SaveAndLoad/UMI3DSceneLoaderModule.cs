@@ -41,8 +41,10 @@ namespace umi3d.edk.save
         {
             foreach(var module in Instance.modules)
             {
+               
                 if(module.Save(obj,out object data, references))
                 {
+                    UnityEngine.Debug.Log($"{obj} => {module.ToString()} {(module as UMI3DSceneLoaderContainer)?.type}");
                     return data;
                 }
             }
@@ -191,14 +193,16 @@ namespace umi3d.edk.save
 
         bool UMI3DSceneLoaderModule.Save<T>(T obj, out object data, SaveReference references)
         {
+
+            UnityEngine.Debug.Log(obj);
             try
             {
                 data = JsonUtility.ToJson(obj);
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log(obj);
-                UnityEngine.Debug.LogError(e);
+                //UnityEngine.Debug.Log(obj);
+                //UnityEngine.Debug.LogError(e);
                 data = null;
             }
             return true;
@@ -249,7 +253,7 @@ namespace umi3d.edk.save
     public interface UMI3DSceneLoaderModule<T,Data> where Data : class, new()
     {
         Data Save(T obj,Data data, SaveReference references);
-        Task<bool> Load(T obj, Data data);
+        Task<bool> Load(T obj, Data data, SaveReference references);
     }
 
     public static class UMI3DSceneLoaderModuleUtils
@@ -264,22 +268,29 @@ namespace umi3d.edk.save
             return GetModulesType(assembly).SelectMany(Instanciate);
         }
 
-        static IEnumerable<Type> GetModulesType(Assembly assembly = null)
+        public static IEnumerable<Type> GetModulesType(Assembly assembly = null)
         {
             return AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => assembly == null || a == assembly)
                 .SelectMany(a => a.GetTypes())
                 .Where(type => type.IsValidType() && !type.IsIgnoreAttribute())
-                .OrderByDescending(type =>
-                {
-                    var attributes = type.GetCustomAttributes(typeof(UMI3DSceneLoaderOrderAttribute), true);
-                    if (type.GetCustomAttributes(typeof(UMI3DSceneLoaderOrderAttribute), true).Length > 0)
-                    {
-                        return attributes.Select(a => a as UMI3DSceneLoaderOrderAttribute).First().priotity;
-                    }
-                    return -1;
-                });
+                .OrderByDescending(GetTypeOrder);
         }
+
+        static int GetTypeOrder(Type type)
+        {
+            var attributes = type.GetCustomAttributes(typeof(UMI3DSceneLoaderOrderAttribute), true);
+            if (type.GetCustomAttributes(typeof(UMI3DSceneLoaderOrderAttribute), true).Length > 0)
+            {
+                return attributes.Select(a => a as UMI3DSceneLoaderOrderAttribute).First().priotity;
+            }
+
+            if (type == typeof(object))
+                return -1;
+
+            return GetTypeOrder(type.BaseType) +1;
+        }
+
 
         /// <summary>
         /// State if the The type is a serializer.

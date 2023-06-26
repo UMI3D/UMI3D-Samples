@@ -17,7 +17,9 @@ limitations under the License.
 using inetum.unityUtils;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using umi3d.common;
+using umi3d.edk.save;
 using UnityEngine;
 
 namespace umi3d.edk
@@ -95,10 +97,10 @@ namespace umi3d.edk
         public UMI3DAsyncProperty<bool> objectActive { get { Register(); return _objectActive; } protected set => _objectActive = value; }
 
         /// <summary>
-        /// Anchor of the object in the real world, if any, for AR design.
+        /// AnchorId of the object in the real world, if any, for AR design.
         /// </summary>
-        /// Nodes that possess an Anchor are placed according to their anchor in the real world, instaed of its position in the scene.
-        [SerializeField, EditorReadOnly, Tooltip("Anchor of the object in the real world, if any, for AR design.")]
+        /// Nodes that possess an AnchorId are placed according to their anchor in the real world, instaed of its position in the scene.
+        [SerializeField, EditorReadOnly, Tooltip("AnchorId of the object in the real world, if any, for AR design.")]
         protected UMI3DAnchor UMI3DAnchor;
         /// <summary>
         /// See <see cref="UMI3DAnchor"/>.
@@ -383,6 +385,31 @@ namespace umi3d.edk
 
         #endregion
 
+        public class AbstractNodeSaveLoader : UMI3DSceneLoaderModule<UMI3DAbstractNode, AbstractNodeSO>
+        {
+            public AbstractNodeSO Save(UMI3DAbstractNode obj, AbstractNodeSO data, SaveReference references)
+            {
+                data.active = obj.active;
+                data.isStatic = obj.isStatic;
+                data.AnchorId = references.GetId(obj.UMI3DAnchor);
+                data.immersiveOnly = obj.immersiveOnly;
+
+                return data;
+            }
+
+            public async Task<bool> Load(UMI3DAbstractNode obj, AbstractNodeSO data, SaveReference references)
+            {
+                obj.active = data.active;
+                obj.isStatic = data.isStatic;
+                obj.immersiveOnly = data.immersiveOnly;
+                obj.UMI3DAnchor = await references.GetEntity<UMI3DAnchor>(data.AnchorId);
+                return true;
+            }
+        }
+
     }
+
+
+
 }
 
