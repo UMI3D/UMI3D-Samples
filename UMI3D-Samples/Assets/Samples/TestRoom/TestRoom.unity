@@ -434,6 +434,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   materialIds: 
   animationIds: 
+  poseOverriderContainerIds: 
   materialSOs:
   - {fileID: 11400000, guid: 5cdb75934ed3b564f967ea8a226917ac, type: 2}
   - {fileID: 11400000, guid: c142dd9d6aa316d408557ff0b2a1effe, type: 2}
@@ -3732,6 +3733,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   materialIds: 
   animationIds: 
+  poseOverriderContainerIds: 
   materialSOs: []
   PreloadedMaterials: []
 --- !u!1 &1003581601
@@ -4447,6 +4449,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
   materialIds: 
   animationIds: 
+  poseOverriderContainerIds: 
   materialSOs: []
   PreloadedMaterials: []
 --- !u!4 &1183297984
@@ -9909,11 +9912,6 @@ PrefabInstance:
     - target: {fileID: 5269527785894036185, guid: 2b7b70a2502ea194aae6806ffb51f44f,
         type: 3}
       propertyPath: colliderType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5269527785894036185, guid: 2b7b70a2502ea194aae6806ffb51f44f,
-        type: 3}
-      propertyPath: isTraversable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5269527785894036185, guid: 2b7b70a2502ea194aae6806ffb51f44f,
