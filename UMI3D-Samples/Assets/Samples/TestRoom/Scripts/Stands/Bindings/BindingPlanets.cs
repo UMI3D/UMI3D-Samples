@@ -16,6 +16,7 @@ limitations under the License.
 
 using System.Linq;
 using umi3d.edk;
+using umi3d.edk.binding;
 using umi3d.edk.collaboration;
 using umi3d.edk.userCapture;
 using UnityEngine;

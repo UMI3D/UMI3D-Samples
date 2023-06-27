@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 using umi3d.edk;
-
+using umi3d.edk.binding;
 using UnityEngine;
 
 public class BindingStickMultibinding : MonoBehaviour

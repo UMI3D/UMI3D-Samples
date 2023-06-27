@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using umi3d.edk;
 using umi3d.edk.collaboration;
+using umi3d.edk.collaboration.emotes;
 using umi3d.edk.userCapture;
 using UnityEngine;
 

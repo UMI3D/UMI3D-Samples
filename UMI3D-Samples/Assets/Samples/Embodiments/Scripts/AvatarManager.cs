@@ -21,10 +21,14 @@ using System.Collections.Generic;
 using System.Linq;
 
 using umi3d.common.userCapture;
+using umi3d.common.userCapture.animation;
 using umi3d.edk;
+using umi3d.edk.binding;
 using umi3d.edk.collaboration;
+using umi3d.edk.collaboration.emotes;
 using umi3d.edk.userCapture;
-
+using umi3d.edk.userCapture.animation;
+using umi3d.edk.userCapture.binding;
 using UnityEngine;
 
 public class AvatarManager : MonoBehaviour
