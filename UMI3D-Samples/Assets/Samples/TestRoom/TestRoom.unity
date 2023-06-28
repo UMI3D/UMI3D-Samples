@@ -1048,54 +1048,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 326592199}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &331114674 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4391323535956915931, guid: 8d55352bcc906fb478df3f31e17be3cd,
-    type: 3}
-  m_PrefabInstance: {fileID: 4391323535506847188}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 227935805aa868343b8f29a1936a6cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &331114680 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4391323535956915909, guid: 8d55352bcc906fb478df3f31e17be3cd,
-    type: 3}
-  m_PrefabInstance: {fileID: 4391323535506847188}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 227935805aa868343b8f29a1936a6cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &331114683 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4391323535956915906, guid: 8d55352bcc906fb478df3f31e17be3cd,
-    type: 3}
-  m_PrefabInstance: {fileID: 4391323535506847188}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 227935805aa868343b8f29a1936a6cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &331114685 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4391323535956915904, guid: 8d55352bcc906fb478df3f31e17be3cd,
-    type: 3}
-  m_PrefabInstance: {fileID: 4391323535506847188}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 227935805aa868343b8f29a1936a6cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &336792916
 GameObject:
   m_ObjectHideFlags: 0
@@ -2076,171 +2028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e9940359247dc48a1c9178b9bff2c4, type: 3}
   m_Name: Hand Pose Information
   m_EditorClassIdentifier: 
-  RightHandPosition: {x: -0.0000023841856, y: 0.00000029802322, z: -2.1186397}
-  RightHandEulerRotation: {x: 323.38354, y: 270, z: 180}
-  LeftHandPosition: {x: 0, y: 0, z: 0}
-  LeftHandEulerRotation: {x: 323.38354, y: 270, z: 180}
-  PhalangesData:
-  - PhalanxName: LeftThumbProximal
-    Data:
-      Pos: {x: -0.03788809, y: -0.02166997, z: 0.03003088}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbIntermediate
-    Data:
-      Pos: {x: -3.675443, y: -2.122008, z: 2.122012}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbDistal
-    Data:
-      Pos: {x: -3.394359, y: -1.959744, z: 1.959793}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbEnd
-    Data:
-      Pos: {x: -2.679404, y: -1.546945, z: 1.54692}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexProximal
-    Data:
-      Pos: {x: -0.1226661, y: -0.002316688, z: 0.02822058}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexIntermediate
-    Data:
-      Pos: {x: -3.891967, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexDistal
-    Data:
-      Pos: {x: -3.415161, y: 0.000000005749108, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexEnd
-    Data:
-      Pos: {x: -3.077986, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleProximal
-    Data:
-      Pos: {x: -0.1277552, y: 0.0000001334202, z: 0.0000002041846}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleIntermediate
-    Data:
-      Pos: {x: -3.613972, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleDistal
-    Data:
-      Pos: {x: -3.45976, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleEnd
-    Data:
-      Pos: {x: -3.680192, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingProximal
-    Data:
-      Pos: {x: -0.12147, y: 0.00009894983, z: -0.02216629}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingIntermediate
-    Data:
-      Pos: {x: -3.60119, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingDistal
-    Data:
-      Pos: {x: -3.307317, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingEnd
-    Data:
-      Pos: {x: -3.660115, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleProximal
-    Data:
-      Pos: {x: -0.1090819, y: -0.00226365, z: -0.04725818}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleIntermediate
-    Data:
-      Pos: {x: -4.136652, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleDistal
-    Data:
-      Pos: {x: -2.594836, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleEnd
-    Data:
-      Pos: {x: -2.923869, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightThumbProximal
-    Data:
-      Pos: {x: 0.03788812, y: -0.02166999, z: 0.03003085}
-      Rot: {x: -0.0000002740924, y: -0.00000007053219, z: 26.30834}
-  - PhalanxName: RightThumbIntermediate
-    Data:
-      Pos: {x: 3.675445, y: -2.122004, z: 2.122034}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightThumbDistal
-    Data:
-      Pos: {x: 3.39436, y: -1.959753, z: 1.959789}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightThumbEnd
-    Data:
-      Pos: {x: 2.679403, y: -1.546945, z: 1.546891}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexProximal
-    Data:
-      Pos: {x: 0.1226662, y: -0.002316732, z: 0.02822055}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexIntermediate
-    Data:
-      Pos: {x: 3.891967, y: -0.00000007205551, z: 0.00003751302}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexDistal
-    Data:
-      Pos: {x: 3.415161, y: 0.0000002529914, z: -0.000008605841}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexEnd
-    Data:
-      Pos: {x: 3.077986, y: -0.0000009272842, z: -0.000008780579}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightMiddleProximal
-    Data:
-      Pos: {x: 0.1277552, y: 0.00000008945774, z: 0.0000001801164}
-      Rot: {x: 3.207475, y: 353.9779, z: 271.3276}
-  - PhalanxName: RightMiddleIntermediate
-    Data:
-      Pos: {x: 3.613972, y: 0.000002756502, z: 0.000003080337}
-      Rot: {x: 0.000001681974, y: -0.000005667903, z: 268.2792}
-  - PhalanxName: RightMiddleDistal
-    Data:
-      Pos: {x: 3.45976, y: -0.0000001972182, z: -0.00002645789}
-      Rot: {x: 0.000002055291, y: -0.0000145475, z: 280.1786}
-  - PhalanxName: RightMiddleEnd
-    Data:
-      Pos: {x: 3.680192, y: -0.0000006576055, z: 0.00003250981}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightRingProximal
-    Data:
-      Pos: {x: 0.12147, y: 0.00009894557, z: -0.02216627}
-      Rot: {x: 3.207475, y: 353.9779, z: 271.3276}
-  - PhalanxName: RightRingIntermediate
-    Data:
-      Pos: {x: 3.601193, y: 0, z: 0.00002384185}
-      Rot: {x: 0.000001681974, y: -0.000005667903, z: 268.2792}
-  - PhalanxName: RightRingDistal
-    Data:
-      Pos: {x: 3.30732, y: 0, z: -0.00001341104}
-      Rot: {x: 0.000002055291, y: -0.0000145475, z: 280.1786}
-  - PhalanxName: RightRingEnd
-    Data:
-      Pos: {x: 3.660113, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightLittleProximal
-    Data:
-      Pos: {x: 0.1090819, y: -0.002263658, z: -0.04725829}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightLittleIntermediate
-    Data:
-      Pos: {x: 4.136657, y: 0, z: 0.00003576278}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightLittleDistal
-    Data:
-      Pos: {x: 2.594835, y: 0, z: -0.00003576278}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightLittleEnd
-    Data:
-      Pos: {x: 2.923873, y: 0, z: 0.00001112792}
-      Rot: {x: 0, y: 0, z: 0}
 --- !u!1 &514022492
 GameObject:
   m_ObjectHideFlags: 0
@@ -4479,171 +4266,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e9940359247dc48a1c9178b9bff2c4, type: 3}
   m_Name: Hand Pose Information
   m_EditorClassIdentifier: 
-  RightHandPosition: {x: 0, y: 0, z: -0.55164206}
-  RightHandEulerRotation: {x: 270, y: 89.99999, z: 0}
-  LeftHandPosition: {x: -0.31522277, y: 0.13142107, z: -0.04896505}
-  LeftHandEulerRotation: {x: 270, y: 89.99999, z: 0}
-  PhalangesData:
-  - PhalanxName: LeftThumbProximal
-    Data:
-      Pos: {x: -0.03788809, y: -0.02166997, z: 0.03003088}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbIntermediate
-    Data:
-      Pos: {x: -3.675443, y: -2.122008, z: 2.122012}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbDistal
-    Data:
-      Pos: {x: -3.394359, y: -1.959744, z: 1.959793}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbEnd
-    Data:
-      Pos: {x: -2.679404, y: -1.546945, z: 1.54692}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexProximal
-    Data:
-      Pos: {x: -0.1226661, y: -0.002316688, z: 0.02822058}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexIntermediate
-    Data:
-      Pos: {x: -3.891967, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexDistal
-    Data:
-      Pos: {x: -3.415161, y: 0.000000005749108, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexEnd
-    Data:
-      Pos: {x: -3.077986, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleProximal
-    Data:
-      Pos: {x: -0.1277552, y: 0.0000001334202, z: 0.0000002041846}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleIntermediate
-    Data:
-      Pos: {x: -3.613972, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleDistal
-    Data:
-      Pos: {x: -3.45976, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleEnd
-    Data:
-      Pos: {x: -3.680192, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingProximal
-    Data:
-      Pos: {x: -0.12147, y: 0.00009894983, z: -0.02216629}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingIntermediate
-    Data:
-      Pos: {x: -3.60119, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingDistal
-    Data:
-      Pos: {x: -3.307317, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingEnd
-    Data:
-      Pos: {x: -3.660115, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleProximal
-    Data:
-      Pos: {x: -0.1090819, y: -0.00226365, z: -0.04725818}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleIntermediate
-    Data:
-      Pos: {x: -4.136652, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleDistal
-    Data:
-      Pos: {x: -2.594836, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleEnd
-    Data:
-      Pos: {x: -2.923869, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightThumbProximal
-    Data:
-      Pos: {x: 0.03788812, y: -0.02166999, z: 0.03003085}
-      Rot: {x: 0.00000005797181, y: 27.376736, z: 0.00000006250037}
-  - PhalanxName: RightThumbIntermediate
-    Data:
-      Pos: {x: 3.675445, y: -2.122004, z: 2.122034}
-      Rot: {x: 0.000000114998045, y: 35.544487, z: 0.0000001126539}
-  - PhalanxName: RightThumbDistal
-    Data:
-      Pos: {x: 3.39436, y: -1.959753, z: 1.959789}
-      Rot: {x: -0.000000074923825, y: 56.727287, z: 0.00000028065173}
-  - PhalanxName: RightThumbEnd
-    Data:
-      Pos: {x: 2.679403, y: -1.546945, z: 1.546891}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexProximal
-    Data:
-      Pos: {x: 0.1226662, y: -0.002316732, z: 0.02822055}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexIntermediate
-    Data:
-      Pos: {x: 3.891967, y: -0.00000007205551, z: 0.00003751302}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexDistal
-    Data:
-      Pos: {x: 3.415161, y: 0.0000002529914, z: -0.000008605841}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexEnd
-    Data:
-      Pos: {x: 3.077986, y: -0.0000009272842, z: -0.000008780579}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightMiddleProximal
-    Data:
-      Pos: {x: 0.1277552, y: 0.00000008945774, z: 0.0000001801164}
-      Rot: {x: 0.0000062625004, y: -0.0000012081157, z: 294.72293}
-  - PhalanxName: RightMiddleIntermediate
-    Data:
-      Pos: {x: 3.613972, y: 0.000002756502, z: 0.000003080337}
-      Rot: {x: 0.000011204971, y: 0.0000024601327, z: 294.07178}
-  - PhalanxName: RightMiddleDistal
-    Data:
-      Pos: {x: 3.45976, y: -0.0000001972182, z: -0.00002645789}
-      Rot: {x: 0.000006019213, y: 0.00001329271, z: 261.88162}
-  - PhalanxName: RightMiddleEnd
-    Data:
-      Pos: {x: 3.680192, y: -0.0000006576055, z: 0.00003250981}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightRingProximal
-    Data:
-      Pos: {x: 0.12147, y: 0.00009894557, z: -0.02216627}
-      Rot: {x: 0.0000062625, y: -0.000001208116, z: 294.7229}
-  - PhalanxName: RightRingIntermediate
-    Data:
-      Pos: {x: 3.601193, y: 0, z: 0.00002384185}
-      Rot: {x: 0.00001120497, y: 0.000002460133, z: 294.0718}
-  - PhalanxName: RightRingDistal
-    Data:
-      Pos: {x: 3.30732, y: 0, z: -0.00001341104}
-      Rot: {x: 0.000006019213, y: 0.00001329271, z: 261.8816}
-  - PhalanxName: RightRingEnd
-    Data:
-      Pos: {x: 3.660113, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightLittleProximal
-    Data:
-      Pos: {x: 0.1090819, y: -0.002263658, z: -0.04725829}
-      Rot: {x: 0.0000062625, y: -0.000001208116, z: 294.7229}
-  - PhalanxName: RightLittleIntermediate
-    Data:
-      Pos: {x: 4.136657, y: 0, z: 0.00003576278}
-      Rot: {x: 0.00001120497, y: 0.000002460133, z: 294.0718}
-  - PhalanxName: RightLittleDistal
-    Data:
-      Pos: {x: 2.594835, y: 0, z: -0.00003576278}
-      Rot: {x: 0.000006019213, y: 0.00001329271, z: 261.8816}
-  - PhalanxName: RightLittleEnd
-    Data:
-      Pos: {x: 2.923873, y: 0, z: 0.00001112792}
-      Rot: {x: 0, y: 0, z: 0}
 --- !u!1 &1215297419
 GameObject:
   m_ObjectHideFlags: 0
@@ -4980,171 +4602,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e9940359247dc48a1c9178b9bff2c4, type: 3}
   m_Name: Hand Pose Information
   m_EditorClassIdentifier: 
-  RightHandPosition: {x: 0, y: 0, z: -0.4684033}
-  RightHandEulerRotation: {x: 270, y: 89.99999, z: 0}
-  LeftHandPosition: {x: 0, y: 0, z: 0}
-  LeftHandEulerRotation: {x: 270, y: 89.99999, z: 0}
-  PhalangesData:
-  - PhalanxName: LeftThumbProximal
-    Data:
-      Pos: {x: -0.03788809, y: -0.02166997, z: 0.03003088}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbIntermediate
-    Data:
-      Pos: {x: -3.675443, y: -2.122008, z: 2.122012}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbDistal
-    Data:
-      Pos: {x: -3.394359, y: -1.959744, z: 1.959793}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbEnd
-    Data:
-      Pos: {x: -2.679404, y: -1.546945, z: 1.54692}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexProximal
-    Data:
-      Pos: {x: -0.1226661, y: -0.002316688, z: 0.02822058}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexIntermediate
-    Data:
-      Pos: {x: -3.891967, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexDistal
-    Data:
-      Pos: {x: -3.415161, y: 0.000000005749108, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexEnd
-    Data:
-      Pos: {x: -3.077986, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleProximal
-    Data:
-      Pos: {x: -0.1277552, y: 0.0000001334202, z: 0.0000002041846}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleIntermediate
-    Data:
-      Pos: {x: -3.613972, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleDistal
-    Data:
-      Pos: {x: -3.45976, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleEnd
-    Data:
-      Pos: {x: -3.680192, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingProximal
-    Data:
-      Pos: {x: -0.12147, y: 0.00009894983, z: -0.02216629}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingIntermediate
-    Data:
-      Pos: {x: -3.60119, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingDistal
-    Data:
-      Pos: {x: -3.307317, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingEnd
-    Data:
-      Pos: {x: -3.660115, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleProximal
-    Data:
-      Pos: {x: -0.1090819, y: -0.00226365, z: -0.04725818}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleIntermediate
-    Data:
-      Pos: {x: -4.136652, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleDistal
-    Data:
-      Pos: {x: -2.594836, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleEnd
-    Data:
-      Pos: {x: -2.923869, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightThumbProximal
-    Data:
-      Pos: {x: 0.03788812, y: -0.02166999, z: 0.03003085}
-      Rot: {x: -0.0000002740924, y: -0.00000007053219, z: 26.30834}
-  - PhalanxName: RightThumbIntermediate
-    Data:
-      Pos: {x: 3.675445, y: -2.122004, z: 2.122034}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightThumbDistal
-    Data:
-      Pos: {x: 3.39436, y: -1.959753, z: 1.959789}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightThumbEnd
-    Data:
-      Pos: {x: 2.679403, y: -1.546945, z: 1.546891}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexProximal
-    Data:
-      Pos: {x: 0.1226662, y: -0.002316732, z: 0.02822055}
-      Rot: {x: 3.2074747, y: 353.97794, z: 271.32764}
-  - PhalanxName: RightIndexIntermediate
-    Data:
-      Pos: {x: 3.891967, y: -0.00000007205551, z: 0.00003751302}
-      Rot: {x: 0.0000016819745, y: -0.0000056679028, z: 268.27917}
-  - PhalanxName: RightIndexDistal
-    Data:
-      Pos: {x: 3.415161, y: 0.0000002529914, z: -0.000008605841}
-      Rot: {x: 0.0000020552914, y: -0.0000145475, z: 280.1786}
-  - PhalanxName: RightIndexEnd
-    Data:
-      Pos: {x: 3.077986, y: -0.0000009272842, z: -0.000008780579}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightMiddleProximal
-    Data:
-      Pos: {x: 0.1277552, y: 0.00000008945774, z: 0.0000001801164}
-      Rot: {x: 3.207475, y: 353.9779, z: 271.3276}
-  - PhalanxName: RightMiddleIntermediate
-    Data:
-      Pos: {x: 3.613972, y: 0.000002756502, z: 0.000003080337}
-      Rot: {x: 0.000001681974, y: -0.000005667903, z: 268.2792}
-  - PhalanxName: RightMiddleDistal
-    Data:
-      Pos: {x: 3.45976, y: -0.0000001972182, z: -0.00002645789}
-      Rot: {x: 0.000002055291, y: -0.0000145475, z: 280.1786}
-  - PhalanxName: RightMiddleEnd
-    Data:
-      Pos: {x: 3.680192, y: -0.0000006576055, z: 0.00003250981}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightRingProximal
-    Data:
-      Pos: {x: 0.12147, y: 0.00009894557, z: -0.02216627}
-      Rot: {x: 3.207475, y: 353.9779, z: 271.3276}
-  - PhalanxName: RightRingIntermediate
-    Data:
-      Pos: {x: 3.601193, y: 0, z: 0.00002384185}
-      Rot: {x: 0.000001681974, y: -0.000005667903, z: 268.2792}
-  - PhalanxName: RightRingDistal
-    Data:
-      Pos: {x: 3.30732, y: 0, z: -0.00001341104}
-      Rot: {x: 0.000002055291, y: -0.0000145475, z: 280.1786}
-  - PhalanxName: RightRingEnd
-    Data:
-      Pos: {x: 3.660113, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightLittleProximal
-    Data:
-      Pos: {x: 0.1090819, y: -0.002263658, z: -0.04725829}
-      Rot: {x: 3.207475, y: 353.9779, z: 271.3276}
-  - PhalanxName: RightLittleIntermediate
-    Data:
-      Pos: {x: 4.136657, y: 0, z: 0.00003576278}
-      Rot: {x: 0.000001681974, y: -0.000005667903, z: 268.2792}
-  - PhalanxName: RightLittleDistal
-    Data:
-      Pos: {x: 2.594835, y: 0, z: -0.00003576278}
-      Rot: {x: 0.000002055291, y: -0.0000145475, z: 280.1786}
-  - PhalanxName: RightLittleEnd
-    Data:
-      Pos: {x: 2.923873, y: 0, z: 0.00001112792}
-      Rot: {x: 0, y: 0, z: 0}
 --- !u!4 &1269359223 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1470513307848119975, guid: 2ba4f7980c0ee364ba0e1f2c57c4d483,
@@ -5694,30 +5151,6 @@ MonoBehaviour:
   onChangeFalse:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1355657195 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4391323535687612582, guid: 8d55352bcc906fb478df3f31e17be3cd,
-    type: 3}
-  m_PrefabInstance: {fileID: 4391323535506847188}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 227935805aa868343b8f29a1936a6cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1355657197 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4391323535687612580, guid: 8d55352bcc906fb478df3f31e17be3cd,
-    type: 3}
-  m_PrefabInstance: {fileID: 4391323535506847188}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 227935805aa868343b8f29a1936a6cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1426578666 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8634133687493381513, guid: b45ed22fbbc5e4d48a9949dc1af5106d,
@@ -8697,171 +8130,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e9940359247dc48a1c9178b9bff2c4, type: 3}
   m_Name: Hand Pose Information
   m_EditorClassIdentifier: 
-  RightHandPosition: {x: -0.29801127, y: 0.30043602, z: 0.42877668}
-  RightHandEulerRotation: {x: 270, y: 88.92471, z: 0}
-  LeftHandPosition: {x: 0, y: 0, z: 0}
-  LeftHandEulerRotation: {x: 0, y: 0, z: 0}
-  PhalangesData:
-  - PhalanxName: LeftThumbProximal
-    Data:
-      Pos: {x: -0.03788809, y: -0.02166997, z: 0.03003088}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbIntermediate
-    Data:
-      Pos: {x: -3.675443, y: -2.122008, z: 2.122012}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbDistal
-    Data:
-      Pos: {x: -3.394359, y: -1.959744, z: 1.959793}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftThumbEnd
-    Data:
-      Pos: {x: -2.679404, y: -1.546945, z: 1.54692}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexProximal
-    Data:
-      Pos: {x: -0.1226661, y: -0.002316688, z: 0.02822058}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexIntermediate
-    Data:
-      Pos: {x: -3.891967, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexDistal
-    Data:
-      Pos: {x: -3.415161, y: 0.000000005749108, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftIndexEnd
-    Data:
-      Pos: {x: -3.077986, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleProximal
-    Data:
-      Pos: {x: -0.1277552, y: 0.0000001334202, z: 0.0000002041846}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleIntermediate
-    Data:
-      Pos: {x: -3.613972, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleDistal
-    Data:
-      Pos: {x: -3.45976, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftMiddleEnd
-    Data:
-      Pos: {x: -3.680192, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingProximal
-    Data:
-      Pos: {x: -0.12147, y: 0.00009894983, z: -0.02216629}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftRingIntermediate
-    Data:
-      Pos: {x: -3.60119, y: 0, z: 0}
-      Rot: {x: -0, y: 0, z: 0}
-  - PhalanxName: LeftRingDistal
-    Data:
-      Pos: {x: -3.307317, y: 0, z: 0}
-      Rot: {x: -0, y: 0, z: 0}
-  - PhalanxName: LeftRingEnd
-    Data:
-      Pos: {x: -3.660115, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleProximal
-    Data:
-      Pos: {x: -0.1090819, y: -0.00226365, z: -0.04725818}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: LeftLittleIntermediate
-    Data:
-      Pos: {x: -4.136652, y: 0, z: 0}
-      Rot: {x: -0, y: 0, z: 0}
-  - PhalanxName: LeftLittleDistal
-    Data:
-      Pos: {x: -2.594836, y: 0, z: 0}
-      Rot: {x: -0, y: 0, z: 0}
-  - PhalanxName: LeftLittleEnd
-    Data:
-      Pos: {x: -2.923869, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightThumbProximal
-    Data:
-      Pos: {x: 0.03788812, y: -0.02166999, z: 0.03003085}
-      Rot: {x: 42.07673, y: 302.24054, z: 295.9247}
-  - PhalanxName: RightThumbIntermediate
-    Data:
-      Pos: {x: 3.675445, y: -2.122004, z: 2.122034}
-      Rot: {x: 1.928187, y: 20.59582, z: 27.138622}
-  - PhalanxName: RightThumbDistal
-    Data:
-      Pos: {x: 3.39436, y: -1.959753, z: 1.959789}
-      Rot: {x: 359.64166, y: 17.020153, z: 32.3645}
-  - PhalanxName: RightThumbEnd
-    Data:
-      Pos: {x: 2.679403, y: -1.546945, z: 1.546891}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightIndexProximal
-    Data:
-      Pos: {x: 0.1226662, y: -0.002316732, z: 0.02822055}
-      Rot: {x: 0, y: 0, z: 330.30066}
-  - PhalanxName: RightIndexIntermediate
-    Data:
-      Pos: {x: 3.891967, y: -0.00000007205551, z: 0.00003751302}
-      Rot: {x: 0, y: 0, z: 326.1146}
-  - PhalanxName: RightIndexDistal
-    Data:
-      Pos: {x: 3.415161, y: 0.0000002529914, z: -0.000008605841}
-      Rot: {x: 0, y: 0, z: 336.372}
-  - PhalanxName: RightIndexEnd
-    Data:
-      Pos: {x: 3.077986, y: -0.0000009272842, z: -0.000008780579}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightMiddleProximal
-    Data:
-      Pos: {x: 0.1277552, y: 0.00000008945774, z: 0.0000001801164}
-      Rot: {x: 0.000004943207, y: -0.000002172992, z: 348.33484}
-  - PhalanxName: RightMiddleIntermediate
-    Data:
-      Pos: {x: 3.613972, y: 0.000002756502, z: 0.000003080337}
-      Rot: {x: 0.000008717168, y: 0.0000030761494, z: 313.06738}
-  - PhalanxName: RightMiddleDistal
-    Data:
-      Pos: {x: 3.45976, y: -0.0000001972182, z: -0.00002645789}
-      Rot: {x: 0.0000051151123, y: 0.000015329502, z: 319.30795}
-  - PhalanxName: RightMiddleEnd
-    Data:
-      Pos: {x: 3.680192, y: -0.0000006576055, z: 0.00003250981}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightRingProximal
-    Data:
-      Pos: {x: 0.12147, y: 0.00009894557, z: -0.02216627}
-      Rot: {x: 0.0000047221233, y: -0.000002618918, z: 337.7686}
-  - PhalanxName: RightRingIntermediate
-    Data:
-      Pos: {x: 3.601193, y: 0, z: 0.00002384185}
-      Rot: {x: 0.000010058202, y: 0.0000017810999, z: 332.49484}
-  - PhalanxName: RightRingDistal
-    Data:
-      Pos: {x: 3.30732, y: 0, z: -0.00001341104}
-      Rot: {x: 0.000007014653, y: 0.000013509217, z: 313.24603}
-  - PhalanxName: RightRingEnd
-    Data:
-      Pos: {x: 3.660113, y: 0, z: 0}
-      Rot: {x: 0, y: 0, z: 0}
-  - PhalanxName: RightLittleProximal
-    Data:
-      Pos: {x: 0.1090819, y: -0.002263658, z: -0.04725829}
-      Rot: {x: 0.000005794945, y: -0.000007727975, z: 342.65466}
-  - PhalanxName: RightLittleIntermediate
-    Data:
-      Pos: {x: 4.136657, y: 0, z: 0.00003576278}
-      Rot: {x: 0.000009402461, y: 0.0000031806835, z: 347.9021}
-  - PhalanxName: RightLittleDistal
-    Data:
-      Pos: {x: 2.594835, y: 0, z: -0.00003576278}
-      Rot: {x: 0.00000091053636, y: 0.000010551597, z: 304.94177}
-  - PhalanxName: RightLittleEnd
-    Data:
-      Pos: {x: 2.923873, y: 0, z: 0.00001112792}
-      Rot: {x: 0, y: 0, z: 0}
 --- !u!1 &2065404462
 GameObject:
   m_ObjectHideFlags: 0
@@ -9530,6 +8798,24 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 2855740249372619023, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: allServerPoses.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 63a8d76b5069b7b44a4338e7370c7c10,
+        type: 2}
+    - target: {fileID: 2855740249372619023, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: allPoseOverriders.Array.data[0].poseOverriderContainer.poseOverriders.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 6270718cf4102364988301c065fd5501,
+        type: 2}
+    - target: {fileID: 2855740249372619023, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: allPoseOverriders.Array.data[1].poseOverriderContainer.poseOverriders.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 16b3c9b228b536f41ae7baf49d0f6029,
+        type: 2}
     - target: {fileID: 4391323534800945835, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: ScriptableHand
@@ -9539,12 +8825,12 @@ PrefabInstance:
         type: 3}
       propertyPath: nodeAnimation
       value: 
-      objectReference: {fileID: 1355657197}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535687612583, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: HoverEnterAnimation
       value: 
-      objectReference: {fileID: 1355657195}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535687612601, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: ScriptableHand
@@ -9554,7 +8840,7 @@ PrefabInstance:
         type: 3}
       propertyPath: nodeAnimation
       value: 
-      objectReference: {fileID: 1355657195}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535956915904, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: playing
@@ -9574,7 +8860,7 @@ PrefabInstance:
         type: 3}
       propertyPath: nodeAnimation
       value: 
-      objectReference: {fileID: 331114685}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535956915906, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: playing
@@ -9599,7 +8885,7 @@ PrefabInstance:
         type: 3}
       propertyPath: nodeAnimation
       value: 
-      objectReference: {fileID: 331114683}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535956915909, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: playing
@@ -9609,12 +8895,12 @@ PrefabInstance:
         type: 3}
       propertyPath: ReleaseAnimation
       value: 
-      objectReference: {fileID: 331114674}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535956915910, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: TriggerAnimation
       value: 
-      objectReference: {fileID: 331114683}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535956915911, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: hoverPose
@@ -9629,12 +8915,12 @@ PrefabInstance:
         type: 3}
       propertyPath: HoverExitAnimation
       value: 
-      objectReference: {fileID: 331114685}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535956915930, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: HoverEnterAnimation
       value: 
-      objectReference: {fileID: 331114680}
+      objectReference: {fileID: 0}
     - target: {fileID: 4391323535956915931, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: playing
@@ -9716,8 +9002,30 @@ PrefabInstance:
       propertyPath: ScriptableHand
       value: 
       objectReference: {fileID: 2061428025}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2855740249372619023, guid: 8d55352bcc906fb478df3f31e17be3cd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8d55352bcc906fb478df3f31e17be3cd, type: 3}
+--- !u!1 &4391323535506847189 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4391323536028977959, guid: 8d55352bcc906fb478df3f31e17be3cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 4391323535506847188}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4391323535506847190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4391323535506847189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67efcf85a9cc231418fef5f980a05b35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allServerPoses:
+  - {fileID: 0}
+  allPoseOverriders: []
 --- !u!1001 &5141408806126444238
 PrefabInstance:
   m_ObjectHideFlags: 0

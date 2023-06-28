@@ -1,5 +1,5 @@
-﻿/*
-Copyright 2019 - 2021 Inetum
+/*
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,25 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System.Collections.Generic;
-using umi3d.common.userCapture;
 using umi3d.common.userCapture.pose;
+using UnityEngine;
 
-namespace umi3d.common.collaboration
+namespace umi3d.edk.userCapture.pose
 {
-    /// <summary>
-    /// DTO describing user configuration when joining an environment.
-    /// </summary>
-    public class JoinDto : UMI3DDto
+    public class UMI3DPoseContainer : SingleBehaviour<UMI3DPoseContainer>, IPoseContainer
     {
-        /// <summary>
-        /// The local poses from the client
-        /// </summary>
-        public List<PoseDto> clientLocalPoses { get; set; }
+        [SerializeField] private List<UMI3DPose_so> allServerPoses = new List<UMI3DPose_so>();
 
-        /// <summary>
-        /// User size scale relative to the environment.
-        /// </summary>
-        public Vector3Dto userSize { get; set; }
+        public List<UMI3DPose_so> GetAllServerPoses()
+        { return allServerPoses; }
     }
 }
