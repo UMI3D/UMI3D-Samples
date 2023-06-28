@@ -26,17 +26,15 @@ namespace umi3d.edk.save
     public class UMI3DSceneLoader : Singleton<UMI3DSceneLoader>
     {
         List<UMI3DSceneLoaderModule> modules;
-        UMI3DSceneLoaderModule defaultLoader;
 
         public UMI3DSceneLoader():base()
         {
-            modules = UMI3DSceneLoaderModuleUtils.GetModules().ToList();
-            defaultLoader = new LastLoader();
+            modules = new() { new LastLoader() }; //UMI3DSceneLoaderModuleUtils.GetModules().ToList();
         }
 
         static public void Restart()
         {
-            instance.modules = UMI3DSceneLoaderModuleUtils.GetModules().ToList();
+            instance.modules = new() { new LastLoader() };
         }
 
         public static object Save<T>(T obj, SaveReference references)
@@ -46,37 +44,18 @@ namespace umi3d.edk.save
                
                 if(module.Save(obj,out object data, references))
                 {
-                    UnityEngine.Debug.Log($"{obj} => {module.ToString()} {(module as UMI3DSceneLoaderContainer)?.type}");
+                    //UnityEngine.Debug.Log($"{obj} => {module.ToString()} {(module as UMI3DSceneLoaderContainer)?.type}");
                     return data;
                 }
             }
             return default;
         }
 
-        public static object DefaultSave<T>(T obj, SaveReference references)
-        {
-            if (Instance.defaultLoader.Save<T>(obj, out object data, references))
-            {
-                //UnityEngine.Debug.Log($"{obj} => {Instance.defaultLoader.ToString()} {(Instance.defaultLoader as UMI3DSceneLoaderContainer)?.type}");
-                return data;
-            }
-            return default;
-        }
-
-        public static async Task<bool> DefaultLoad<T, Data>(T obj, Data data)
-        {
-            if (await Instance.defaultLoader.Load(obj, data))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public static async Task<bool> Load<T, Data>(T obj, Data data)
+        public static async Task<bool> Load<T, Data>(T obj, Data data, SaveReference references)
         {
             foreach (var module in Instance.modules)
             {
-                if (await module.Load(obj, data))
+                if (await module.Load(obj, data, references))
                 {
                     return true;
                 }
@@ -84,28 +63,30 @@ namespace umi3d.edk.save
             return false;
         }
 
-        public static object Load(GameObject gameObject, string json)
+        public static object Load(GameObject gameObject, string json, SaveReference references)
         {
             var cp = FromJson(json);
-            return Load(gameObject, cp);
+            return Load(gameObject, cp, references);
         }
 
-        public static async Task<object> LoadOrUpdate(GameObject gameObject, ComponentExtensionSO extension)
+        public static async Task<object> LoadOrUpdate(GameObject gameObject, ComponentExtensionSO extension, SaveReference references)
         {
             var type = extension.Type();
             if (type == null)
                 return null;
             var cp = gameObject.GetOrAddComponent(type);
-            await DefaultLoad(cp, extension.data);
-            await Load(cp, extension.customData);
+
+            while (!references.ready)
+                await Task.Yield();
+            Debug.Log("Load");
+            await Load(cp, extension.data, references);
             return cp;
         }
 
-        public static async Task<object> Load(GameObject gameObject, ComponentExtensionSO extension)
+        public static async Task<object> Load(GameObject gameObject, ComponentExtensionSO extension, SaveReference references)
         {
             var cp = gameObject.AddComponent(extension.Type());
-            await DefaultLoad(cp, extension.data);
-            await Load(cp, extension.customData);
+            await Load(cp, extension.data, references);
             return cp;
         }
 
@@ -121,7 +102,7 @@ namespace umi3d.edk.save
         {
             return gameObject.GetComponents<Component>()
                 .OrderBy(OrderComponent)
-                .Select(s => new ComponentExtensionSO() { name = s.GetType().FullName, data = DefaultSave(s, references), customData = Save(s, references), id = references.GetId(s) });
+                .Select(s => new ComponentExtensionSO() { name = s.GetType().FullName, data = Save(s, references), id = references.GetId(s) });
         }
 
         static int OrderComponent(Component component)
@@ -200,12 +181,20 @@ namespace umi3d.edk.save
     [UMI3DSceneLoaderIgnore]
     public class LastLoader : UMI3DSceneLoaderModule
     {
-        Task<bool> UMI3DSceneLoaderModule.Load<T>(T obj, object data)
+        Task<bool> UMI3DSceneLoaderModule.Load<T>(T obj, object data, SaveReference references)
         {
-            if (data != null)
+            if (data != null && !(obj is Transform))
                 try
                 {
-                    JsonUtility.FromJsonOverwrite((string)data, obj);
+                    UnityEngine.Debug.Log(obj +" "+ typeof(T).IsSubclassOf(typeof(Transform)).ToString());
+                    var c = new ComponentConverter(references);
+
+                    JsonConvert.PopulateObject((string)data, obj, new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All,
+                        Converters = new[] { c }
+                    });
+                    //JsonUtility.FromJsonOverwrite((string)data, obj);
                 }
                 catch (Exception e)
                 {
@@ -217,17 +206,28 @@ namespace umi3d.edk.save
         bool UMI3DSceneLoaderModule.Save<T>(T obj, out object data, SaveReference references)
         {
 
-            UnityEngine.Debug.Log(obj);
-            try
-            {
-                data = JsonUtility.ToJson(obj);
-            }
-            catch (Exception e)
-            {
-                //UnityEngine.Debug.Log(obj);
-                //UnityEngine.Debug.LogError(e);
+            UnityEngine.Debug.Log(obj+ " "+ (obj is Transform).ToString()+ " "+ typeof(T).Name);
+            if (!(obj is Transform))
+                try
+                {
+                    var c = new ComponentConverter(references);
+
+                    data = JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All,
+                        Converters = new[] { c }
+                    });
+
+                    //data = JsonUtility.ToJson(obj);
+                }
+                catch (Exception e)
+                {
+                    //UnityEngine.Debug.Log(obj);
+                    UnityEngine.Debug.LogError(e);
+                    data = null;
+                }
+            else
                 data = null;
-            }
             return true;
         }
 
@@ -266,7 +266,7 @@ namespace umi3d.edk.save
     public interface UMI3DSceneLoaderModule
     {
         bool Save<T>(T obj,out object data, SaveReference references);
-        Task<bool> Load<T>(T obj, object data);
+        Task<bool> Load<T>(T obj, object data, SaveReference references);
     }
 
     /// <summary>
@@ -410,10 +410,10 @@ namespace umi3d.edk.save
             return false;
         }
 
-        Task<bool> UMI3DSceneLoaderModule.Load<T>(T obj, object data)
+        Task<bool> UMI3DSceneLoaderModule.Load<T>(T obj, object data, SaveReference references)
         {
             if (type.IsAssignableFrom(typeof(T)) && dataType.IsAssignableFrom(data.GetType()))
-                return (Task<bool>)methodLoad.Invoke(module, new object[] { obj, data });
+                return (Task<bool>)methodLoad.Invoke(module, new object[] { obj, data, references });
             return Task.FromResult(false);
         }
     }

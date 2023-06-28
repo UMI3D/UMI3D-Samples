@@ -24,6 +24,8 @@ namespace umi3d.edk
 {
     public class SaveReference
     {
+        public bool ready = false;
+
         public void Clear()
         {
             entities.Clear();

@@ -17,6 +17,7 @@ limitations under the License.
 using Codice.CM.SEIDInfo;
 using inetum.unityUtils;
 using inetum.unityUtils.editor;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -44,7 +45,7 @@ namespace umi3d.edk.editor
         {
             if (GUILayout.Button("Test"))
             {
-                UMI3DSceneLoaderModuleUtils.GetModulesType().Debug();
+                Test();
             }
 
             if (GUILayout.Button("Save environment"))
@@ -72,6 +73,43 @@ namespace umi3d.edk.editor
             draw.editor.DrawDefaultInspector();
         }
 
+
+        void Test()
+        {
+            //UMI3DSceneLoaderModuleUtils.GetModulesType().Debug();
+            //var a = new A();
+            //a.other = new();
+
+            //Debug.Log(a.GetType() + " " + a.GetType().DeclaringType);
+
+            SaveReference references = new SaveReference();
+
+            var c = new ComponentConverter(references);
+
+            //a.GetType().GetFields().Debug();
+
+            var a = gameobjects.SelectMany(o => o.GetComponentsInChildren<TestObjWiithRef>()).FirstOrDefault(e => e != null);
+
+            var data = JsonConvert.SerializeObject(a, Formatting.Indented, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                Converters = new[] { c }
+            });
+
+            Debug.Log(data.ToString());
+
+            var g = new GameObject();
+            g.name = "Test";
+            g.transform.SetParent(a.transform);
+            var b = g.AddComponent<TestObjWiithRef>();
+
+            JsonConvert.PopulateObject(data,b, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                Converters = new[] { c }
+            });
+        }
+
         protected override void Init()
         {
             gameobjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
@@ -79,10 +117,18 @@ namespace umi3d.edk.editor
         }
 
 
-        class A { }
+        class A {
+            public Other other;
+            public Other other2 {  get; set; }
+        }
         class B : A ,IB1,IB2 { }
         class C : B{ }
         class D : C { }
+
+        class Other
+        {
+
+        }
 
         interface IB1 { }
         interface IB2 { }

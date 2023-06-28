@@ -104,7 +104,7 @@ namespace umi3d.edk
                     switch (ext)
                     {
                         case ComponentExtensionSO ce:
-                            UMI3DSceneLoader.LoadOrUpdate(env, ce);
+                            UMI3DSceneLoader.LoadOrUpdate(env, ce,references);
                             break;
                         default:
                             UnityEngine.Debug.Log(ext);
@@ -116,6 +116,7 @@ namespace umi3d.edk
             {
                 LoadScene(g, env, references);
             }
+            references.ready = true;
         }
 
         static public void LoadScene(GlTFSceneDto glTFSceneDto, GameObject environment, SaveReference references)
@@ -132,7 +133,7 @@ namespace umi3d.edk
                     switch (ext)
                     {
                         case ComponentExtensionSO ce:
-                            UMI3DSceneLoader.LoadOrUpdate(scene, ce);
+                            UMI3DSceneLoader.LoadOrUpdate(scene, ce,references);
                             break;
                         default:
                             UnityEngine.Debug.Log(ext);
@@ -161,7 +162,7 @@ namespace umi3d.edk
                     switch (ext)
                     {
                         case ComponentExtensionSO ce:
-                            UMI3DSceneLoader.LoadOrUpdate(node, ce);
+                            UMI3DSceneLoader.LoadOrUpdate(node, ce,references);
                             break;
                         default:
                             UnityEngine.Debug.Log(ext);
