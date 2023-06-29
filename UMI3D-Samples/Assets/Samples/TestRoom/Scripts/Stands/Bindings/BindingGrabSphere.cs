@@ -22,6 +22,7 @@ using umi3d.common;
 using System.Collections.Generic;
 using umi3d.edk.binding;
 using umi3d.edk.userCapture.binding;
+using umi3d.edk.userCapture.tracking;
 
 [RequireComponent(typeof(UMI3DNode))]
 public class BindingGrabSphere : MonoBehaviour

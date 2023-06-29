@@ -14,21 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common;
-using umi3d.common.userCapture.tracking;
+using System;
 
-namespace umi3d.edk.userCapture.tracking
+namespace umi3d.common.userCapture.description
 {
     /// <summary>
-    /// <see cref="UMI3DUser"/> with a UMI3D Avatar attached to it.
+    /// Class to describe a bone's 6-D pose in the frame of reference of a user.
     /// </summary>
-    public class UMI3DTrackedUser : UMI3DUser
+    /// A bone is a part of the skeleton associated to a user. It represents a part of the human body.
+    /// They are defined like a tree with rotations relation from children to parents bone.
+    [Serializable]
+    public class BoneDto : UMI3DDto
     {
-        private const DebugScope scope = DebugScope.EDK | DebugScope.UserCapture | DebugScope.User;
+        /// <summary>
+        /// Defines the type of the bone.
+        /// </summary>
+        public uint boneType { get; set; }
 
         /// <summary>
-        /// User's tracking current state description
+        /// Rotation of the bone in world space
         /// </summary>
-        public UserTrackingFrameDto CurrentTrackingFrame;
+        public Vector4Dto rotation { get; set; }
     }
 }

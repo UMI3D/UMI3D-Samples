@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common;
-using umi3d.common.userCapture.tracking;
+using System;
 
-namespace umi3d.edk.userCapture.tracking
+namespace umi3d.common.userCapture.description
 {
-    /// <summary>
-    /// <see cref="UMI3DUser"/> with a UMI3D Avatar attached to it.
-    /// </summary>
-    public class UMI3DTrackedUser : UMI3DUser
+    [Serializable]
+    public class ControllerDto : BoneDto
     {
-        private const DebugScope scope = DebugScope.EDK | DebugScope.UserCapture | DebugScope.User;
-
         /// <summary>
-        /// User's tracking current state description
+        /// Position relative to the tracked node.
         /// </summary>
-        public UserTrackingFrameDto CurrentTrackingFrame;
+        public Vector3Dto position { get; set; }
+
+        public bool isOverrider { get; set; }
     }
 }

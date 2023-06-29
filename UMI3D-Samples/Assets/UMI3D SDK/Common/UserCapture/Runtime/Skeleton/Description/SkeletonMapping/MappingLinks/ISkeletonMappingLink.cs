@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common;
-using umi3d.common.userCapture.tracking;
+using UnityEngine;
 
-namespace umi3d.edk.userCapture.tracking
+namespace umi3d.common.userCapture.description
 {
     /// <summary>
-    /// <see cref="UMI3DUser"/> with a UMI3D Avatar attached to it.
+    /// Relation between a set f skeleton information and a position. Links are used to map an unknown skeleton to the UMI3D standard.
     /// </summary>
-    public class UMI3DTrackedUser : UMI3DUser
+    public interface ISkeletonMappingLink
     {
-        private const DebugScope scope = DebugScope.EDK | DebugScope.UserCapture | DebugScope.User;
-
         /// <summary>
-        /// User's tracking current state description
+        /// Compute the link to retrieve a position and rotation.
         /// </summary>
-        public UserTrackingFrameDto CurrentTrackingFrame;
+        /// <returns></returns>
+        public (Vector3 position, Quaternion rotation) Compute();
     }
 }

@@ -20,15 +20,27 @@ using umi3d.common.userCapture.tracking;
 namespace umi3d.edk.userCapture.tracking
 {
     /// <summary>
-    /// <see cref="UMI3DUser"/> with a UMI3D Avatar attached to it.
+    /// <see cref="Operation"/> to control the tracking of the avatar.
     /// </summary>
-    public class UMI3DTrackedUser : UMI3DUser
+    public class SetSendingTracking : Operation
     {
-        private const DebugScope scope = DebugScope.EDK | DebugScope.UserCapture | DebugScope.User;
+        public bool activeSending;
 
-        /// <summary>
-        /// User's tracking current state description
-        /// </summary>
-        public UserTrackingFrameDto CurrentTrackingFrame;
+        /// <inheritdoc/>
+        public override Bytable ToBytable(UMI3DUser user)
+        {
+            return UMI3DSerializer.Write(UMI3DOperationKeys.SetSendingTracking)
+                + UMI3DSerializer.Write(activeSending);
+        }
+
+        /// <inheritdoc/>
+        public override AbstractOperationDto ToOperationDto(UMI3DUser user)
+        {
+            var sendingCamera = new SetSendingTrackingDto()
+            {
+                activeSending = this.activeSending
+            };
+            return sendingCamera;
+        }
     }
 }

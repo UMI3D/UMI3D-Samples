@@ -24,6 +24,7 @@ using UnityEngine;
 using umi3d.common;
 using umi3d.edk.userCapture.binding;
 using umi3d.edk.binding;
+using umi3d.edk.userCapture.tracking;
 
 public class BindingsRollers : MonoBehaviour
 {

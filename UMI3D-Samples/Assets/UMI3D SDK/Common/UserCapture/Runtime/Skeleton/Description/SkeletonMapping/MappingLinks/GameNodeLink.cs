@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common;
-using umi3d.common.userCapture.tracking;
+using UnityEngine;
 
-namespace umi3d.edk.userCapture.tracking
+namespace umi3d.common.userCapture.description
 {
     /// <summary>
-    /// <see cref="UMI3DUser"/> with a UMI3D Avatar attached to it.
+    /// Link based on the position and rotation of a Unity gameobject.
     /// </summary>
-    public class UMI3DTrackedUser : UMI3DUser
+    public class GameNodeLink : ISkeletonMappingLink
     {
-        private const DebugScope scope = DebugScope.EDK | DebugScope.UserCapture | DebugScope.User;
-
         /// <summary>
-        /// User's tracking current state description
+        /// Game node from which to generate the link
         /// </summary>
-        public UserTrackingFrameDto CurrentTrackingFrame;
+        public Transform transform;
+
+        public GameNodeLink(Transform transform)
+        {
+            this.transform = transform;
+        }
+
+        public virtual (Vector3 position, Quaternion rotation) Compute()
+        {
+            return (transform.position, transform.rotation);
+        }
     }
 }

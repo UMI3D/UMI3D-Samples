@@ -14,21 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common;
-using umi3d.common.userCapture.tracking;
+using System.Collections.Generic;
 
-namespace umi3d.edk.userCapture.tracking
+namespace umi3d.common.userCapture.tracking
 {
     /// <summary>
-    /// <see cref="UMI3DUser"/> with a UMI3D Avatar attached to it.
+    /// <see cref="AbstractOperationDto"/> to control the list of the streamed bones.
     /// </summary>
-    public class UMI3DTrackedUser : UMI3DUser
+    /// Use this operation to reduce the number of bones to track, if some are not necessary.
+    /// This will lighthen the load on the networking system, but parts of the user's skeletton won't correspond to the user movements anymore.
+    public class SetStreamedBonesDto : AbstractOperationDto
     {
-        private const DebugScope scope = DebugScope.EDK | DebugScope.UserCapture | DebugScope.User;
-
         /// <summary>
-        /// User's tracking current state description
+        /// List of streamed bones using their boneType id in <see cref="userCapture.BoneType"/>
         /// </summary>
-        public UserTrackingFrameDto CurrentTrackingFrame;
+        public List<uint> streamedBones;
     }
 }

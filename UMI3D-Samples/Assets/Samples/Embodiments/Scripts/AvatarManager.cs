@@ -29,6 +29,8 @@ using umi3d.edk.collaboration.emotes;
 using umi3d.edk.userCapture;
 using umi3d.edk.userCapture.animation;
 using umi3d.edk.userCapture.binding;
+using umi3d.edk.userCapture.tracking;
+
 using UnityEngine;
 
 public class AvatarManager : MonoBehaviour
