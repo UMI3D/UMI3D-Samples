@@ -93,7 +93,7 @@ namespace umi3d.edk.editor
             var data = JsonConvert.SerializeObject(a, Formatting.Indented, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
-                Converters = new[] { c }
+                Converters = new[] { (JsonConverter)c , new VectorConverter()}
             });
 
             Debug.Log(data.ToString());
@@ -106,7 +106,7 @@ namespace umi3d.edk.editor
             JsonConvert.PopulateObject(data,b, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
-                Converters = new[] { c }
+                Converters = new[] { (JsonConverter)c, new VectorConverter() }
             });
         }
 

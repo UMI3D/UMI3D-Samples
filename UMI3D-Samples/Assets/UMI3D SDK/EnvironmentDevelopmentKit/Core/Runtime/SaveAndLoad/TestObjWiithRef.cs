@@ -14,6 +14,9 @@ public class TestObjWiithRef : MonoBehaviour
     public float[] fVars;
     public Transform[] transforms;
 
+    public Vector2 vector2;
+    public Vector2[] vector2s;
+
     // Start is called before the first frame update
     void Start()
     {

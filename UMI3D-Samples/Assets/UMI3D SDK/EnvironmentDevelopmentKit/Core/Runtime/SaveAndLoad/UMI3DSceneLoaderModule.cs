@@ -192,7 +192,7 @@ namespace umi3d.edk.save
                     JsonConvert.PopulateObject((string)data, obj, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
-                        Converters = new[] { c }
+                        Converters = new[] { (JsonConverter)c, new VectorConverter() }
                     });
                     //JsonUtility.FromJsonOverwrite((string)data, obj);
                 }
@@ -215,7 +215,7 @@ namespace umi3d.edk.save
                     data = JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
-                        Converters = new[] { c }
+                        Converters = new[] { (JsonConverter)c, new VectorConverter() }
                     });
 
                     //data = JsonUtility.ToJson(obj);

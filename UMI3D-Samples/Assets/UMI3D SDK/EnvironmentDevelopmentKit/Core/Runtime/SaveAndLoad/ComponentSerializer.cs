@@ -5,11 +5,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using umi3d.edk;
-using Unity.Collections;
-using Codice.CM.Common;
-using System.Reflection;
-using Mono.Cecil.Cil;
-using System.Linq;
 
 public class ComponentConverter : JsonConverter
 {
@@ -22,8 +17,7 @@ public class ComponentConverter : JsonConverter
 
     public override bool CanConvert(Type objectType)
     {
-        //Debug.Log($"{objectType} {typeof(Component).IsAssignableFrom(objectType)}");
-        return objectType.IsClass;
+        return objectType.IsClass && !objectType.IsArray;
     }
 
     bool IsRefProperty(Type type)
@@ -34,140 +28,43 @@ public class ComponentConverter : JsonConverter
 
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
-        Debug.Log($"Read " + objectType);
+        JObject obj = JObject.Load(reader);
 
-        if (objectType.IsArray)
+        if (IsRefProperty(objectType))
         {
-            JArray jsonArray = JArray.Load(reader);
-            Array array = Array.CreateInstance(objectType.GetElementType(), jsonArray.Count);
-
-            //if (IsRefProperty(objectType.GetElementType()))
-            //{
-            int i = 0;
-            foreach (var item in jsonArray.ToList())
+            if (obj["_Type"] != null)
             {
-                if (IsRefProperty(objectType.GetElementType()))
+                if (obj["_Type"].ToString() == "_")
                 {
-                    if (item["_Type"] != null)
-                    {
-                        if (item["_Type"].ToString() == "_")
-                        {
-                            //Debug.Log($"type : {prop.Name} {prop.MemberType} | res : NULL");
-                            array.SetValue(null, i++);
-                        }
-                    }
-                    if (item["Id"] != null)
-                    {
-                        var res = references.GetEntitySync(item["Id"].ToObject<long>());
-                        //Debug.Log($"type : {prop.Name} {prop.MemberType} | res : {res?.GetType().Name}");
-
-                        array.SetValue(res, i++);
-                    }
+                    return null;
                 }
-                else
-                    array.SetValue(item.ToObject(objectType.GetElementType(), serializer), i++);
+                if (obj["Id"] != null)
+                {
+                    var res = references.GetEntitySync(obj["Id"].ToObject<long>());
+                    return res;
+                }
             }
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < jsonArray.Count; i++)
-            //    {
-            //        var val = jsonArray[i];
-
-
-            //        array.SetValue(jsonArray[i].ToObject(objectType.GetElementType(), serializer), i);
-            //    }
-            //}
-
-            return array;
         }
         else
         {
-            Debug.Log(reader.TokenType);
-            JObject obj = JObject.Load(reader);
-            Debug.Log($"Read");
-
-            if (IsRefProperty(objectType))
-            {
-                Debug.Log($"Read ref");
-                if (obj["_Type"] != null)
-                {
-                    if (obj["_Type"].ToString() == "_")
-                    {
-                        //Debug.Log($"type : {prop.Name} {prop.MemberType} | res : NULL");
-                        return null;
-                    }
-                    if (obj["Id"] != null)
-                    {
-                        var res = references.GetEntitySync(obj["Id"].ToObject<long>());
-                        //Debug.Log($"type : {prop.Name} {prop.MemberType} | res : {res?.GetType().Name}");
-
-                        return res;
-                    }
-                }
-
-            }
-            else
-            {
-                Debug.Log($"Read not ref");
-                return obj.ToObject(objectType);
-            }
-
-            //foreach (var prop in objectType.GetFields())
-            //{
-            //    if (obj.ContainsKey(prop.Name))
-            //    {
-            //        if (IsRefProperty(prop.FieldType))
-            //        {
-            //            Debug.Log($"Read ref");
-            //            object value = null;
-
-            //            var p = obj[prop.Name];
-            //            if (p["_Type"] != null)
-            //            {
-            //                if (p["_Type"].ToString() == "_")
-            //                {
-            //                    Debug.Log($"type : {prop.Name} {prop.MemberType} | res : NULL");
-            //                    return null;
-            //                }
-            //                if (obj["Id"] != null)
-            //                {
-            //                    var res = references.GetEntitySync(p["Id"].ToObject<long>());
-            //                    Debug.Log($"type : {prop.Name} {prop.MemberType} | res : {res?.GetType().Name}");
-
-            //                    return res;
-            //                }
-            //            }
-
-            //            prop.SetValue(existingValue, value);
-            //        }
-            //        else
-            //        {
-
-            //            Debug.Log($"Read not ref");
-            //            prop.SetValue(existingValue, obj[prop.Name]);
-            //        }
-            //    }
-            //}
+            return obj.ToObject(objectType);
         }
-
         return null;
     }
 
-    //public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    //{
-    //    JObject obj = new JObject();
-    //    obj["_Type"] = value?.GetType().ToString() ?? "_";
-    //    obj["Id"] = value != null ? references.GetId(value) : -1;
-    //    obj.WriteTo(writer);
-    //}
+    JObject FromValue(object v, Type type)
+    {
+        JObject obj = new JObject();
+        obj["_Type"] = v?.GetType().ToString() ?? type.ToString();
+        obj["Id"] = v != null ? references.GetId(v) : -1;
+        return obj;
+    }
+
     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
     {
         JObject jObject = new JObject();
-        Debug.Log($"Writte value " + value.ToString());
         if (value != null)
         {
-
             Type type = value.GetType();
 
             foreach (var prop in type.GetFields())
@@ -175,13 +72,10 @@ public class ComponentConverter : JsonConverter
 
                 if (prop != null && IsRefProperty(prop.FieldType))
                 {
-                    Debug.Log($"Writte property " + prop.Name);
                     try
                     {
-                        JObject obj = new JObject();
                         var v = prop.GetValue(value);
-                        obj["_Type"] = v?.GetType().ToString() ?? prop.FieldType.ToString();
-                        obj["Id"] = v != null ? references.GetId(v) : -1;
+                        var obj = FromValue(v, prop.FieldType);
                         jObject[prop.Name] = obj;
                     }
                     catch (Exception e)
@@ -192,16 +86,35 @@ public class ComponentConverter : JsonConverter
                 }
                 else
                 {
-                    Debug.Log($"Writte Default property " + prop.Name);
                     try
                     {
                         var v = prop.GetValue(value);
-                        if (v != null)
-                            jObject.Add(prop.Name, JToken.FromObject(v));
+
+                        if ((v?.GetType() ?? prop.FieldType).IsArray && IsRefProperty(v.GetType().GetElementType()))
+                        {
+                            if (v is Array arr)
+                            {
+                                List<JObject> objs = new();
+
+                                var t = v.GetType().GetElementType();
+                                foreach (var customClass in arr)
+                                {
+                                    var obj = FromValue(customClass, t);
+                                    objs.Add(obj);
+                                }
+                                jObject.Add(prop.Name, JToken.FromObject(objs.ToArray()));
+                            }
+                            else
+                                jObject.Add(prop.Name, null);
+                        }
+                        else
+                        {
+                            if (v != null)
+                                jObject.Add(prop.Name, JToken.FromObject(v, serializer));
+                        }
                     }
                     catch (Exception e)
                     {
-
                         Debug.LogError(e);
                         jObject[prop?.Name ?? "ERROR"] = "Error 2 " + e.Message;
                     }
@@ -210,5 +123,102 @@ public class ComponentConverter : JsonConverter
 
             jObject.WriteTo(writer);
         }
+    }
+}
+
+public class VectorConverter : JsonConverter
+{
+
+
+    public override bool CanConvert(Type objectType)
+    {
+        return objectType == typeof(Vector2)
+            || objectType == typeof(Vector3)
+            || objectType == typeof(Vector4)
+            || objectType == typeof(Quaternion)
+            || objectType == typeof(Vector2Int)
+            || objectType == typeof(Vector3Int)
+            ;
+    }
+
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    {
+        JObject obj = JObject.Load(reader);
+        if(objectType == typeof(Vector2))
+                return new Vector2(
+                    obj.ContainsKey("x") ? (float)obj["x"] : 0,
+                    obj.ContainsKey("y") ? (float)obj["y"] : 0
+                    );
+        if (objectType == typeof(Vector3))
+            return new Vector3(
+                obj.ContainsKey("x") ? (float)obj["x"] : 0,
+                obj.ContainsKey("y") ? (float)obj["y"] : 0,
+                obj.ContainsKey("z") ? (float)obj["z"] : 0
+                );
+        if (objectType == typeof(Vector4))
+            return new Vector4(
+                obj.ContainsKey("x") ? (float)obj["x"] : 0,
+                obj.ContainsKey("y") ? (float)obj["y"] : 0,
+                obj.ContainsKey("z") ? (float)obj["z"] : 0,
+                obj.ContainsKey("w") ? (float)obj["w"] : 0
+                );
+        if (objectType == typeof(Quaternion))
+            return new Quaternion(
+                obj.ContainsKey("x") ? (float)obj["x"] : 0,
+                obj.ContainsKey("y") ? (float)obj["y"] : 0,
+                obj.ContainsKey("z") ? (float)obj["z"] : 0,
+                obj.ContainsKey("w") ? (float)obj["w"] : 0
+                );
+        if (objectType == typeof(Vector2Int))
+            return new Vector2Int(
+                obj.ContainsKey("x") ? (int)obj["x"] : 0,
+                obj.ContainsKey("y") ? (int)obj["y"] : 0
+                );
+        if (objectType == typeof(Vector3Int))
+            return new Vector3Int(
+                obj.ContainsKey("x") ? (int)obj["x"] : 0,
+                obj.ContainsKey("y") ? (int)obj["y"] : 0,
+                obj.ContainsKey("z") ? (int)obj["z"] : 0
+                );
+        return null;
+    }
+
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    {
+        JObject jObject = new JObject();
+        switch (value)
+        {
+            case Vector2 v:
+                jObject["x"] = v.x;
+                jObject["y"] = v.y;
+                break;
+            case Vector3 v:
+                jObject["x"] = v.x;
+                jObject["y"] = v.y;
+                jObject["z"] = v.z;
+                break;
+            case Vector4 v:
+                jObject["x"] = v.x;
+                jObject["y"] = v.y;
+                jObject["Z"] = v.z;
+                jObject["w"] = v.w;
+                break;
+            case Quaternion q:
+                jObject["x"] = q.x;
+                jObject["y"] = q.y;
+                jObject["Z"] = q.z;
+                jObject["w"] = q.w;
+                break;
+            case Vector2Int v:
+                jObject["x"] = v.x;
+                jObject["y"] = v.y;
+                break;
+            case Vector3Int v:
+                jObject["x"] = v.x;
+                jObject["y"] = v.y;
+                jObject["z"] = v.z;
+                break;
+        }
+        jObject.WriteTo(writer);
     }
 }
