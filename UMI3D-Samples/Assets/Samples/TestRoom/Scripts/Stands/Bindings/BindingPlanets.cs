@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Linq;
 using umi3d.edk;
 using umi3d.edk.binding;
-using umi3d.edk.collaboration;
-using umi3d.edk.userCapture;
+
 using UnityEngine;
 
 public class BindingPlanets : MonoBehaviour
@@ -64,7 +62,7 @@ public class BindingPlanets : MonoBehaviour
         };
         t.AddIfNotNull(op);
         t.Dispatch();
-        
+
         isOrbiting = true;
     }
 
@@ -80,7 +78,7 @@ public class BindingPlanets : MonoBehaviour
         t.AddIfNotNull(op);
         t.AddIfNotNull(child.objectPosition.SetValue(child.objectPosition.GetValue(), forceOperation: true));
         t.Dispatch();
-        
+
         isOrbiting = false;
     }
 }

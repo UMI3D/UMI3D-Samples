@@ -1,24 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-
 using umi3d.edk;
 using umi3d.edk.binding;
+
 using UnityEngine;
 
 public class BindingStickMultibinding : MonoBehaviour
 {
     [SerializeField]
-    UMI3DModel StickLeft;
+    private UMI3DModel StickLeft;
 
     [SerializeField]
-    UMI3DModel StickRight;
+    private UMI3DModel StickRight;
 
     [SerializeField]
-    UMI3DModel StickMiddle;
+    private UMI3DModel StickMiddle;
 
     [SerializeField]
-    MaterialSO mixMaterial;
+    private MaterialSO mixMaterial;
 
     private MaterialSO baseMaterial;
 
@@ -68,7 +65,6 @@ public class BindingStickMultibinding : MonoBehaviour
         t.Dispatch();
     }
 
-
     public void TriggerBindRighttick()
     {
         Transaction t = new() { reliable = true };
@@ -86,7 +82,7 @@ public class BindingStickMultibinding : MonoBehaviour
             if (!boundLeft)
                 t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = StickRight.objectMaterialOverriders[0].newMaterial }));
             else
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = mixMaterial })); 
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = mixMaterial }));
         }
         else
         {
@@ -94,11 +90,10 @@ public class BindingStickMultibinding : MonoBehaviour
             boundRight = false;
 
             if (!boundLeft)
-                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true,  newMaterial = baseMaterial }));
+                t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = baseMaterial }));
             else
                 t.AddIfNotNull(StickMiddle.objectMaterialOverriders.SetValue(0, new MaterialOverrider() { overrideAllMaterial = true, newMaterial = StickLeft.objectMaterialOverriders[0].newMaterial }));
         }
         t.Dispatch();
     }
-    
 }

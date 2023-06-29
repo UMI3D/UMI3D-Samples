@@ -16,15 +16,15 @@ limitations under the License.
 
 using System.Collections;
 using System.Collections.Generic;
-using umi3d.edk;
-using umi3d.edk.userCapture;
+
 using umi3d.common.userCapture;
-using umi3d.edk.collaboration;
-using UnityEngine;
-using umi3d.common;
-using umi3d.edk.userCapture.binding;
+using umi3d.edk;
 using umi3d.edk.binding;
+using umi3d.edk.collaboration;
+using umi3d.edk.userCapture.binding;
 using umi3d.edk.userCapture.tracking;
+
+using UnityEngine;
 
 public class BindingsRollers : MonoBehaviour
 {
@@ -122,7 +122,7 @@ public class BindingsRollers : MonoBehaviour
         rollerBindings = new List<BoneBinding>();
     }
 
-    IEnumerator MoveAroundTheScene()
+    private IEnumerator MoveAroundTheScene()
     {
         yield return new WaitForSeconds(1);
 
@@ -130,7 +130,7 @@ public class BindingsRollers : MonoBehaviour
 
         angle = startAngle;
 
-        while (angle < 2*Mathf.PI + startAngle)
+        while (angle < 2 * Mathf.PI + startAngle)
         {
             angle += MovementSpeed * Time.deltaTime;
 
@@ -152,7 +152,7 @@ public class BindingsRollers : MonoBehaviour
         UnbindRollers();
     }
 
-    void StartVehicleInterpolation()
+    private void StartVehicleInterpolation()
     {
         StartInterpolationProperty startPos = new StartInterpolationProperty()
         {
@@ -178,7 +178,7 @@ public class BindingsRollers : MonoBehaviour
         UMI3DServer.Dispatch(tr);
     }
 
-    IEnumerator UpdateInterpolation()
+    private IEnumerator UpdateInterpolation()
     {
         while (true)
         {
@@ -202,7 +202,7 @@ public class BindingsRollers : MonoBehaviour
         }
     }
 
-    void StopVehicleInterpolation()
+    private void StopVehicleInterpolation()
     {
         StopInterpolationProperty stopPos = new StopInterpolationProperty()
         {
@@ -227,5 +227,4 @@ public class BindingsRollers : MonoBehaviour
 
         UMI3DServer.Dispatch(tr);
     }
-
 }

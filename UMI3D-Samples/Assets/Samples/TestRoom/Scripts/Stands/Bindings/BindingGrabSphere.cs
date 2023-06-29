@@ -15,14 +15,11 @@ limitations under the License.
 */
 
 using umi3d.edk;
-using umi3d.edk.userCapture;
-using umi3d.common.userCapture;
-using UnityEngine;
-using umi3d.common;
-using System.Collections.Generic;
 using umi3d.edk.binding;
 using umi3d.edk.userCapture.binding;
 using umi3d.edk.userCapture.tracking;
+
+using UnityEngine;
 
 [RequireComponent(typeof(UMI3DNode))]
 public class BindingGrabSphere : MonoBehaviour
@@ -32,22 +29,22 @@ public class BindingGrabSphere : MonoBehaviour
     /// <summary>
     /// Orignal local position of <see cref="node"/>.
     /// </summary>
-    Vector3 originalPos;
+    private Vector3 originalPos;
 
     /// <summary>
     /// Original local rotation of <see cref="node"/>.
     /// </summary>
-    Quaternion originalRot;
+    private Quaternion originalRot;
 
     /// <summary>
     /// Current binding when <see cref="node"/> is grabbed.
     /// </summary>
-    BoneBinding binding;
+    private BoneBinding binding;
 
     /// <summary>
     /// Id of the current <see cref="UMI3DUser"/> who is grabbing <see cref="node"/>.
     /// </summary>
-    ulong ownerUserID;
+    private ulong ownerUserID;
 
     /// <summary>
     /// Is the object grabbed ?
@@ -57,15 +54,15 @@ public class BindingGrabSphere : MonoBehaviour
     /// <summary>
     /// Reference to the node grabbed.
     /// </summary>
-    UMI3DNode node;
+    private UMI3DNode node;
 
-    #endregion
+    #endregion Fields
 
     private IBindingService bindingHelperServer;
 
     #region Methods
 
-    void Start()
+    private void Start()
     {
         bindingHelperServer = BindingManager.Instance;
 
@@ -75,7 +72,7 @@ public class BindingGrabSphere : MonoBehaviour
         node = GetComponent<UMI3DNode>();
     }
 
-    void Update()
+    private void Update()
     {
         if (isObjectGrabbed)
         {
@@ -133,5 +130,5 @@ public class BindingGrabSphere : MonoBehaviour
         }
     }
 
-    #endregion
+    #endregion Methods
 }

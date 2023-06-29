@@ -11,8 +11,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using umi3d.edk;
 
 using UnityEngine;
@@ -30,6 +28,7 @@ public class SimpleRotation : MonoBehaviour
 
     [Header("Transaction settings")]
     public bool selfManaged = false;
+
     public float updateFrequency = 5;
 
     private UMI3DNode node;
@@ -41,19 +40,22 @@ public class SimpleRotation : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         switch (Axe)
         {
             case Axes.X:
                 transform.Rotate(Speed * Time.deltaTime, 0, 0);
                 break;
+
             case Axes.Y:
                 transform.Rotate(0, Speed * Time.deltaTime, 0);
                 break;
+
             case Axes.Z:
                 transform.Rotate(0, 0, Speed * Time.deltaTime);
                 break;
+
             default:
                 break;
         }

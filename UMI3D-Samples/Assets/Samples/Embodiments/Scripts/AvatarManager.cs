@@ -26,7 +26,6 @@ using umi3d.edk;
 using umi3d.edk.binding;
 using umi3d.edk.collaboration;
 using umi3d.edk.collaboration.emotes;
-using umi3d.edk.userCapture;
 using umi3d.edk.userCapture.animation;
 using umi3d.edk.userCapture.binding;
 using umi3d.edk.userCapture.tracking;
@@ -226,7 +225,7 @@ public class AvatarManager : MonoBehaviour
 
         if (bindRig)
         {
-            var bindings = Rigs.binds.Select(bind => 
+            var bindings = Rigs.binds.Select(bind =>
                 new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
                 {
                     syncPosition = true,

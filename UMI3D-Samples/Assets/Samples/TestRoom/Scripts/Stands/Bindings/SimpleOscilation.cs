@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 using umi3d.edk;
 
 using UnityEngine;
 
-namespace Assembly_CSharp // TODO: Complete and lowercase the namespace 
+namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
 {
     [RequireComponent(typeof(UMI3DNode))]
     public class SimpleOscilation : MonoBehaviour
@@ -36,6 +35,7 @@ namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
 
         [Header("Transaction settings")]
         public bool selfManaged = false;
+
         public float updateFrequency = 5;
 
         private Vector3 startPosition;
@@ -51,19 +51,22 @@ namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
             node = GetComponent<UMI3DNode>();
         }
 
-        void Update()
+        private void Update()
         {
             switch (Axe)
             {
                 case Axes.X:
-                    transform.position = startPosition + new Vector3(Amplitude * Mathf.Cos(Speed * (Time.time-startTime)), 0, 0);
+                    transform.position = startPosition + new Vector3(Amplitude * Mathf.Cos(Speed * (Time.time - startTime)), 0, 0);
                     break;
+
                 case Axes.Y:
                     transform.position = startPosition + new Vector3(0, Amplitude * Mathf.Cos(Speed * (Time.time - startTime)), 0);
                     break;
+
                 case Axes.Z:
                     transform.position = startPosition + new Vector3(0, 0, Amplitude * Mathf.Cos(Speed * (Time.time - startTime)));
                     break;
+
                 default:
                     break;
             }
@@ -79,6 +82,5 @@ namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
                 }
             }
         }
-
     }
 }
