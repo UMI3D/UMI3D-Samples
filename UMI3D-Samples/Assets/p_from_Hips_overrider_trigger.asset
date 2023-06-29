@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c65548862f6784aa8bbe226fb48b55, type: 3}
+  m_Name: p_from_Hips_overrider_trigger
+  m_EditorClassIdentifier: 
+  pose: {fileID: 11400000, guid: d0b2bf5ba7a2f6441be07323d3b37be7, type: 2}
+  poseConditions:
+  - rid: 5308120631451058176
+  interpolationable: 0
+  composable: 1
+  isHoverEnter: 0
+  isHoverExit: 0
+  isRelease: 0
+  isTrigger: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 5308120631451058176
+      type: {class: MagnitudeConditionDto, ns: umi3d.common.userCapture.pose, asm: UMI3D.Common.UserCapture}
+      data:
+        magnitude: 1
+        boneOrigin: 13
+        targetObjectId: 0
