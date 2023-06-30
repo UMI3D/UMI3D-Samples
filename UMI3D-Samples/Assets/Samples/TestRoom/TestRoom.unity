@@ -5484,7 +5484,7 @@ MonoBehaviour:
       rigName: mixamorig:Spine
       positionOffset: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
-  sendWalkingAnimator: 1
+  sendWalkingAnimator: 0
   movementSubskeletonData:
     animatedSubkeletonBundleResource:
       variants:
@@ -5503,7 +5503,7 @@ MonoBehaviour:
     animatorStateNames:
     - Walking (Blend tree)
   maxSpeed: 0.5
-  sendEmotes: 1
+  sendEmotes: 0
   emotesSubskeletonData:
     animatedSubkeletonBundleResource:
       variants:
