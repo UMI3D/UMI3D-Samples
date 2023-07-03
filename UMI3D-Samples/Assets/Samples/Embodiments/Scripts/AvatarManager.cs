@@ -41,8 +41,8 @@ public class AvatarManager : MonoBehaviour
     private class HandledInfos
     {
         public UMI3DModel avatar;
-        public UMI3DSkeletonNode emotesSkeletonNode;
-        public UMI3DSkeletonNode walkingSkeletonNode;
+        public UMI3DSkeletonAnimationNode emotesSkeletonNode;
+        public UMI3DSkeletonAnimationNode walkingSkeletonNode;
         public List<UMI3DAnimatorAnimation> emotesAnimations = new();
         public UMI3DAnimatorAnimation walkingAnimation;
     }
@@ -257,7 +257,7 @@ public class AvatarManager : MonoBehaviour
         subskeletonNodeGo.transform.localPosition = Vector3.zero;
         subskeletonNodeGo.transform.localRotation = Quaternion.identity;
 
-        UMI3DSkeletonNode skeletonNode = subskeletonNodeGo.AddComponent<UMI3DSkeletonNode>();
+        UMI3DSkeletonAnimationNode skeletonNode = subskeletonNodeGo.AddComponent<UMI3DSkeletonAnimationNode>();
         SimpleModificationListener.Instance.RemoveNode(skeletonNode);
 
         List<UMI3DAbstractAnimation> animations = new();
@@ -300,7 +300,7 @@ public class AvatarManager : MonoBehaviour
         subskeletonGo.transform.localPosition = Vector3.zero;
         subskeletonGo.transform.localRotation = Quaternion.identity;
 
-        UMI3DSkeletonNode skeletonNode = subskeletonGo.AddComponent<UMI3DSkeletonNode>();
+        UMI3DSkeletonAnimationNode skeletonNode = subskeletonGo.AddComponent<UMI3DSkeletonAnimationNode>();
         SimpleModificationListener.Instance.RemoveNode(skeletonNode);
 
         var usedAnimationState = emoteSubskeleton.animatorStateNames.Take(emoteSubskeleton.emoteConfig.IncludedEmotes.Count).ToList();
