@@ -17,17 +17,22 @@ public class ComponentConverter : JsonConverter
 
     public override bool CanConvert(Type objectType)
     {
-        return objectType.IsClass && !objectType.IsArray;
+        return 
+            objectType.IsClass 
+            && !objectType.IsArray 
+            && objectType != typeof(string) 
+            && !(objectType.IsGenericType && objectType.GetGenericTypeDefinition() == typeof(List<>));
     }
 
     bool IsRefProperty(Type type)
     {
-        return (typeof(Component).IsAssignableFrom(type) || typeof(GameObject).IsAssignableFrom(type));
+        return (typeof(ScriptableObject).IsAssignableFrom(type) || typeof(Component).IsAssignableFrom(type) || typeof(GameObject).IsAssignableFrom(type));
     }
 
 
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
+        Debug.Log(reader.TokenType);
         JObject obj = JObject.Load(reader);
 
         if (IsRefProperty(objectType))
@@ -40,14 +45,29 @@ public class ComponentConverter : JsonConverter
                 }
                 if (obj["Id"] != null)
                 {
-                    var res = references.GetEntitySync(obj["Id"].ToObject<long>());
-                    return res;
+                    var id = obj["Id"].ToObject<long>();
+                    if (id != -1)
+                    {
+                        var res = references.GetEntitySync(id);
+                        Debug.Assert(res != null && !typeof(ScriptableObject).IsAssignableFrom(objectType) && id != -1, $"no entity[{objectType}] for id {id} in {references.Count} {references.debug}");
+                        return res;
+                    }
+                    return null;
                 }
             }
         }
         else
         {
-            return obj.ToObject(objectType);
+            try
+            {
+                return obj.ToObject(objectType);
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogException(ex);
+                Debug.LogError(objectType + " " + reader.TokenType+" "+objectType.IsArray);
+                return null;
+            }
         }
         return null;
     }
@@ -110,7 +130,12 @@ public class ComponentConverter : JsonConverter
                         else
                         {
                             if (v != null)
-                                jObject.Add(prop.Name, JToken.FromObject(v, serializer));
+                            {
+                                //if (v is string s)
+                                //    jObject.Add(prop.Name, JToken.FromObject(s));
+                                //else
+                                    jObject.Add(prop.Name, JToken.FromObject(v, serializer));
+                            }
                         }
                     }
                     catch (Exception e)
@@ -138,6 +163,7 @@ public class VectorConverter : JsonConverter
             || objectType == typeof(Quaternion)
             || objectType == typeof(Vector2Int)
             || objectType == typeof(Vector3Int)
+            || objectType == typeof(Color)
             ;
     }
 
@@ -180,6 +206,13 @@ public class VectorConverter : JsonConverter
                 obj.ContainsKey("y") ? (int)obj["y"] : 0,
                 obj.ContainsKey("z") ? (int)obj["z"] : 0
                 );
+        if (objectType == typeof(Color))
+            return new Color(
+                obj.ContainsKey("r") ? (int)obj["r"] : 0,
+                obj.ContainsKey("g") ? (int)obj["g"] : 0,
+                obj.ContainsKey("b") ? (int)obj["b"] : 0,
+                obj.ContainsKey("a") ? (int)obj["a"] : 0
+                );
         return null;
     }
 
@@ -217,6 +250,12 @@ public class VectorConverter : JsonConverter
                 jObject["x"] = v.x;
                 jObject["y"] = v.y;
                 jObject["z"] = v.z;
+                break;
+            case Color c:
+                jObject["r"] = c.r;
+                jObject["g"] = c.g;
+                jObject["b"] = c.b;
+                jObject["a"] = c.a;
                 break;
         }
         jObject.WriteTo(writer);

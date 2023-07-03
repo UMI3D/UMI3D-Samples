@@ -17,6 +17,8 @@ public class TestObjWiithRef : MonoBehaviour
     public Vector2 vector2;
     public Vector2[] vector2s;
 
+    public string sVar;
+
     // Start is called before the first frame update
     void Start()
     {

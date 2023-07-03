@@ -45,7 +45,7 @@ namespace umi3d.edk.editor
         {
             if (GUILayout.Button("Test"))
             {
-                Test();
+                Test3();
             }
 
             if (GUILayout.Button("Save environment"))
@@ -103,11 +103,55 @@ namespace umi3d.edk.editor
             g.transform.SetParent(a.transform);
             var b = g.AddComponent<TestObjWiithRef>();
 
-            JsonConvert.PopulateObject(data,b, new JsonSerializerSettings
+            JsonConvert.PopulateObject(data, b, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
                 Converters = new[] { (JsonConverter)c, new VectorConverter() }
             });
+        }
+
+        void Test2()
+        {
+            //UMI3DSceneLoaderModuleUtils.GetModulesType().Debug();
+            //var a = new A();
+            //a.other = new();
+
+            //Debug.Log(a.GetType() + " " + a.GetType().DeclaringType);
+
+            SaveReference references = new SaveReference();
+
+            var c = new ComponentConverter(references);
+
+            //a.GetType().GetFields().Debug();
+
+            // var a = gameobjects.SelectMany(o => o.GetComponentsInChildren<TestObjWiithRef>()).FirstOrDefault(e => e != null);
+            var a = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null);
+
+            var data = JsonConvert.SerializeObject(a, Formatting.Indented, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                Converters = new[] { (JsonConverter)c, new VectorConverter() }
+            });
+
+            Debug.Log(data.ToString());
+
+            //var g = new GameObject();
+            //g.name = "Test";
+            //g.transform.SetParent(a.transform);
+            //var b = g.AddComponent<TestObjWiithRef>();
+
+            //JsonConvert.PopulateObject(data,b, new JsonSerializerSettings
+            //{
+            //    TypeNameHandling = TypeNameHandling.All,
+            //    Converters = new[] { (JsonConverter)c, new VectorConverter() }
+            //});
+        }
+
+        void Test3()
+        {
+            gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null).GetType().GetFields().Debug();
+            gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null).GetType().GetFields(System.Reflection.BindingFlags.NonPublic).Debug();
+            gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null).GetType().GetFields(System.Reflection.BindingFlags.Public).Debug();
         }
 
         protected override void Init()

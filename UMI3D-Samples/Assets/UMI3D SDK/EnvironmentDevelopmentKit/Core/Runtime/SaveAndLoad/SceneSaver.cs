@@ -98,9 +98,9 @@ namespace umi3d.edk
             
             if (environmentDto.extensions is NodeExtension nodeExt)
             {
+                references.GetId(env, nodeExt.id);
                 foreach (ComponentExtensionSO ext in nodeExt.extensions)
                 {
-                    references.GetId(env, nodeExt.id);
                     switch (ext)
                     {
                         case ComponentExtensionSO ce:
@@ -116,6 +116,7 @@ namespace umi3d.edk
             {
                 LoadScene(g, env, references);
             }
+            UnityEngine.Debug.Log($"Ref should be ok {references.debug}");
             references.ready = true;
         }
 

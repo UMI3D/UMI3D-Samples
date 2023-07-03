@@ -75,10 +75,10 @@ namespace umi3d.edk.save
             if (type == null)
                 return null;
             var cp = gameObject.GetOrAddComponent(type);
-
+            references.GetId(cp, extension.id);
             while (!references.ready)
                 await Task.Yield();
-            Debug.Log("Load");
+            Debug.Log("Load "+gameObject.name);
             await Load(cp, extension.data, references);
             return cp;
         }

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using inetum.unityUtils;
 
 namespace umi3d.edk
 {
@@ -31,6 +32,10 @@ namespace umi3d.edk
             entities.Clear();
             lastId = 0;
         }
+
+        public int Count { get => entities.Count; }
+
+        public string debug { get => entities.ToString(K => $"{K.Key}|{K.Value}" ); }
 
         Dictionary<long,object> entities = new Dictionary<long, object>();
 
@@ -58,11 +63,13 @@ namespace umi3d.edk
 
             var id = NewID();
             entities.Add(id, entity);
+            UnityEngine.Debug.Log($"<color='Yellow'>Add Id {id}</color>");
             return id;
         }
 
         public long GetId(object entity, long id)
         {
+            UnityEngine.Debug.Log($"<color='purple'>Add Id {id}</color>");
             if (entities.ContainsValue(entity))
                 return entities.First(p => p.Value == entity).Key;
 
