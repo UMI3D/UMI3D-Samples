@@ -2843,6 +2843,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7392837007985643891, guid: a327a3c5fe21b904381ab9e5957d8fed,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a327a3c5fe21b904381ab9e5957d8fed, type: 3}
 --- !u!4 &845656445 stripped
@@ -3648,36 +3653,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ip: localhost
-  OnUserJoin:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserRegistered:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserRecreated:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserReady:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserAway:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserMissing:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserActive:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserLeave:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUserUnregistered:
-    m_PersistentCalls:
-      m_Calls: []
   useIp: 0
   tokenLifeTime: 10
   Identifier: {fileID: 11400000, guid: 23cd79f55f3bb4544a19e17dbca7316f, type: 2}
@@ -5484,7 +5459,7 @@ MonoBehaviour:
       rigName: mixamorig:Spine
       positionOffset: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
-  sendWalkingAnimator: 0
+  sendWalkingAnimator: 1
   movementSubskeletonData:
     animatedSubkeletonBundleResource:
       variants:
@@ -7717,6 +7692,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 1549223915669608115, guid: b98b73033cec24746a41ce3cbedd7233,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6155535171943177252, guid: b98b73033cec24746a41ce3cbedd7233,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6254103149613706206, guid: b98b73033cec24746a41ce3cbedd7233,
         type: 3}
       propertyPath: m_RootOrder
@@ -8471,6 +8456,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MultyEvent1
       objectReference: {fileID: 0}
+    - target: {fileID: 4838421662741603820, guid: 1c0f4b9e7347efa469dc75d3f207daef,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c0f4b9e7347efa469dc75d3f207daef, type: 3}
 --- !u!1001 &103469936522012759
@@ -8545,16 +8535,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interpolation
       objectReference: {fileID: 0}
+    - target: {fileID: 103469936030375478, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 103469936073842027, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: Listener
       value: 
       objectReference: {fileID: 1274528703}
+    - target: {fileID: 103469936290098972, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 103469936817692320, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: Listener
       value: 
       objectReference: {fileID: 1274528703}
+    - target: {fileID: 4817552009550151438, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd7d8c1b1f5904d4e917cb98322ae4c0, type: 3}
 --- !u!1001 &201602352833198660
@@ -8623,6 +8628,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1067976813202431061, guid: fc37607fd0d1cbe418719468011efbf6,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc37607fd0d1cbe418719468011efbf6, type: 3}
@@ -8703,6 +8713,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5849188978144649724, guid: 3bbdc520aaa269649a13b91fd7635277,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3bbdc520aaa269649a13b91fd7635277, type: 3}
 --- !u!1001 &1470513306852488400
@@ -8776,6 +8791,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6331123550382140362, guid: 2ba4f7980c0ee364ba0e1f2c57c4d483,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ba4f7980c0ee364ba0e1f2c57c4d483, type: 3}
@@ -9281,6 +9301,11 @@ PrefabInstance:
       propertyPath: Listener
       value: 
       objectReference: {fileID: 1274528703}
+    - target: {fileID: 5269527785633633317, guid: 2b7b70a2502ea194aae6806ffb51f44f,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5269527785894036185, guid: 2b7b70a2502ea194aae6806ffb51f44f,
         type: 3}
       propertyPath: hasCollider
@@ -9420,6 +9445,11 @@ PrefabInstance:
       propertyPath: colliderBoxSize.z
       value: 2.3
       objectReference: {fileID: 0}
+    - target: {fileID: 6784865001298626801, guid: 221b55ec760220b4cbb81823ef0a151f,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 221b55ec760220b4cbb81823ef0a151f, type: 3}
 --- !u!4 &5684091075959194172 stripped
@@ -9441,6 +9471,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 1651469531386653991, guid: d05798125d77b6f4c9ee6c587e5360ac,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6151857257979825866, guid: d05798125d77b6f4c9ee6c587e5360ac,
         type: 3}
       propertyPath: m_RootOrder
@@ -9542,11 +9577,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 2581194187549926494, guid: 9ac0b2935248d344587c3ce4c17716db,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6946456270500701559, guid: 9ac0b2935248d344587c3ce4c17716db,
         type: 3}
       propertyPath: UILink
       value: 
       objectReference: {fileID: 2013666226}
+    - target: {fileID: 6946456270695138359, guid: 9ac0b2935248d344587c3ce4c17716db,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6946456270852082258, guid: 9ac0b2935248d344587c3ce4c17716db,
         type: 3}
       propertyPath: m_RootOrder
@@ -9616,6 +9661,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 2947803035119618394, guid: 55f3a73bacb78e34094131a72026efec,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7736137849239311036, guid: 55f3a73bacb78e34094131a72026efec,
         type: 3}
       propertyPath: m_RootOrder
@@ -9685,6 +9735,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 3896460021734180104, guid: 908c4eac634e6264f967e7a433b19e74,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8478020672795721026, guid: 908c4eac634e6264f967e7a433b19e74,
         type: 3}
       propertyPath: m_Name
@@ -9754,6 +9809,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 3775812587397732708, guid: b45ed22fbbc5e4d48a9949dc1af5106d,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8634133687493381513, guid: b45ed22fbbc5e4d48a9949dc1af5106d,
         type: 3}
       propertyPath: m_RootOrder
