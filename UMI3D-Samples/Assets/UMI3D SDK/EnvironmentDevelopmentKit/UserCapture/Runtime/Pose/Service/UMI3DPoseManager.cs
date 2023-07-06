@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System;
 using System.Collections.Generic;
 using umi3d.common.userCapture.pose;
 
 namespace umi3d.edk.userCapture.pose
 {
-    public class UMI3DPoseManager : Singleton<UMI3DPoseManager>
+    public class UMI3DPoseManager : Singleton<UMI3DPoseManager>, IUMI3DPoseManager
     {
         private readonly IPoseContainer poseContainerService;
         private readonly IPoseOverriderFieldContainer poseOverriderContainerService;
@@ -44,42 +45,61 @@ namespace umi3d.edk.userCapture.pose
         public Dictionary<ulong, List<PoseDto>> allPoses = new Dictionary<ulong, List<PoseDto>>();
         protected List<UMI3DPoseOverriderContainerDto> allPoseOverriderContainer = new();
 
-        public void UpdateAlPoseOverriders(UMI3DPoseOverriderContainerDto allPoseOverriderContainer)
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public Dictionary<ulong, List<PoseDto>> AllPoses {get => allPoses;} 
+        /// <inheritdoc/>
+        public List<UMI3DPoseOverriderContainerDto> AllPoseOverriderContainer { get => allPoseOverriderContainer; }
+
+        /// <inheritdoc/>
+        public void SetNewUserPose(ulong userId, List<PoseDto> poseDtos)
         {
-            this.allPoseOverriderContainer.Find(a => a.id == allPoseOverriderContainer.id).poseOverriderDtos = allPoseOverriderContainer.poseOverriderDtos;
+            allPoses.Add(userId, poseDtos);
         }
 
-        public List<UMI3DPoseOverriderContainerDto> GetOverriders()
+        /// <summary>
+        /// Inits all the poses and pose overriders to make them ready for dto server-client exchanges
+        /// </summary>
+        private void Init()
         {
-            return allPoseOverriderContainer;
-        }
-
-        public void Init()
-        {
-            List<UMI3DPose_so> allServerPoses = poseContainerService.GetAllServerPoses();
             if (posesInitialized == false)
             {
                 posesInitialized = true;
-                List<PoseDto> poses = new List<PoseDto>();
-                for (int i = 0; i < allServerPoses.Count; i++)
-                {
-                    allServerPoses[i].SendPoseIndexationEvent(i);
-                    PoseDto poseDto = allServerPoses[i].ToDTO();
-                    poseDto.id = i;
-                    poses.Add(poseDto);
-                }
 
-                allPoses.Add(0, poses);
-                InitEachPoseAnimationWithPoseOverriderContainer();
+                ServerPoseInit();
+                PoseOverrider_Init();
             }
         }
 
-        private void InitEachPoseAnimationWithPoseOverriderContainer()
+        /// <summary>
+        /// Take pose in scriptables object format and put them in posedto format
+        /// </summary>
+        private void ServerPoseInit()
+        {
+            List<UMI3DPose_so> allServerPoses = poseContainerService.GetAllServerPoses();
+            List<PoseDto> poses = new List<PoseDto>();
+            for (int i = 0; i < allServerPoses.Count; i++)
+            {
+                PoseDto poseDto = allServerPoses[i].ToDTO();
+                poseDto.id = i;
+                allServerPoses[i].poseRef = poseDto.id;
+                poses.Add(poseDto);
+            }
+
+            allPoses.Add(0, poses);
+        }
+
+        /// <summary>
+        /// Take pose overriders fields to generate all the needed pose overriders containers 
+        /// </summary>
+        private void PoseOverrider_Init()
         {
             List<OverriderContainerField> overriderContainerFields = poseOverriderContainerService.GetAllPoseOverriders();
             for (int i = 0; i < overriderContainerFields.Count; i++)
             {
                 overriderContainerFields[i].PoseOverriderContainer.Id();
+
                 if (overriderContainerFields[i].uMI3DModel.GetComponent<UMI3DPoseOverriderAnimation>() == null)
                 {
                     overriderContainerFields[i].uMI3DModel.gameObject.AddComponent<UMI3DPoseOverriderAnimation>()
@@ -89,11 +109,6 @@ namespace umi3d.edk.userCapture.pose
                 overriderContainerFields[i].SetNode();
                 allPoseOverriderContainer.Add(overriderContainerFields[i].PoseOverriderContainer.ToDto());
             }
-        }
-
-        public void InitNewUserPoses(ulong userId, List<PoseDto> poseDtos)
-        {
-            allPoses.Add(userId, poseDtos);
         }
     }
 }
