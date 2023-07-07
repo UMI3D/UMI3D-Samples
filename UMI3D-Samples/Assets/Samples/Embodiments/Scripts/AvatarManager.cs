@@ -48,7 +48,7 @@ public class AvatarManager : MonoBehaviour
     #region Avatar Model
 
     [Header("Avatar")]
-    [SerializeField]
+    [SerializeField, EditorReadOnly]
     private UMI3DScene AvatarScene;
 
     [SerializeField, EditorReadOnly]
@@ -82,31 +82,28 @@ public class AvatarManager : MonoBehaviour
     [Serializable]
     public class SubskeletonDescription
     {
-        [SerializeField]
+        [SerializeField, EditorReadOnly]
         public UMI3DResource animatedSubkeletonBundleResource;
 
-        [SerializeField]
+        [SerializeField, EditorReadOnly]
         public List<string> animatorStateNames;
     }
 
     #region MovementAnimation
 
     [Header("Movement animation")]
-    [SerializeField]
+    [SerializeField, EditorReadOnly]
     private bool sendWalkingAnimator;
 
     [SerializeField, EditorReadOnly]
     private SubskeletonDescription movementSubskeletonData;
-
-    [SerializeField]
-    public float maxSpeed = 1f;
 
     #endregion MovementAnimation
 
     #region Emotes
 
     [Header("Emotes")]
-    [SerializeField]
+    [SerializeField, EditorReadOnly]
     private bool sendEmotes;
 
     [SerializeField, EditorReadOnly]
@@ -115,7 +112,7 @@ public class AvatarManager : MonoBehaviour
     [Serializable]
     public class EmotesSubskeletonDescription : SubskeletonDescription
     {
-        [SerializeField]
+        [SerializeField, EditorReadOnly]
         public UMI3DEmotesConfig emoteConfig;
     }
 
