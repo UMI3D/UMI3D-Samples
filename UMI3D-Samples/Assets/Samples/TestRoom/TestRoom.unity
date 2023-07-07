@@ -5478,7 +5478,7 @@ MonoBehaviour:
     animatorStateNames:
     - Walking (Blend tree)
   maxSpeed: 0.5
-  sendEmotes: 0
+  sendEmotes: 1
   emotesSubskeletonData:
     animatedSubkeletonBundleResource:
       variants:
