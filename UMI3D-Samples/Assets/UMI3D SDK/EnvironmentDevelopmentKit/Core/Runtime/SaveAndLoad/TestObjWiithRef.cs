@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class TestObjWiithRef : MonoBehaviour
 {
-    public Transform tVar;
+    [SerializeField]
+    protected Transform tVar;
     public GameObject gVar;
     public UMI3DNode nVar;
     public MonoBehaviour mVar;

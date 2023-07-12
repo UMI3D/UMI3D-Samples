@@ -59,7 +59,16 @@ namespace umi3d.edk
         public long GetId(object entity)
         {
             if(entities.ContainsValue(entity))
-                return entities.First(p => p.Value == entity).Key;
+            {
+                try
+                {
+                    return entities.First(p => p.Value == entity).Key;
+                }
+                catch
+                {
+                    return -1;
+                }
+            }
 
             var id = NewID();
             entities.Add(id, entity);

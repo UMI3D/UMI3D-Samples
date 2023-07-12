@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 #if UNITY_EDITOR
 using Codice.CM.SEIDInfo;
 using inetum.unityUtils;
@@ -159,25 +160,6 @@ namespace umi3d.edk.editor
             gameobjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
             draw = new ScriptableLoader<SceneSaverWindowData>(fileName);
         }
-
-
-        class A {
-            public Other other;
-            public Other other2 {  get; set; }
-        }
-        class B : A ,IB1,IB2 { }
-        class C : B{ }
-        class D : C { }
-
-        class Other
-        {
-
-        }
-
-        interface IB1 { }
-        interface IB2 { }
     }
-
-
 }
 #endif

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using umi3d.edk;
+using System.Reflection;
 
 public class ComponentConverter : JsonConverter
 {
@@ -65,7 +66,7 @@ public class ComponentConverter : JsonConverter
             catch (Exception ex)
             {
                 UnityEngine.Debug.LogException(ex);
-                Debug.LogError(objectType + " " + reader.TokenType+" "+objectType.IsArray);
+                Debug.LogError(objectType + " " + reader.TokenType+" "+objectType.IsArray+"\n"+obj.ToString());
                 return null;
             }
         }
@@ -87,9 +88,8 @@ public class ComponentConverter : JsonConverter
         {
             Type type = value.GetType();
 
-            foreach (var prop in type.GetFields())
+            foreach (var prop in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
             {
-
                 if (prop != null && IsRefProperty(prop.FieldType))
                 {
                     try
@@ -100,7 +100,7 @@ public class ComponentConverter : JsonConverter
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError(e);
+                        Debug.LogError(type.ToString() + " - " + prop.Name + " - " + e);
                         jObject[prop?.Name ?? "ERROR"] = "Error 1 " + e.Message;
                     }
                 }
@@ -110,7 +110,11 @@ public class ComponentConverter : JsonConverter
                     {
                         var v = prop.GetValue(value);
 
-                        if ((v?.GetType() ?? prop.FieldType).IsArray && IsRefProperty(v.GetType().GetElementType()))
+                        if (v == null)
+                        {
+                            //jObject.Add(prop.Name, null);
+                        }
+                        else if ((v.GetType() ?? prop.FieldType).IsArray && IsRefProperty(v.GetType().GetElementType()))
                         {
                             if (v is Array arr)
                             {
@@ -124,23 +128,53 @@ public class ComponentConverter : JsonConverter
                                 }
                                 jObject.Add(prop.Name, JToken.FromObject(objs.ToArray()));
                             }
-                            else
-                                jObject.Add(prop.Name, null);
+                            //else
+                             //   jObject.Add(prop.Name, null);
+                        }
+                        else if ((v.GetType() ?? prop.FieldType).IsGenericType && 
+                            ((v.GetType() ?? prop.FieldType).GetGenericTypeDefinition() == typeof(Dictionary<,>)
+                            || (v.GetType() ?? prop.FieldType).GetGenericTypeDefinition() == typeof(HashSet<>)
+                            ))
+                        {
+                            // Nothing
+                        }
+                        else if (typeof(IEnumerable).IsAssignableFrom(v.GetType() ?? prop.FieldType) && (v.GetType() ?? prop.FieldType) != typeof(string))
+                        {
+                            if (v is IEnumerable enumerable)
+                            {
+                                IEnumerator enumerator = enumerable.GetEnumerator();
+                                List<JObject> objs = new();
+
+                                bool atLeastOneValue = enumerator.MoveNext();
+
+                                if (!atLeastOneValue)
+                                    jObject.Add(prop.Name, JToken.FromObject(objs.ToArray()));
+                                else if (!IsRefProperty(enumerator.Current.GetType()))
+                                    jObject.Add(prop.Name, JToken.FromObject(v, serializer));
+                                else
+                                {
+                                    do
+                                    {
+                                        object item = enumerator.Current;
+
+                                        var obj = FromValue(enumerator.Current, enumerator.Current.GetType());
+                                        objs.Add(obj);
+                                    } while (enumerator.MoveNext());
+
+                                    jObject.Add(prop.Name, JToken.FromObject(objs.ToArray()));
+                                }
+                            }
+                            //else
+                            //    jObject.Add(prop.Name, null);
                         }
                         else
                         {
-                            if (v != null)
-                            {
-                                //if (v is string s)
-                                //    jObject.Add(prop.Name, JToken.FromObject(s));
-                                //else
-                                    jObject.Add(prop.Name, JToken.FromObject(v, serializer));
-                            }
+                            jObject.Add(prop.Name, JToken.FromObject(v, serializer));
                         }
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError(e);
+                        Debug.LogError(type.ToString() + " - " + prop.Name + " - " + e);
                         jObject[prop?.Name ?? "ERROR"] = "Error 2 " + e.Message;
                     }
                 }
@@ -164,6 +198,7 @@ public class VectorConverter : JsonConverter
             || objectType == typeof(Vector2Int)
             || objectType == typeof(Vector3Int)
             || objectType == typeof(Color)
+            || objectType == typeof(Color32)
             ;
     }
 
@@ -213,6 +248,13 @@ public class VectorConverter : JsonConverter
                 obj.ContainsKey("b") ? (int)obj["b"] : 0,
                 obj.ContainsKey("a") ? (int)obj["a"] : 0
                 );
+        if (objectType == typeof(Color32))
+            return new Color32(
+                obj.ContainsKey("r") ? (byte)obj["r"] : byte.MinValue,
+                obj.ContainsKey("g") ? (byte)obj["g"] : byte.MinValue,
+                obj.ContainsKey("b") ? (byte)obj["b"] : byte.MinValue,
+                obj.ContainsKey("a") ? (byte)obj["a"] : byte.MinValue
+                );
         return null;
     }
 
@@ -252,6 +294,12 @@ public class VectorConverter : JsonConverter
                 jObject["z"] = v.z;
                 break;
             case Color c:
+                jObject["r"] = c.r;
+                jObject["g"] = c.g;
+                jObject["b"] = c.b;
+                jObject["a"] = c.a;
+                break;
+            case Color32 c:
                 jObject["r"] = c.r;
                 jObject["g"] = c.g;
                 jObject["b"] = c.b;

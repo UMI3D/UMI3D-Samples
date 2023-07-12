@@ -13,6 +13,7 @@ limitations under the License.
 
 using inetum.unityUtils;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -177,7 +178,21 @@ namespace umi3d.edk.save
 
     }
 
-   // [UMI3DSceneLoaderOrder(int.MinValue)]
+    public class AllPropertiesContractResolver : DefaultContractResolver
+    {
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+        {
+            var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                            .Select(p => base.CreateProperty(p, memberSerialization))
+                        .Union(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                   .Select(f => base.CreateProperty(f, memberSerialization)))
+                        .ToList();
+            props.ForEach(p => { p.Writable = true; p.Readable = true; });
+            return props;
+        }
+    }
+
+    // [UMI3DSceneLoaderOrder(int.MinValue)]
     [UMI3DSceneLoaderIgnore]
     public class LastLoader : UMI3DSceneLoaderModule
     {
@@ -192,21 +207,22 @@ namespace umi3d.edk.save
                     JsonConvert.PopulateObject((string)data, obj, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
-                        Converters = new[] { (JsonConverter)c, new VectorConverter() }
+                        Converters = new[] { (JsonConverter)c, new VectorConverter() },
+                        ContractResolver = new AllPropertiesContractResolver()
                     });
-                    //JsonUtility.FromJsonOverwrite((string)data, obj);
                 }
                 catch (Exception e)
                 {
                     UnityEngine.Debug.LogError(e);
                 }
+
             return Task.FromResult(true);
         }
 
         bool UMI3DSceneLoaderModule.Save<T>(T obj, out object data, SaveReference references)
         {
-
             UnityEngine.Debug.Log(obj+ " "+ (obj is Transform).ToString()+ " "+ typeof(T).Name);
+
             if (!(obj is Transform))
                 try
                 {
@@ -215,10 +231,9 @@ namespace umi3d.edk.save
                     data = JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
-                        Converters = new[] { (JsonConverter)c, new VectorConverter() }
+                        Converters = new[] { (JsonConverter)c, new VectorConverter() },
+                        ContractResolver = new AllPropertiesContractResolver()
                     });
-
-                    //data = JsonUtility.ToJson(obj);
                 }
                 catch (Exception e)
                 {
@@ -228,6 +243,7 @@ namespace umi3d.edk.save
                 }
             else
                 data = null;
+
             return true;
         }
 
