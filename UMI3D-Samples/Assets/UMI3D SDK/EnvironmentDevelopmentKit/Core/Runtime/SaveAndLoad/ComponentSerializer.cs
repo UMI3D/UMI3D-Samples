@@ -161,7 +161,7 @@ public class ComponentConverter : JsonConverter
                                         objs.Add(obj);
                                     } while (enumerator.MoveNext());
 
-                                    jObject.Add(prop.Name, JToken.FromObject(objs.ToArray()));
+                                    jObject.Add(prop.Name, JToken.FromObject(objs));
                                 }
                             }
                             //else
