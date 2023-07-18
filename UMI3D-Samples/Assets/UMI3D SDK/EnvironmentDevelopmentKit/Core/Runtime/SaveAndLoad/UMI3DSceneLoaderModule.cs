@@ -67,27 +67,56 @@ namespace umi3d.edk.save
         public static object Load(GameObject gameObject, string json, SaveReference references)
         {
             var cp = FromJson(json);
+
             return Load(gameObject, cp, references);
         }
 
         public static async Task<object> LoadOrUpdate(GameObject gameObject, ComponentExtensionSO extension, SaveReference references)
         {
             var type = extension.Type();
+
             if (type == null)
                 return null;
-            var cp = gameObject.GetOrAddComponent(type);
-            references.GetId(cp, extension.id);
+
+            /*var component = gameObject.GetOrAddComponent(type);
+            references.GetId(component, extension.id);*/
+            
+            Component component = null;
+
+            var components = gameObject.GetComponents(type);
+            foreach (var cp in components)
+            {
+                var id = references.GetId(cp, extension.id);
+
+                if (id == extension.id)
+                {
+                    component = cp;
+                    break;
+                }
+            }
+
+            if (component == null)
+            {
+                component = gameObject.AddComponent(type);
+                references.GetId(component, extension.id);
+            }
+            
             while (!references.ready)
                 await Task.Yield();
+
             Debug.Log("Load "+gameObject.name);
-            await Load(cp, extension.data, references);
-            return cp;
+
+            await Load(component, extension.data, references);
+
+            return component;
         }
 
         public static async Task<object> Load(GameObject gameObject, ComponentExtensionSO extension, SaveReference references)
         {
             var cp = gameObject.AddComponent(extension.Type());
+
             await Load(cp, extension.data, references);
+
             return cp;
         }
 
@@ -155,8 +184,10 @@ namespace umi3d.edk.save
         {
             if (component == null)
                 return 0;
+
             if (antiCircularLoop.Contains(component))
                 return int.MaxValue;
+
             antiCircularLoop.Add(component);
 
             var attributes = component.GetCustomAttributes(typeof(RequireComponent), true);

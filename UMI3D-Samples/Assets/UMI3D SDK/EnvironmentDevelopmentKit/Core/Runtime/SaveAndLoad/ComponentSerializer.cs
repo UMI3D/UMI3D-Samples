@@ -50,7 +50,7 @@ public class ComponentConverter : JsonConverter
                     if (id != -1)
                     {
                         var res = references.GetEntitySync(id);
-                        Debug.Assert(res != null && !typeof(ScriptableObject).IsAssignableFrom(objectType) && id != -1, $"no entity[{objectType}] for id {id} in {references.Count} {references.debug}");
+                        Debug.Assert(res != null, $"no entity[{objectType}] for id {id} in {references.Count} {references.debug}");
                         return res;
                     }
                     return null;
