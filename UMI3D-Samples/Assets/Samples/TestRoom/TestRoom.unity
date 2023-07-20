@@ -5477,7 +5477,6 @@ MonoBehaviour:
         libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
     animatorStateNames:
     - Walking (Blend tree)
-  maxSpeed: 0.5
   sendEmotes: 1
   emotesSubskeletonData:
     animatedSubkeletonBundleResource:
@@ -9075,22 +9074,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 4391323535506847189}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67efcf85a9cc231418fef5f980a05b35, type: 3}
+  m_Script: {fileID: 11500000, guid: 0267537928b360f448408f2eaf4035b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allServerPoses:
-  - {fileID: 11400000, guid: d0b2bf5ba7a2f6441be07323d3b37be7, type: 2}
-  allPoseOverriders:
+  environmentPoses:
+  - {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d, type: 2}
+  poseOverriderFields:
   - poseOverriderContainer:
       poseOverriders:
-      - {fileID: 11400000, guid: 6ce36d67c8d50a546acbb542aa70dff9, type: 2}
+      - {fileID: 11400000, guid: e463e04c6abfd2a4a94813b2b0a8e14e, type: 2}
       isStart: 0
-    _uMI3DModel: {fileID: 4391323535506847192}
+    model: {fileID: 4391323535506847192}
   - poseOverriderContainer:
       poseOverriders:
-      - {fileID: 11400000, guid: 4f54155206e0a0e45bf7a043341e70db, type: 2}
+      - {fileID: 11400000, guid: e463e04c6abfd2a4a94813b2b0a8e14e, type: 2}
       isStart: 0
-    _uMI3DModel: {fileID: 4391323535506847191}
+    model: {fileID: 4391323535506847191}
 --- !u!114 &4391323535506847191 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6647562059469304826, guid: 8d55352bcc906fb478df3f31e17be3cd,
