@@ -17,6 +17,7 @@ limitations under the License.
 using System;
 using umi3d.common;
 using umi3d.common.collaboration;
+using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
 using umi3d.edk.collaboration;
 using UnityEngine;

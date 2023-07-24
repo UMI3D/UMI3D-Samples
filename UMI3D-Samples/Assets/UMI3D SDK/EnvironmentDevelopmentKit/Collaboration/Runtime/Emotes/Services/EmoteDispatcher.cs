@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System;
 using System.Collections.Generic;
 using umi3d.common;
 
-namespace umi3d.edk.collaboration
+namespace umi3d.edk.collaboration.emotes
 {
     /// <summary>
-    /// Dispatch emote requests by trigerring the right animation
+    /// Dispatch emote requests by triggering the right animation
     /// </summary>
     public interface IEmoteDispatcher
     {
@@ -36,11 +37,13 @@ namespace umi3d.edk.collaboration
         /// <summary>
         /// Emote configuration for the environment for each user.
         /// </summary>
-        public Dictionary<ulong, UMI3DEmotesConfig> EmotesConfigs { get; }
+        public IDictionary<ulong, UMI3DEmotesConfig> EmotesConfigs { get; }
+
+        public event Action<(UMI3DUser sendingUser, ulong emoteId, bool isTrigger)> EmoteTriggered;
     }
 
     /// <summary>
-    /// Dispatch emote requests by trigerring the right animation
+    /// Dispatch emote requests by triggering the right animation
     /// </summary>
     public class EmoteDispatcher : Singleton<EmoteDispatcher>, IEmoteDispatcher
     {
@@ -48,24 +51,26 @@ namespace umi3d.edk.collaboration
 
         #region Dependency Injection
 
-        private readonly UMI3DEnvironment umi3dEnvironmentService;
+        private readonly IUMI3DEnvironmentManager umi3dEnvironmentService;
 
         public EmoteDispatcher() : base()
         {
             umi3dEnvironmentService = UMI3DEnvironment.Instance;
         }
 
-        public EmoteDispatcher(UMI3DEnvironment umi3dEnvironmentService) : base()
+        public EmoteDispatcher(IUMI3DEnvironmentManager umi3dEnvironmentService) : base()
         {
             this.umi3dEnvironmentService = umi3dEnvironmentService;
         }
 
-        #endregion environmentLoaderService
+        #endregion Dependency Injection
 
         /// <summary>
         /// Emote configuration for the environment for each user. Key is user id.
         /// </summary>
-        public Dictionary<ulong, UMI3DEmotesConfig> EmotesConfigs { get; protected set; } = new();
+        public IDictionary<ulong, UMI3DEmotesConfig> EmotesConfigs { get; protected set; } = new Dictionary<ulong, UMI3DEmotesConfig>();
+
+        public event Action<(UMI3DUser sendingUser, ulong emoteId, bool isTrigger)> EmoteTriggered;
 
         /// <summary>
         /// Request the other browsers than the user's one to trigger/interrupt the emote of the corresponding id.
@@ -87,7 +92,7 @@ namespace umi3d.edk.collaboration
                 return;
             }
 
-            UMI3DEmote emote = EmotesConfigs[sendingUserId].IncludedEmotes.Find(x => x.id == emoteId);
+            UMI3DEmote emote = EmotesConfigs[sendingUserId].IncludedEmotes.Find(x => x.Id() == emoteId);
 
             if (!emote.Available.GetValue(sendingUser))
             {
@@ -102,6 +107,8 @@ namespace umi3d.edk.collaboration
             var op = animation.objectPlaying.SetValue(trigger);
             if (t.AddIfNotNull(op))
                 t.Dispatch();
+
+            EmoteTriggered?.Invoke((sendingUser, emoteId, trigger));
         }
     }
 }

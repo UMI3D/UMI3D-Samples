@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+namespace umi3d.common.dto.binding
 {
     /// <summary>
-    /// Dto for an association linking together two objects in the 3D space
+    /// DTO for a binding, an association linking together two objects in the 3D space.
     /// </summary>
     [System.Serializable]
-    public class BindingDto : AbstractOperationDto
+    public class BindingDto : AbstractEntityDto, IEntity
     {
         /// <summary>
         /// An identifier defined by the designer.

@@ -17,7 +17,8 @@ limitations under the License.
 using System.Collections;
 
 using umi3d.common.userCapture;
-using umi3d.edk.userCapture;
+using umi3d.edk.binding;
+using umi3d.edk.userCapture.binding;
 
 using UnityEngine;
 
@@ -93,14 +94,14 @@ namespace umi3d.edk.collaboration
                 }
             }
 
-            var binding = new BoneBinding(audioSourceNode.Id(), BoneType.Head, user.Id())
+            var binding = new BoneBinding(audioSourceNode.Id(), user.Id(), BoneType.Head)
             {
                 syncPosition = true,
                 syncRotation = true,
                 priority = 100
             };
 
-            tr.AddIfNotNull(BindingHelper.Instance.AddBinding(binding));
+            tr.AddIfNotNull(BindingManager.Instance.AddBinding(binding));
             UMI3DServer.Dispatch(tr);
 
             UMI3DServer.Instance.NotifyUserChanged(user);
@@ -136,11 +137,11 @@ namespace umi3d.edk.collaboration
 
         private void RemoveAudioSource(UMI3DCollaborationUser user)
         {
-            if (user is null)
+            if (user is null || user.audioPlayer == null)
                 return;
             Transaction t = new() { reliable = true };
             var audioSource = user.audioPlayer.ObjectNode.GetValue();
-            t.AddIfNotNull(BindingHelper.Instance.RemoveAllBindings(audioSource.Id()));
+            t.AddIfNotNull(BindingManager.Instance.RemoveAllBindings(audioSource.Id()));
             t.AddIfNotNull(audioSource.GetDeleteEntity());
             UnityEngine.Object.Destroy(audioSource.gameObject);
         }

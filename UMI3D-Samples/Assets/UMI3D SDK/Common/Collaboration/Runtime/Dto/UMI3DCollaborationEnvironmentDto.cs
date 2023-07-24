@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
-using umi3d.common.userCapture;
+using umi3d.common.collaboration.dto.signaling;
+using umi3d.common.userCapture.pose;
 
-namespace umi3d.common.collaboration
+namespace umi3d.common.collaboration.dto
 {
     public class UMI3DCollaborationEnvironmentDto : UMI3DEnvironmentDto
     {
@@ -32,13 +33,13 @@ namespace umi3d.common.collaboration
         /// key : user Id 
         /// value : list of all the poses of this user
         /// </summary>
-        public Dictionary<ulong, List<PoseDto>> allPoses { get; set; }
+        public Dictionary<ulong, List<PoseDto>> poses { get; set; }
 
         /// <summary>
         /// A dictionary that contains all the poses already loaded in the environment
         /// key : user Id 
         /// value : list of all the poses of this user
         /// </summary>
-        public List<UMI3DPoseOverriderContainerDto> allPoseOverriderContainer { get; set; } = new();
+        public List<UMI3DPoseOverriderContainerDto> poseOverriderContainers { get; set; } = new();
     }
 }

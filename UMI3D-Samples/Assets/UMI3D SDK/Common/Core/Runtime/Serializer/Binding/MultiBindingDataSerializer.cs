@@ -14,13 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+using umi3d.common.dto.binding;
+
+namespace umi3d.common.binding
 {
     /// <summary>
     /// Serialiser for <see cref="MultiBindingDataDto"/>.
     /// </summary>
     public class MultiBindingDataSerializer : IUMI3DSerializerSubModule<MultiBindingDataDto>
     {
+        /// <inheritdoc/>
         public bool Read(ByteContainer container, out MultiBindingDataDto result)
         {
             bool readable = true;
@@ -30,22 +33,23 @@ namespace umi3d.common
             AbstractSimpleBindingDataDto[] bindings = UMI3DSerializer.ReadArray<AbstractSimpleBindingDataDto>(container);
 
             result = readable ?
-                new MultiBindingDataDto() {
+                new MultiBindingDataDto()
+                {
                     priority = priority,
                     partialFit = partialFit,
                     Bindings = bindings
-                } 
+                }
                 : default;
 
             return readable;
         }
 
+        /// <inheritdoc/>
         public Bytable Write(MultiBindingDataDto multiBindingDto)
         {
             return UMI3DSerializer.Write(multiBindingDto.priority)
                         + UMI3DSerializer.Write(multiBindingDto.partialFit)
-
-                        + UMI3DSerializer.WriteCollection(multiBindingDto.Bindings); //! the pb of serilizing with polymorphism
+                        + UMI3DSerializer.WriteCollection(multiBindingDto.Bindings);
         }
     }
 }

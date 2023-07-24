@@ -14,8 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+namespace umi3d.common.dto.binding
 {
+    /// <summary>
+    /// Multibinding data, required to bind a same node to various parents.
+    /// </summary>
     [System.Serializable]
     public class MultiBindingDataDto : AbstractBindingDataDto
     {

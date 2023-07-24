@@ -13,19 +13,13 @@ MonoBehaviour:
   m_Name: AvatarLibrary
   m_EditorClassIdentifier: 
   id: com.gfi.avatar
-  version: 0.1.1
+  version: 0.1.2
   variants:
   - name: default
     path: private\com.gfi.avatar\default
-    metrics:
-      resolution: 0
-      size: 0
     formats:
     - unity_standalone
   - name: android_quest
     path: private/com.gfi.avatar/android
-    metrics:
-      resolution: 0
-      size: 0
     formats:
     - unity_android

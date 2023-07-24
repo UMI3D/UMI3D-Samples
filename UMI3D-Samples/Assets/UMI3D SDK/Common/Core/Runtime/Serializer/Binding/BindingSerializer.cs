@@ -14,34 +14,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+using umi3d.common.dto.binding;
+
+namespace umi3d.common.binding
 {
     /// <summary>
     /// Serialiser for <see cref="BindingDto"/>.
     /// </summary>
     public class BindingSerializer : IUMI3DSerializerSubModule<BindingDto>
     {
+        /// <inheritdoc/>
         public bool Read(ByteContainer container, out BindingDto result)
         {
             bool readable = true;
 
             readable &= UMI3DSerializer.TryRead(container, out ulong bindingId);
+            readable &= UMI3DSerializer.TryRead(container, out ulong boundNodeId);
             readable &= UMI3DSerializer.TryRead(container, out AbstractBindingDataDto bindingData);
 
             result = readable ?
-                new BindingDto() 
+                new BindingDto()
                 {
-                    boundNodeId = bindingId,
+                    id = bindingId,
+                    boundNodeId = boundNodeId,
                     data = bindingData
-                } 
+                }
                 : default;
 
             return readable;
         }
 
+        /// <inheritdoc/>
         public Bytable Write(BindingDto dto)
         {
-            return UMI3DSerializer.Write(dto.boundNodeId)
+            return UMI3DSerializer.Write(dto.id)
+                    + UMI3DSerializer.Write(dto.boundNodeId)
                     + UMI3DSerializer.Write(dto.data);
         }
     }

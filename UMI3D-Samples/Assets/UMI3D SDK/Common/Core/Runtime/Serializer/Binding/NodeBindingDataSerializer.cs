@@ -14,13 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+using umi3d.common.dto.binding;
+
+namespace umi3d.common.binding
 {
     /// <summary>
     /// Serialiser for <see cref="NodeBindingDataDto"/>.
     /// </summary>
     public class NodeBindingDataSerializer : IUMI3DSerializerSubModule<NodeBindingDataDto>
     {
+        /// <inheritdoc/>
         public virtual bool Read(ByteContainer container, out NodeBindingDataDto result)
         {
             bool readable = true;
@@ -55,13 +58,14 @@ namespace umi3d.common
 
                     anchorPosition = anchorPosition,
 
-                    nodeId = nodeId
+                    parentNodeId = nodeId
                 }
                 : default;
 
             return readable;
         }
 
+        /// <inheritdoc/>
         public virtual Bytable Write(NodeBindingDataDto nodeBindingDto)
         {
             return UMI3DSerializer.Write(nodeBindingDto.priority)
@@ -77,7 +81,7 @@ namespace umi3d.common
 
                         + UMI3DSerializer.Write(nodeBindingDto.anchorPosition)
 
-                        + UMI3DSerializer.Write(nodeBindingDto.nodeId);
+                        + UMI3DSerializer.Write(nodeBindingDto.parentNodeId);
         }
     }
 }

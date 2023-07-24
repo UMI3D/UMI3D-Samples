@@ -31,6 +31,8 @@ using umi3d.edk.userCapture;
 using umi3d.common.userCapture;
 using UnityEngine;
 using UnityEngine.Events;
+using umi3d.common.collaboration.dto.networking;
+using umi3d.common.collaboration.dto.signaling;
 
 namespace umi3d.edk.collaboration
 {
@@ -549,7 +551,7 @@ namespace umi3d.edk.collaboration
                 user.networkPlayer?.Networker?.Ping();
             }
             catch { }
-            var sr = new StatusRequestDto { CurrentStatus = user.status };
+            var sr = new StatusRequestDto { status = user.status };
             ForgeServer.SendSignalingMessage(user.networkPlayer, sr);
         }
 

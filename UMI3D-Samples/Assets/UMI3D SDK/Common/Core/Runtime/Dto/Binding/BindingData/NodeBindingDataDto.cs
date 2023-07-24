@@ -14,11 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+namespace umi3d.common.dto.binding
 {
+    /// <summary>
+    /// Node binding data, required to bind two nodes together.
+    /// </summary>
     [System.Serializable]
     public class NodeBindingDataDto : AbstractSimpleBindingDataDto
     {
-        public ulong nodeId { get; set; }
+        /// <summary>
+        /// UMI3D ID of the parent node.
+        /// </summary>
+        public ulong parentNodeId { get; set; }
     }
 }
