@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
+#if UNITY_EDITOR
 
 using UnityEditor;
 using UnityEngine;
@@ -34,13 +34,14 @@ namespace umi3d.common.userCapture.pose.editor
                 label.text = property.type.ToString().Replace("managedReference<", "").Replace(">", "").Replace("Dto", "");
                 position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
-                var magnitudeRect = new Rect(position.x, position.y, 30, position.height);
-                var boneOriginRect = new Rect(position.x + 35, position.y, 50, position.height);
-                var targetObjectIdRect = new Rect(position.x + 90, position.y, position.width - 90, position.height);
+                // TODO: Repair this drawer. beware of the DTO standard.
+                //var magnitudeRect = new Rect(position.x, position.y, 30, position.height);
+                //var boneOriginRect = new Rect(position.x + 35, position.y, 50, position.height);
+                //var targetObjectIdRect = new Rect(position.x + 90, position.y, position.width - 90, position.height);
 
-                EditorGUI.PropertyField(magnitudeRect, property.FindPropertyRelative("magnitude"), GUIContent.none);
-                EditorGUI.PropertyField(boneOriginRect, property.FindPropertyRelative("boneOrigin"), GUIContent.none);
-                EditorGUI.PropertyField(targetObjectIdRect, property.FindPropertyRelative("targetObjectId"), GUIContent.none);
+                //EditorGUI.PropertyField(magnitudeRect, property.FindPropertyRelative("magnitude"), GUIContent.none);
+                //EditorGUI.PropertyField(boneOriginRect, property.FindPropertyRelative("boneOrigin"), GUIContent.none);
+                //EditorGUI.PropertyField(targetObjectIdRect, property.FindPropertyRelative("targetNodeId"), GUIContent.none);
             }
 
             EditorGUI.indentLevel = indent;
@@ -49,3 +50,4 @@ namespace umi3d.common.userCapture.pose.editor
         }
     }
 }
+#endif
