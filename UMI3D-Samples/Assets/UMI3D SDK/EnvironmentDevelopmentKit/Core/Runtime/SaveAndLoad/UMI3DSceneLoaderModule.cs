@@ -104,11 +104,33 @@ namespace umi3d.edk.save
             while (!references.ready)
                 await Task.Yield();
 
-            Debug.Log("Load "+gameObject.name);
+            //Debug.Log("Load "+gameObject.name);
 
             await Load(component, extension.data, references);
 
             return component;
+        }
+
+        public static async Task<object> LoadOrUpdate(GameObject gameObject, ScriptableExtensionSO extension, SaveReference references)
+        {
+            var type = extension.Type();
+
+            if (type == null)
+                return null;
+
+            ScriptableObject scriptableObject = ScriptableObject.CreateInstance(type);
+            scriptableObject.name = extension.name;
+
+            var id = references.GetId(scriptableObject, extension.id);
+
+            while (!references.ready)
+                await Task.Yield();
+
+            //Debug.Log("Load Scriptable " + extension.name);
+
+            await Load(scriptableObject, extension.data, references);
+
+            return scriptableObject;
         }
 
         public static async Task<object> Load(GameObject gameObject, ComponentExtensionSO extension, SaveReference references)
@@ -132,7 +154,13 @@ namespace umi3d.edk.save
         {
             return gameObject.GetComponents<Component>()
                 .OrderBy(OrderComponent)
-                .Select(s => new ComponentExtensionSO() { name = s.GetType().FullName, data = Save(s, references), id = references.GetId(s) });
+                .Select(s => new ComponentExtensionSO() { type = s.GetType().FullName, data = Save(s, references), id = references.GetId(s) });
+        }
+
+        public static IEnumerable<ScriptableExtensionSO> GetScriptables(SaveReference references)
+        {
+            return references.GetAllEntitiesAssignedFrom<ScriptableObject>()
+                .Select(s => new ScriptableExtensionSO() { type = s.GetType().FullName, data = Save((ScriptableObject)s, references), id = references.GetId(s), name = ((ScriptableObject)s).name });
         }
 
         static int OrderComponent(Component component)
@@ -211,6 +239,14 @@ namespace umi3d.edk.save
 
     public class AllPropertiesContractResolver : DefaultContractResolver
     {
+        protected static AllPropertiesContractResolver singleton = null;
+        public static AllPropertiesContractResolver Singleton { get
+            {
+                if (singleton == null)
+                    singleton = new AllPropertiesContractResolver();
+                return singleton;
+            } }
+
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
@@ -218,7 +254,9 @@ namespace umi3d.edk.save
                         .Union(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                                    .Select(f => base.CreateProperty(f, memberSerialization)))
                         .ToList();
+
             props.ForEach(p => { p.Writable = true; p.Readable = true; });
+
             return props;
         }
     }
@@ -232,14 +270,14 @@ namespace umi3d.edk.save
             if (data != null && !(obj is Transform))
                 try
                 {
-                    UnityEngine.Debug.Log(obj +" "+ typeof(T).IsSubclassOf(typeof(Transform)).ToString());
+                    //UnityEngine.Debug.Log(obj +" "+ typeof(T).IsSubclassOf(typeof(Transform)).ToString());
                     var c = new ComponentConverter(references);
 
                     JsonConvert.PopulateObject((string)data, obj, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
                         Converters = new[] { (JsonConverter)c, new VectorConverter() },
-                        ContractResolver = new AllPropertiesContractResolver()
+                        ContractResolver = AllPropertiesContractResolver.Singleton
                     });
                 }
                 catch (Exception e)
@@ -263,7 +301,7 @@ namespace umi3d.edk.save
                     {
                         TypeNameHandling = TypeNameHandling.All,
                         Converters = new[] { (JsonConverter)c, new VectorConverter() },
-                        ContractResolver = new AllPropertiesContractResolver()
+                        ContractResolver = AllPropertiesContractResolver.Singleton
                     });
                 }
                 catch (Exception e)
@@ -293,10 +331,10 @@ namespace umi3d.edk.save
             return UMI3DSceneLoader.GetComponents(gameObject, references);
         }
 
-        public static Type Type(this ComponentExtensionSO extension)
+        public static Type Type(this ExtensionSO extension)
         {
             return AppDomain.CurrentDomain.GetAssemblies()
-                .Select(a => a.GetType(extension.name))
+                .Select(a => a.GetType(extension.type))
                 .FirstOrDefault(t => t != null);
         }
 

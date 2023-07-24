@@ -21,6 +21,6 @@ namespace umi3d.edk
     {
         public int sceneIndex;
         public long id;
-        public List<ComponentExtensionSO> extensions = new List<ComponentExtensionSO>();
+        public List<ExtensionSO> extensions = new List<ExtensionSO>();
     }
 }

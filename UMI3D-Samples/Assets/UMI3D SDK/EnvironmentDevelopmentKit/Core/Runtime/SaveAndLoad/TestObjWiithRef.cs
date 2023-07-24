@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.edk;
@@ -5,6 +6,9 @@ using UnityEngine;
 
 public class TestObjWiithRef : MonoBehaviour
 {
+    [SerializeField]
+    public TestObjWiiithRef wiiithRef;
+
     [SerializeField]
     protected Transform tVar;
     public GameObject gVar;
@@ -31,4 +35,17 @@ public class TestObjWiithRef : MonoBehaviour
     {
         
     }
+}
+
+[Serializable]
+public class TestObjWiiithRef
+{
+    [SerializeField]
+    public TestObjWiithRef wiithRef;
+
+    [SerializeField]
+    public int iVar;
+
+    [SerializeField]
+    public Vector2 vector2;
 }

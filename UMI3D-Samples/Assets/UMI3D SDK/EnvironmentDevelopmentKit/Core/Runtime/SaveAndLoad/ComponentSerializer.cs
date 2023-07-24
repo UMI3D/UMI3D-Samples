@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using umi3d.edk;
 using System.Reflection;
+using umi3d.edk.save;
 
 public class ComponentConverter : JsonConverter
 {
@@ -33,24 +34,25 @@ public class ComponentConverter : JsonConverter
 
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
-        Debug.Log(reader.TokenType);
-        JObject obj = JObject.Load(reader);
+        //Debug.Log(objectType + " " + reader.TokenType);
+        JObject jobj = JObject.Load(reader);
 
         if (IsRefProperty(objectType))
         {
-            if (obj["_Type"] != null)
+            if (jobj["_Type"] != null)
             {
-                if (obj["_Type"].ToString() == "_")
+                if (jobj["_Type"].ToString() == "_")
                 {
                     return null;
                 }
-                if (obj["Id"] != null)
+                if (jobj["Id"] != null)
                 {
-                    var id = obj["Id"].ToObject<long>();
+                    var id = jobj["Id"].ToObject<long>();
                     if (id != -1)
                     {
                         var res = references.GetEntitySync(id);
                         Debug.Assert(res != null, $"no entity[{objectType}] for id {id} in {references.Count} {references.debug}");
+
                         return res;
                     }
                     return null;
@@ -61,15 +63,32 @@ public class ComponentConverter : JsonConverter
         {
             try
             {
-                return obj.ToObject(objectType);
+                if (objectType.ToString().Contains("UnityEngine"))
+                    return null; // jobj.ToObject(objectType);
+
+                object obj = Activator.CreateInstance(objectType);
+
+                if (jobj.ToString() == "{}")
+                    return obj;
+
+                JsonConvert.PopulateObject(jobj.ToString(), obj, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    Converters = new[] { (JsonConverter)this, new VectorConverter() },
+                    ContractResolver = AllPropertiesContractResolver.Singleton
+                });
+
+                return obj;
             }
             catch (Exception ex)
             {
                 UnityEngine.Debug.LogException(ex);
-                Debug.LogError(objectType + " " + reader.TokenType+" "+objectType.IsArray+"\n"+obj.ToString());
+                Debug.LogError(objectType + " " + reader.TokenType+"\n"+jobj.ToString());
+
                 return null;
             }
         }
+
         return null;
     }
 

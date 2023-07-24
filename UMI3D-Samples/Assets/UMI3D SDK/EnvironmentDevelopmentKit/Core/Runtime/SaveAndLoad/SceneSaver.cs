@@ -29,7 +29,7 @@ namespace umi3d.edk
             {
                 sceneIndex = -1,
                 id = references.GetId(env.gameObject),
-                extensions = env.gameObject.GetComponentExtensionSOs(references).ToList()
+                extensions = env.gameObject.GetComponentExtensionSOs(references).ToList<ExtensionSO>()
             };
 
             var glTFEnvironmentDto = new GlTFEnvironmentDto()
@@ -39,6 +39,9 @@ namespace umi3d.edk
             };
 
             SaveScenes(glTFEnvironmentDto, objects.SelectMany(o => o.GetComponentsInChildren<UMI3DScene>()).ToList(), references);
+
+            ext.extensions.AddRange(UMI3DSceneLoader.GetScriptables(references));
+
             return glTFEnvironmentDto.ToJson();
         }
 
@@ -50,7 +53,7 @@ namespace umi3d.edk
                 {
                     sceneIndex = -1,
                     id = references.GetId(obj.gameObject),
-                    extensions = obj.gameObject.GetComponentExtensionSOs(references).ToList()
+                    extensions = obj.gameObject.GetComponentExtensionSOs(references).ToList<ExtensionSO>()
                 };
 
                 var glTFSceneDto = new GlTFSceneDto
@@ -82,7 +85,7 @@ namespace umi3d.edk
                     {
                         sceneIndex = glTFSceneDto.nodes.Count,
                         id = references.GetId(t.gameObject),
-                        extensions = t.GetComponentExtensionSOs(references).ToList()
+                        extensions = t.GetComponentExtensionSOs(references).ToList<ExtensionSO>()
                     }
                 };
 
@@ -99,12 +102,15 @@ namespace umi3d.edk
             if (environmentDto.extensions is NodeExtension nodeExt)
             {
                 references.GetId(env, nodeExt.id);
-                foreach (ComponentExtensionSO ext in nodeExt.extensions)
+                foreach (ExtensionSO ext in nodeExt.extensions)
                 {
                     switch (ext)
                     {
                         case ComponentExtensionSO ce:
                             UMI3DSceneLoader.LoadOrUpdate(env, ce,references);
+                            break;
+                        case ScriptableExtensionSO se:
+                            UMI3DSceneLoader.LoadOrUpdate(env, se, references);
                             break;
                         default:
                             UnityEngine.Debug.Log(ext);

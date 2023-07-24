@@ -92,6 +92,11 @@ namespace umi3d.edk.userCapture
             public string Phalanx;
             public Vector3 PhalanxEulerRotation;
 
+            public PhalanxRotation()
+            {
+
+            }
+
             public PhalanxRotation(int id, string boneType, Vector3 rotation)
             {
                 phalanxId = id;

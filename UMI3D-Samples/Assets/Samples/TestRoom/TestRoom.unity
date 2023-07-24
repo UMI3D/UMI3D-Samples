@@ -9452,6 +9452,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f361612d2b60484bb1b07adb10b28a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wiiithRef:
+    wiithRef: {fileID: 1339967391353572496}
+    iVar: 5
+    vector2: {x: 10, y: 12.5}
   tVar: {fileID: 907630343}
   gVar: {fileID: 7736137849247920586}
   nVar: {fileID: 7736137849247920587}
@@ -9475,6 +9479,7 @@ MonoBehaviour:
   vector2s:
   - {x: 5, y: 8}
   - {x: 4, y: 1}
+  sVar: 
 --- !u!1001 &1470513306852488400
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -78,7 +78,7 @@ namespace umi3d.edk
 
         public long GetId(object entity, long id)
         {
-            UnityEngine.Debug.Log($"<color='purple'>Add Id {id}</color>");
+            //UnityEngine.Debug.Log($"<color='purple'>Add Id {id}</color>");
             if (entities.ContainsValue(entity))
                 return entities.First(p => p.Value == entity).Key;
 
@@ -124,6 +124,11 @@ namespace umi3d.edk
                 return default;
             }
             return entities[id];
+        }
+
+        public IEnumerable<object> GetAllEntitiesAssignedFrom<E>()
+        {
+            return entities.Values.Where(entity => typeof(E).IsAssignableFrom(entity.GetType()));
         }
     }
 }

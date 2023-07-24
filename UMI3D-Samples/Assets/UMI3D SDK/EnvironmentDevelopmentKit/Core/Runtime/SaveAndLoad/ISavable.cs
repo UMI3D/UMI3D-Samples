@@ -40,11 +40,19 @@ using umi3d.edk;
 //    Task<bool> Load(Data data);
 //}
 
-public class ComponentExtensionSO
+public class ExtensionSO
 {
     public long id { get; set; }
-    public string name { get; set; }
+    public string type { get; set; }
     public object data { get; set; }
+}
+
+public class ComponentExtensionSO : ExtensionSO
+{ }
+
+public class ScriptableExtensionSO : ExtensionSO
+{ 
+    public string name { get; set; }
 }
 
 public static class ComponentExtensionSOLoader
