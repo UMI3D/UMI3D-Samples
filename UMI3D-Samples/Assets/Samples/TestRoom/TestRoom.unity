@@ -5359,13 +5359,25 @@ MonoBehaviour:
     - isLocalFile: 1
       domain: 
       path: private\com.gfi.avatar\default\unitskeleton.prefab.bundle
-      format: unity_standalone
+      format: unity_standalone_urp
       extension: .bundle
       isInBundle: 1
       pathIfInBundle: Assets/Samples/Embodiments/Models/UnitSkeleton.prefab
       metrics:
         resolution: 0
         size: 1432.743
+      isInLibrary: 1
+      libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+    - isLocalFile: 1
+      domain: 
+      path: private\com.gfi.avatar\android\unitskeleton.prefab.bundle
+      format: unity_android_urp
+      extension: .bundle
+      isInBundle: 1
+      pathIfInBundle: Assets/Samples/Embodiments/Models/UnitSkeleton.prefab
+      metrics:
+        resolution: 0
+        size: 1213.481
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
   bindRig: 1
@@ -5473,6 +5485,18 @@ MonoBehaviour:
         metrics:
           resolution: 0
           size: 78.162
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+      - isLocalFile: 1
+        domain: 
+        path: private\com.gfi.avatar\android\emoteanimator.prefab.bundle
+        format: unity_android_urp
+        extension: .bundle
+        isInBundle: 1
+        pathIfInBundle: Assets/Samples/Embodiments/Models/EmoteAnimator.prefab
+        metrics:
+          resolution: 0
+          size: 231.409
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
     animatorStateNames:
