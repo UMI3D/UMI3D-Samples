@@ -17,7 +17,6 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using umi3d.common;
 using umi3d.common.userCapture.pose;
 using umi3d.edk.core;
@@ -85,7 +84,7 @@ namespace umi3d.edk.userCapture.pose
         /// <returns></returns>
         public override IEntity ToEntityDto(UMI3DUser user = null)
         {
-            return new UMI3DPoseOverriderContainerDto()
+            return new UMI3DPoseOverridersContainerDto()
             {
                 id = Id(),
                 poseOverriderDtos = PoseOverriders.GetValue(user).ToArray(),
