@@ -356,6 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a001158263df49e41bca38dc87a278c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 0}
   _Spacialized: 1
 --- !u!4 &76787175
 Transform:
@@ -9145,6 +9146,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 4226030227542323878, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226030227542323878, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226030227542323878, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226030227542323878, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226030227542323878, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408805648294660, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
