@@ -56,14 +56,14 @@ namespace umi3d.edk.interaction
         /// <inheritdoc/>
         protected override AbstractInteractionDto CreateDto()
         {
-            return new FormDto();
+            return new common.interaction.FormDto();
         }
 
         /// <inheritdoc/>
         protected override void WriteProperties(AbstractInteractionDto dto_, UMI3DUser user)
         {
             base.WriteProperties(dto_, user);
-            var dto = dto_ as FormDto;
+            var dto = dto_ as common.interaction.FormDto;
             if (dto == null)
                 return;
             dto.fields = Fields.Select(f => f.Id()).ToList();
@@ -111,14 +111,14 @@ namespace umi3d.edk.interaction
         }
 
         /// <summary>
-        /// Creates <see cref="Form"/> from this.
+        /// Creates <see cref="common.interaction.form.FormDto"/> from this.
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public Form ToConnectionFormDto(UMI3DUser user)
+        public common.interaction.form.FormDto ToConnectionFormDto(UMI3DUser user)
         {
 
-            Form dto = new Form() { Name = "Empty" };
+            common.interaction.form.FormDto dto = new common.interaction.form.FormDto() { Name = "Empty" };
             //dto.fields = Fields.Select(f => f.ToDto(user) as AbstractParameterDto).ToList();
             return dto;
         }

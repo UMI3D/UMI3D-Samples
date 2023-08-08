@@ -33,73 +33,68 @@ namespace umi3d.worldController
 
         private readonly List<string> tokens = new List<string>();
 
-        public virtual async Task<Form> GenerateForm(User user)
+        public virtual async Task<common.interaction.form.FormDto> GenerateForm(User user)
         {
-            var form = new Form()
+            var form = new common.interaction.form.FormDto()
             {
                 Name = "Login",
                 Description = "",
-                Pages = new List<Page>()
+                Pages = new List<PageDto>()
                 {
-                    new Page()
+                    new PageDto()
                     {
                         Name = "Mail",
-                        Group = new Group()
+                        Group = new GroupDto()
                         {
                             CanRemember = true,
-                            Children = new List<Div>()
+                            Children = new List<DivDto>()
                             {
-                                new Text()
+                                new TextDto()
                                 {
                                     Label = "Mail",
                                     PlaceHolder = "example@inetum.com",
                                     Type = TextType.Mail
                                 },
-                                new Text()
+                                new TextDto()
                                 {
                                     Label = "Password",
                                     PlaceHolder = "password",
                                     Type = TextType.Password
                                 },
-                                new Button()
+                                new ButtonDto()
                                 {
                                     Label = "< Back",
                                     Type = ButtonType.Back
                                 },
-                                new Button()
+                                new ButtonDto()
                                 {
-                                    Label = "Submit",
+                                    Label = "Ok",
                                     Type = ButtonType.Submit
                                 }
                             }
                         }
                     },
-                    new Page()
+                    new PageDto()
                     {
                         Name = "Pin",
-                        Group = new Group()
+                        Group = new GroupDto()
                         {
                             CanRemember = true,
-                            Children = new List<Div> { 
-                                new Text()
+                            Children = new List<DivDto> { 
+                                new TextDto()
                                 {
                                     Label = "Pin",
                                     PlaceHolder = "123456",
                                     Type = TextType.Number
                                 },
-                                new Button()
-                                {
-                                    Label = "Submit",
-                                    Type = ButtonType.Submit
-                                },
-                                new Button()
+                                new ButtonDto()
                                 {
                                     Label = "< Back",
                                     Type = ButtonType.Back
                                 },
-                                new Button()
+                                new ButtonDto()
                                 {
-                                    Label = "Submit",
+                                    Label = "Ok",
                                     Type = ButtonType.Submit
                                 }
                             }
