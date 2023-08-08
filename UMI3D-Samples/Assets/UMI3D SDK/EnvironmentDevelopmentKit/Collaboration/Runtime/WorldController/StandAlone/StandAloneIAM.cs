@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
+using UnityEngine;
 
 namespace umi3d.worldController
 {
@@ -31,39 +33,80 @@ namespace umi3d.worldController
 
         private readonly List<string> tokens = new List<string>();
 
-        public virtual async Task<ConnectionFormDto> GenerateForm(User user)
+        public virtual async Task<Form> GenerateForm(User user)
         {
-            var form = new ConnectionFormDto()
+            var form = new Form()
             {
-                globalToken = user.globalToken,
-                name = "Connection",
-                description = null,
-                fields = new List<AbstractParameterDto>()
+                Name = "Login",
+                Description = "",
+                Pages = new List<Page>()
+                {
+                    new Page()
+                    {
+                        Name = "Mail",
+                        Group = new Group()
+                        {
+                            CanRemember = true,
+                            Children = new List<Div>()
+                            {
+                                new Text()
+                                {
+                                    Label = "Mail",
+                                    PlaceHolder = "example@inetum.com",
+                                    Type = TextType.Mail
+                                },
+                                new Text()
+                                {
+                                    Label = "Password",
+                                    PlaceHolder = "password",
+                                    Type = TextType.Password
+                                },
+                                new Button()
+                                {
+                                    Label = "< Back",
+                                    Type = ButtonType.Back
+                                },
+                                new Button()
+                                {
+                                    Label = "Submit",
+                                    Type = ButtonType.Submit
+                                }
+                            }
+                        }
+                    },
+                    new Page()
+                    {
+                        Name = "Pin",
+                        Group = new Group()
+                        {
+                            CanRemember = true,
+                            Children = new List<Div> { 
+                                new Text()
+                                {
+                                    Label = "Pin",
+                                    PlaceHolder = "123456",
+                                    Type = TextType.Number
+                                },
+                                new Button()
+                                {
+                                    Label = "Submit",
+                                    Type = ButtonType.Submit
+                                },
+                                new Button()
+                                {
+                                    Label = "< Back",
+                                    Type = ButtonType.Back
+                                },
+                                new Button()
+                                {
+                                    Label = "Submit",
+                                    Type = ButtonType.Submit
+                                }
+                            }
+                        }
+                    }
+                }
             };
-
-            form.fields.Add(
-                new StringParameterDto()
-                {
-                    id = 1,
-                    name = "Login",
-                    value = ""
-                });
-            form.fields.Add(
-                new StringParameterDto()
-                {
-                    id = 2,
-                    privateParameter = true,
-                    name = "Password",
-                    value = ""
-                });
-            form.fields.Add(
-                new EnumParameterDto<string>()
-                {
-                    id = 3,
-                    name = "Select an option",
-                    possibleValues = new List<string>() { "ValueA", "ValueB", "ValueC", "ValueD", "Une Pomme", "@&&&é" },
-                    value = ""
-                });
 
 
             return await Task.FromResult(form);

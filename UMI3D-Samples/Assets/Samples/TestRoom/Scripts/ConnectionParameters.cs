@@ -16,6 +16,7 @@ limitations under the License.
 
 using System.Linq;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 using umi3d.edk.collaboration;
 using umi3d.edk.interaction;
 using UnityEngine;
@@ -34,8 +35,8 @@ public class ConnectionParameters : MonoBehaviour
             ((PinIdentifierWithParameter)pinIdentifier).GetParameter = GetParameter;
     }
 
-    ConnectionFormDto GetParameter(UMI3DCollaborationUser user) {
+    Form GetParameter(UMI3DCollaborationUser user) {
         UnityEngine.Debug.LogError("Need to convert form to connectionForm");
-        return form.ToDto(user) as ConnectionFormDto;
+        return new Form() { Name = "Empty" };//form.ToDto(user) as Form;
     }
 }

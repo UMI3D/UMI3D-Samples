@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 
 namespace umi3d.worldController
 {
@@ -31,7 +32,7 @@ namespace umi3d.worldController
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<ConnectionFormDto> GenerateForm(User user);
+        Task<common.interaction.form.Form> GenerateForm(User user);
 
         /// <summary>
         /// State if a user is valid.
