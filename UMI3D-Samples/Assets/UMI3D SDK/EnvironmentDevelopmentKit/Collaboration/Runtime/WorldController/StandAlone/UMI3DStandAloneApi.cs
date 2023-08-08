@@ -101,8 +101,6 @@ namespace umi3d.worldController
             if (result != null)
             {
                 HttpListenerResponse res = e.Response;
-                var form = result as Form;
-                Debug.Log(result.ToJson(Newtonsoft.Json.TypeNameHandling.None));
                 res.WriteContent(System.Text.Encoding.UTF8.GetBytes(result.ToJson(Newtonsoft.Json.TypeNameHandling.All)));
             }
         }

@@ -32,7 +32,7 @@ namespace umi3d.worldController
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<common.interaction.form.Form> GenerateForm(User user);
+        Task<common.interaction.form.FormDto> GenerateForm(User user);
 
         /// <summary>
         /// State if a user is valid.

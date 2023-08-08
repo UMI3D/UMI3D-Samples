@@ -36,9 +36,9 @@ namespace umi3d.edk.collaboration
         public UMI3DForm form;
 
         /// <inheritdoc/>
-        public override Form GetParameterDtosFor(UMI3DCollaborationUser user)
+        public override common.interaction.form.FormDto GetParameterDtosFor(UMI3DCollaborationUser user)
         {
-            return new Form() { Name = "Empty" };//form.ToDto(user) as Form;
+            return new common.interaction.form.FormDto() { Name = "Empty" };//form.ToDto(user) as Form;
         }
 
         /// <inheritdoc/>
