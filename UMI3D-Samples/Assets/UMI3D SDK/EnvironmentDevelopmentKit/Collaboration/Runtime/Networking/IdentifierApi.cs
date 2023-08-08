@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using umi3d.common;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 using umi3d.edk.interaction;
 using UnityEngine;
 
@@ -63,7 +64,7 @@ namespace umi3d.edk.collaboration
         /// </summary>
         /// <param name="login">Login of the user.</param>
         /// <returns></returns>
-        public virtual ConnectionFormDto GetParameterDtosFor(UMI3DCollaborationUser user)
+        public virtual Form GetParameterDtosFor(UMI3DCollaborationUser user)
         {
             return null;
         }

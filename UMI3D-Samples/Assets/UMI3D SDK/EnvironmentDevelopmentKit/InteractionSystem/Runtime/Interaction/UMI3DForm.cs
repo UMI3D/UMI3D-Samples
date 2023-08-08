@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 using UnityEngine.Events;
 
 namespace umi3d.edk.interaction
@@ -110,14 +111,15 @@ namespace umi3d.edk.interaction
         }
 
         /// <summary>
-        /// Creates <see cref="ConnectionFormDto"/> from this.
+        /// Creates <see cref="Form"/> from this.
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public ConnectionFormDto ToConnectionFormDto(UMI3DUser user)
+        public Form ToConnectionFormDto(UMI3DUser user)
         {
-            ConnectionFormDto dto = new ConnectionFormDto();
-            dto.fields = Fields.Select(f => f.ToDto(user) as AbstractParameterDto).ToList();
+
+            Form dto = new Form() { Name = "Empty" };
+            //dto.fields = Fields.Select(f => f.ToDto(user) as AbstractParameterDto).ToList();
             return dto;
         }
     }

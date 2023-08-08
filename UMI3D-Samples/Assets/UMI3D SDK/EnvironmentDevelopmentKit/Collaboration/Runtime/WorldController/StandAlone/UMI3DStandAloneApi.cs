@@ -21,6 +21,7 @@ using System.IO;
 using umi3d.common;
 using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
+using umi3d.common.interaction.form;
 using umi3d.edk.collaboration;
 using UnityEngine;
 using WebSocketSharp;
@@ -100,6 +101,8 @@ namespace umi3d.worldController
             if (result != null)
             {
                 HttpListenerResponse res = e.Response;
+                var form = result as Form;
+                Debug.Log(result.ToJson(Newtonsoft.Json.TypeNameHandling.None));
                 res.WriteContent(System.Text.Encoding.UTF8.GetBytes(result.ToJson(Newtonsoft.Json.TypeNameHandling.None)));
             }
         }

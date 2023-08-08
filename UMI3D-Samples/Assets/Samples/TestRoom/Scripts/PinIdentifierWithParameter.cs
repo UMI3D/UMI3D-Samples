@@ -19,15 +19,16 @@ using umi3d.common;
 using umi3d.common.collaboration;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 using umi3d.edk.collaboration;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PinIdentifierWithForm", menuName = "UMI3D/Test/Pin Identifier")]
 public class PinIdentifierWithParameter : PinIdentifierApi
 {
-    public Func<UMI3DCollaborationUser, ConnectionFormDto> GetParameter;
+    public Func<UMI3DCollaborationUser, Form> GetParameter;
 
-    public override ConnectionFormDto GetParameterDtosFor(UMI3DCollaborationUser user)
+    public override Form GetParameterDtosFor(UMI3DCollaborationUser user)
     {
         return GetParameter != null ? GetParameter(user) : null;
     }
