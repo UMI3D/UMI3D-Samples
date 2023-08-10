@@ -35,7 +35,7 @@ namespace umi3d.worldController
 
         public virtual async Task<common.interaction.form.FormDto> GenerateForm(User user)
         {
-            var form = new common.interaction.form.FormDto()
+            /*var form = new common.interaction.form.FormDto()
             {
                 Name = "World",
                 Pages = new List<PageDto> {
@@ -125,9 +125,9 @@ namespace umi3d.worldController
                         }
                     }
                 }
-            };
+            };*/
 
-            /*
+            
             var form = new common.interaction.form.FormDto()
             {
                 Name = "Login",
@@ -146,13 +146,15 @@ namespace umi3d.worldController
                                 {
                                     Label = "Mail",
                                     PlaceHolder = "example@inetum.com",
-                                    Type = TextType.Mail
+                                    Type = TextType.Mail,
+                                    Tooltip = "Enter your email adress"
                                 },
                                 new TextDto()
                                 {
                                     Label = "Password",
                                     PlaceHolder = "password",
-                                    Type = TextType.Password
+                                    Type = TextType.Password,
+                                    Tooltip = "Enter your password"
                                 },
                                 new ButtonDto()
                                 {
@@ -195,7 +197,7 @@ namespace umi3d.worldController
                     }
                 }
             };
-            */
+            
 
             return await Task.FromResult(form);
         }
