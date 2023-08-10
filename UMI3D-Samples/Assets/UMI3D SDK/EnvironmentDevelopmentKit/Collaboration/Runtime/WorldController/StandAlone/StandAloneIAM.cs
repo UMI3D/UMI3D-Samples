@@ -37,6 +37,99 @@ namespace umi3d.worldController
         {
             var form = new common.interaction.form.FormDto()
             {
+                Name = "World",
+                Pages = new List<PageDto> {
+                    new PageDto()
+                    {
+                        Group = new GroupScrollViewDto()
+                        {
+                            Mode = UnityEngine.UIElements.ScrollViewMode.Horizontal,
+                            Children = new List<DivDto>
+                            {
+                                new GroupDto()
+                                {
+                                    SubmitOnValidate = true,
+                                    Children = new List<DivDto>
+                                    {
+                                        new LabelDto()
+                                        {
+                                            Text = "Test"
+                                        },
+                                        new ButtonDto()
+                                        {
+                                            Label = "G",
+                                        }
+                                    }
+                                },
+                                new GroupDto()
+                                {
+                                    SubmitOnValidate = true,
+                                    Children = new List<DivDto>
+                                    {
+                                        new LabelDto()
+                                        {
+                                            Text = "Test"
+                                        },
+                                        new ButtonDto()
+                                        {
+                                            Label = "G",
+                                        }
+                                    }
+                                },
+                                new GroupDto()
+                                {
+                                    SubmitOnValidate = true,
+                                    Children = new List<DivDto>
+                                    {
+                                        new LabelDto()
+                                        {
+                                            Text = "Test"
+                                        },
+                                        new ButtonDto()
+                                        {
+                                            Label = "G",
+                                        }
+                                    }
+                                },
+                                new GroupDto()
+                                {
+                                    SubmitOnValidate = true,
+                                    Children = new List<DivDto>
+                                    {
+                                        new LabelDto()
+                                        {
+                                            Text = "Test"
+                                        },
+                                        new ButtonDto()
+                                        {
+                                            Label = "G",
+                                        }
+                                    }
+                                },
+                                new GroupDto()
+                                {
+                                    SubmitOnValidate = true,
+                                    Children = new List<DivDto>
+                                    {
+                                        new LabelDto()
+                                        {
+                                            Text = "Test"
+                                        },
+                                        new ButtonDto()
+                                        {
+                                            Label = "G",
+                                        }
+                                    }
+                                },
+                            }
+                        }
+                    }
+                }
+            };
+
+            /*
+            var form = new common.interaction.form.FormDto()
+            {
                 Name = "Login",
                 Description = "",
                 Pages = new List<PageDto>()
@@ -102,7 +195,7 @@ namespace umi3d.worldController
                     }
                 }
             };
-
+            */
 
             return await Task.FromResult(form);
         }
