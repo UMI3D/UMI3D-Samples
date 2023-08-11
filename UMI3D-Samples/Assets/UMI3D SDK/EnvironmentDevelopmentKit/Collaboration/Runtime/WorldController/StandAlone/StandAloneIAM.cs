@@ -19,7 +19,9 @@ using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.interaction.form;
+using umi3d.edk;
 using UnityEngine;
+using static UnityEditor.UIElements.ToolbarMenu;
 
 namespace umi3d.worldController
 {
@@ -35,7 +37,7 @@ namespace umi3d.worldController
 
         public virtual async Task<common.interaction.form.FormDto> GenerateForm(User user)
         {
-            /*var form = new common.interaction.form.FormDto()
+            var form = new common.interaction.form.FormDto()
             {
                 Name = "World",
                 Pages = new List<PageDto> {
@@ -51,6 +53,35 @@ namespace umi3d.worldController
                                     SubmitOnValidate = true,
                                     Children = new List<DivDto>
                                     {
+                                        new ImageDto()
+                                        {
+                                            Resource = new ResourceDto()
+                                            {
+                                                variants = new List<FileDto>()
+                                                {
+                                                    new FileDto()
+                                                    {
+                                                        format = "png",
+                                                        extension = ".png",
+                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
+                                                    }
+                                                }
+                                            },
+                                            Styles = new List<StyleDto>()
+                                            {
+                                                new StyleDto()
+                                                {  
+                                                    Variants = new ()
+                                                    {
+                                                        new SizeStyleDto ()
+                                                        {
+                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
                                         new LabelDto()
                                         {
                                             Text = "Test"
@@ -66,6 +97,35 @@ namespace umi3d.worldController
                                     SubmitOnValidate = true,
                                     Children = new List<DivDto>
                                     {
+                                        new ImageDto()
+                                        {
+                                            Resource = new ResourceDto()
+                                            {
+                                                variants = new List<FileDto>()
+                                                {
+                                                    new FileDto()
+                                                    {
+                                                        format = "png",
+                                                        extension = ".png",
+                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
+                                                    }
+                                                }
+                                            },
+                                            Styles = new List<StyleDto>()
+                                            {
+                                                new StyleDto()
+                                                {
+                                                    Variants = new ()
+                                                    {
+                                                        new SizeStyleDto ()
+                                                        {
+                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
                                         new LabelDto()
                                         {
                                             Text = "Test"
@@ -81,6 +141,35 @@ namespace umi3d.worldController
                                     SubmitOnValidate = true,
                                     Children = new List<DivDto>
                                     {
+                                        new ImageDto()
+                                        {
+                                            Resource = new ResourceDto()
+                                            {
+                                                variants = new List<FileDto>()
+                                                {
+                                                    new FileDto()
+                                                    {
+                                                        format = "png",
+                                                        extension = ".png",
+                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
+                                                    }
+                                                }
+                                            },
+                                            Styles = new List<StyleDto>()
+                                            {
+                                                new StyleDto()
+                                                {
+                                                    Variants = new ()
+                                                    {
+                                                        new SizeStyleDto ()
+                                                        {
+                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
                                         new LabelDto()
                                         {
                                             Text = "Test"
@@ -96,6 +185,35 @@ namespace umi3d.worldController
                                     SubmitOnValidate = true,
                                     Children = new List<DivDto>
                                     {
+                                        new ImageDto()
+                                        {
+                                            Resource = new ResourceDto()
+                                            {
+                                                variants = new List<FileDto>()
+                                                {
+                                                    new FileDto()
+                                                    {
+                                                        format = "png",
+                                                        extension = ".png",
+                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
+                                                    }
+                                                }
+                                            },
+                                            Styles = new List<StyleDto>()
+                                            {
+                                                new StyleDto()
+                                                {
+                                                    Variants = new ()
+                                                    {
+                                                        new SizeStyleDto ()
+                                                        {
+                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
                                         new LabelDto()
                                         {
                                             Text = "Test"
@@ -111,6 +229,35 @@ namespace umi3d.worldController
                                     SubmitOnValidate = true,
                                     Children = new List<DivDto>
                                     {
+                                        new ImageDto()
+                                        {
+                                            Resource = new ResourceDto()
+                                            {
+                                                variants = new List<FileDto>()
+                                                {
+                                                    new FileDto()
+                                                    {
+                                                        format = "png",
+                                                        extension = ".png",
+                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
+                                                    }
+                                                }
+                                            },
+                                            Styles = new List<StyleDto>()
+                                            {
+                                                new StyleDto()
+                                                {
+                                                    Variants = new ()
+                                                    {
+                                                        new SizeStyleDto ()
+                                                        {
+                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
                                         new LabelDto()
                                         {
                                             Text = "Test"
@@ -125,9 +272,9 @@ namespace umi3d.worldController
                         }
                     }
                 }
-            };*/
+            };
 
-            
+            /*
             var form = new common.interaction.form.FormDto()
             {
                 Name = "Login",
@@ -196,7 +343,7 @@ namespace umi3d.worldController
                         }
                     }
                 }
-            };
+            };*/
             
 
             return await Task.FromResult(form);
