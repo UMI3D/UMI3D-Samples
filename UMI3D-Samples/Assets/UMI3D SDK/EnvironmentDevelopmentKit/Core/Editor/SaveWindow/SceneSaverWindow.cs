@@ -57,6 +57,8 @@ namespace umi3d.edk.editor
                 {
                     draw.data.tmp = SceneSaver.SaveEnvironment(env, gameobjects.ToList() ,references);
                 }
+
+                Debug.Log($"<color=#0000FF>Done Saving Environment</color>");
             }
 
             if (GUILayout.Button("Load TMP"))
@@ -69,6 +71,8 @@ namespace umi3d.edk.editor
                     SceneSaver.LoadEnvironment(environmentDto,env, references);
                     EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
                 }
+
+                Debug.Log($"<color=#0000FF>Done Loading Environment</color>");
             }
 
             draw.editor.DrawDefaultInspector();

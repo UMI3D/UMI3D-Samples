@@ -7,6 +7,9 @@ using System;
 using umi3d.edk;
 using System.Reflection;
 using umi3d.edk.save;
+using UnityEngine.Events;
+using System.Linq;
+using UnityEditor.Events;
 
 public class ComponentConverter : JsonConverter
 {
@@ -29,6 +32,11 @@ public class ComponentConverter : JsonConverter
     bool IsRefProperty(Type type)
     {
         return (typeof(ScriptableObject).IsAssignableFrom(type) || typeof(Component).IsAssignableFrom(type) || typeof(GameObject).IsAssignableFrom(type));
+    }
+
+    bool IsEventProperty(Type type)
+    {
+        return (typeof(UnityEventBase).IsAssignableFrom(type));
     }
 
 
@@ -59,12 +67,86 @@ public class ComponentConverter : JsonConverter
                 }
             }
         }
+        else if (IsEventProperty(objectType))
+        {
+            if (jobj["Callbacks"] != null)
+            {
+                List<JObject> lst = jobj["Callbacks"].ToObject<List<JObject>>();
+
+                object obj = Activator.CreateInstance(objectType);
+
+                if (obj is UnityEventBase evnt)
+                {
+                    foreach (JObject jobjMethod in lst)
+                    {
+                        if (jobjMethod["_Type"] != null)
+                        {
+                            if (jobjMethod["_Type"].ToString() == "_")
+                            {
+                                continue;
+                            }
+
+                            if (jobjMethod["Id"] != null)
+                            {
+                                var id = jobjMethod["Id"].ToObject<long>();
+                                if (id != -1)
+                                {
+                                    var res = references.GetEntitySync(id);
+                                    Debug.Assert(res != null, $"no entity[{objectType}] for id {id} in {references.Count} {references.debug}");
+
+                                    if (res != null)
+                                    {
+                                        string methodName = jobjMethod["Method"].ToString();
+
+                                        var methodToLink = res.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault(m => m.Name == methodName);
+
+                                        var methods = obj.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                                        var addPersistentListenerMethod = methods.FirstOrDefault(m => m.Name == "AddPersistentListener" && m.GetParameters().Count() == 0);
+                                        var setPersistentListenerStateMethod = methods.FirstOrDefault(m => m.Name == "SetPersistentListenerState" && m.GetParameters().Count() == 2);
+
+                                        int index = evnt.GetPersistentEventCount();
+
+                                        addPersistentListenerMethod.Invoke(obj, new object[] { });
+                                        if (methodToLink.GetParameters().Count() == 0)
+                                        {
+                                            var registerVoidPersistentListenerMethod = methods.FirstOrDefault(m => m.Name == "RegisterVoidPersistentListener" && m.GetParameters().Count() == 2);
+                                            UnityAction action = Delegate.CreateDelegate(typeof(UnityAction), res, methodName) as UnityAction;
+
+                                            registerVoidPersistentListenerMethod.Invoke(obj, new object[] { index, action });
+                                        }
+                                        else
+                                        {
+                                            var registerPersistentListenerMethod = methods.FirstOrDefault(m => m.Name == "RegisterPersistentListener" && m.GetParameters().Count() == 3);
+
+                                            registerPersistentListenerMethod.Invoke(obj, new object[] { index, res, methodToLink });
+                                        }
+                                        setPersistentListenerStateMethod.Invoke(obj, new object[] { index, UnityEventCallState.RuntimeOnly });
+                                    }
+
+                                    return obj;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         else
         {
             try
             {
-                if (objectType.ToString().Contains("UnityEngine"))
+                if (objectType.ToString().Contains("UnityEngine.Font"))
+                {
+                    var res = Resources.GetBuiltinResource<Font>("Arial.ttf");
+                    return res;
+                }
+                if (objectType.ToString().Contains("UnityEngine") && !objectType.ToString().Contains("UnityEngine.UI.FontData")
+                    && !objectType.ToString().Contains("UnityEngine.Events.UnityEvent")
+                    && !objectType.ToString().Contains("UnityEngine.AnimationCurve")) 
+                {
+                    Debug.Log(objectType.ToString());
                     return null; // jobj.ToObject(objectType);
+                }
 
                 object obj = Activator.CreateInstance(objectType);
 
@@ -95,8 +177,17 @@ public class ComponentConverter : JsonConverter
     JObject FromValue(object v, Type type)
     {
         JObject obj = new JObject();
-        obj["_Type"] = v?.GetType().ToString() ?? type.ToString();
+        obj["_Type"] = v?.GetType().ToString() ?? type?.ToString() ?? "_";
         obj["Id"] = v != null ? references.GetId(v) : -1;
+        return obj;
+    }
+
+    JObject FromValue(object v, Type type, string methodName)
+    {
+        JObject obj = new JObject();
+        obj["_Type"] = v?.GetType().ToString() ?? type?.ToString() ?? "_";
+        obj["Id"] = v != null ? references.GetId(v) : -1;
+        obj["Method"] = methodName;
         return obj;
     }
 
@@ -109,6 +200,11 @@ public class ComponentConverter : JsonConverter
 
             foreach (var prop in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
             {
+                //if (prop.FieldType.ToString().Contains("UnityEngine.Font"))
+                //{
+                //    Debug.Log("It's a font !");
+                //    continue;
+                //}
                 if (prop != null && IsRefProperty(prop.FieldType))
                 {
                     try
@@ -121,6 +217,32 @@ public class ComponentConverter : JsonConverter
                     {
                         Debug.LogError(type.ToString() + " - " + prop.Name + " - " + e);
                         jObject[prop?.Name ?? "ERROR"] = "Error 1 " + e.Message;
+                    }
+                }
+                else if (prop != null && IsEventProperty(prop.FieldType))
+                {
+                    var v = prop.GetValue(value);
+
+                    if (v is UnityEventBase evnt)
+                    {
+                        int n = evnt.GetPersistentEventCount();
+
+                        List<JObject> objs = new();
+                        for (int i = 0; i < n; i++)
+                        {
+                            string methodName = evnt.GetPersistentMethodName(i);
+                            object target = evnt.GetPersistentTarget(i);
+
+                            objs.Add(FromValue(target, target.GetType(), methodName));
+                        }
+                        
+                        if (objs.Count > 0)
+                        {
+                            JObject obj = new JObject();
+                            obj["Callbacks"] = JToken.FromObject(objs);
+
+                            jObject[prop.Name] = obj;
+                        }
                     }
                 }
                 else
@@ -176,7 +298,7 @@ public class ComponentConverter : JsonConverter
                                     {
                                         object item = enumerator.Current;
 
-                                        var obj = FromValue(enumerator.Current, enumerator.Current.GetType());
+                                        var obj = FromValue(item, item?.GetType());
                                         objs.Add(obj);
                                     } while (enumerator.MoveNext());
 

@@ -290,7 +290,7 @@ namespace umi3d.edk.save
 
         bool UMI3DSceneLoaderModule.Save<T>(T obj, out object data, SaveReference references)
         {
-            UnityEngine.Debug.Log(obj+ " "+ (obj is Transform).ToString()+ " "+ typeof(T).Name);
+            //UnityEngine.Debug.Log(obj+ " "+ (obj is Transform).ToString()+ " "+ typeof(T).Name);
 
             if (!(obj is Transform))
                 try

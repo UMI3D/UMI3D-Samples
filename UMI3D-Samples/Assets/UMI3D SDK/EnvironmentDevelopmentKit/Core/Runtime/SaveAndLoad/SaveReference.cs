@@ -72,7 +72,7 @@ namespace umi3d.edk
 
             var id = NewID();
             entities.Add(id, entity);
-            UnityEngine.Debug.Log($"<color='Yellow'>Add Id {id}</color>");
+            //UnityEngine.Debug.Log($"<color='Yellow'>Add Id {id}</color>");
             return id;
         }
 
