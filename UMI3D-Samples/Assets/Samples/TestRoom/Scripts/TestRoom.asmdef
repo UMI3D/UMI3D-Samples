@@ -1,0 +1,24 @@
+{
+    "name": "TestRoom",
+    "rootNamespace": "",
+    "references": [
+        "UMI3D.EDK.Collaboration",
+        "UMI3D.EDK.InteractionSystem",
+        "UMI3D.EDK.Core",
+        "UMI3D.Common.InteractionSystem",
+        "UMI3D.Common.Collaboration",
+        "UMI3D.Common.UserCapture",
+        "inetum.unityUtils",
+        "UMI3D.EDK.UserCapture",
+        "UMI3D.Common.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

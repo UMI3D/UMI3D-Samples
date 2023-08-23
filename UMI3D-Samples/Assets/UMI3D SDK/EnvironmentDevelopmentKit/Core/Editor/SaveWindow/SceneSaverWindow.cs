@@ -21,10 +21,13 @@ using inetum.unityUtils.editor;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using umi3d.common;
 using umi3d.edk.save;
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -44,125 +47,103 @@ namespace umi3d.edk.editor
 
         protected override void Draw()
         {
-            if (GUILayout.Button("Test"))
-            {
-                Test3();
-            }
+            draw.editor.DrawDefaultInspector();
 
-            if (GUILayout.Button("Save environment"))
+            if (GUILayout.Button("Save"))
             {
+                RefreshGameObjects();
+
                 SaveReference references = new SaveReference();
                 UMI3DEnvironment env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null);
+
+                if (Directory.Exists(Application.dataPath + "/../mod"))
+                    Directory.Delete(Application.dataPath + "/../mod", true);
+                Directory.CreateDirectory(Application.dataPath + "/../mod");
+
                 if (env != null)
                 {
-                    draw.data.tmp = SceneSaver.SaveEnvironment(env, gameobjects.ToList() ,references);
+                    string json = SceneSaver.SaveEnvironment(env, gameobjects.ToList() ,references);
+
+                    using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/contents/jsons/scene.json"))
+                    {
+                        sw.Write(json);
+                        sw.Dispose();
+                    }
+                }
+
+                if (draw.data.assemblies != null && draw.data.assemblies.Count > 0)
+                {
+                    List<string> assembliesToBuild = draw.data.assemblies.Select(assemblyDefinition => assemblyDefinition.name).ToList();
+
+                    Assembly[] playerAssemblies = CompilationPipeline.GetAssemblies(AssembliesType.Editor);
+                    foreach (var assembly in playerAssemblies)
+                    {
+                        if (assembliesToBuild.Contains(assembly.name))
+                        {
+                            if (File.Exists(assembly.outputPath))
+                            {
+                                string filename = System.IO.Path.GetFileName(assembly.outputPath);
+                                string outputfile = System.IO.Path.Combine(Application.dataPath + "/../mod/contents/dll/", filename);
+
+                                if (!Directory.Exists(Application.dataPath + "/../mod/contents/dll"))
+                                    Directory.CreateDirectory(Application.dataPath + "/../mod/contents/dll");
+
+                                File.Copy(assembly.outputPath, outputfile, true);
+                            }
+                        }
+                    }
                 }
 
                 Debug.Log($"<color=#0000FF>Done Saving Environment</color>");
             }
 
-            if (GUILayout.Button("Load TMP"))
+            if (GUILayout.Button("Load"))
             {
-                SaveReference references = new SaveReference();
-                UMI3DDto dto = UMI3DDtoSerializer.FromJson(draw.data.tmp);
-                if (dto is GlTFEnvironmentDto environmentDto)
-                {
-                    GameObject env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null)?.gameObject ?? new GameObject("UMI3DEnvironment");
-                    SceneSaver.LoadEnvironment(environmentDto,env, references);
-                    EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-                }
+                RefreshGameObjects();
 
+                if (Directory.Exists(Application.dataPath + "/../mod/contents/dll"))
+                {
+                    if (!Directory.Exists(Application.dataPath + "/Mods"))
+                        Directory.CreateDirectory(Application.dataPath + "/Mods");
+
+                    foreach (string dllFile in Directory.GetFiles(Application.dataPath + "/../mod/contents/dll"))
+                    {
+                        File.Copy(dllFile, Application.dataPath + "/Mods/" + System.IO.Path.GetFileName(dllFile), true);
+                        System.Reflection.Assembly.LoadFile(Application.dataPath + "/Mods/" + System.IO.Path.GetFileName(dllFile));
+                    }
+
+                    AssetDatabase.Refresh();
+                }
+                
+                if (File.Exists(Application.dataPath + "/../mod/contents/jsons/scene.json"))
+                {
+                    string json = File.ReadAllText(Application.dataPath + "/../mod/contents/jsons/scene.json");
+
+                    SaveReference references = new SaveReference();
+                    UMI3DDto dto = UMI3DDtoSerializer.FromJson(json);
+
+                    if (dto is GlTFEnvironmentDto environmentDto)
+                    {
+                        GameObject env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null)?.gameObject ?? new GameObject("UMI3DEnvironment");
+                        SceneSaver.LoadEnvironment(environmentDto, env, references);
+                        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+                    }
+                }
+                
                 Debug.Log($"<color=#0000FF>Done Loading Environment</color>");
             }
-
-            draw.editor.DrawDefaultInspector();
-        }
-
-
-        void Test()
-        {
-            //UMI3DSceneLoaderModuleUtils.GetModulesType().Debug();
-            //var a = new A();
-            //a.other = new();
-
-            //Debug.Log(a.GetType() + " " + a.GetType().DeclaringType);
-
-            SaveReference references = new SaveReference();
-
-            var c = new ComponentConverter(references);
-
-            //a.GetType().GetFields().Debug();
-
-            var a = gameobjects.SelectMany(o => o.GetComponentsInChildren<TestObjWiithRef>()).FirstOrDefault(e => e != null);
-
-            var data = JsonConvert.SerializeObject(a, Formatting.Indented, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                Converters = new[] { (JsonConverter)c , new VectorConverter()}
-            });
-
-            Debug.Log(data.ToString());
-
-            var g = new GameObject();
-            g.name = "Test";
-            g.transform.SetParent(a.transform);
-            var b = g.AddComponent<TestObjWiithRef>();
-
-            JsonConvert.PopulateObject(data, b, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                Converters = new[] { (JsonConverter)c, new VectorConverter() }
-            });
-        }
-
-        void Test2()
-        {
-            //UMI3DSceneLoaderModuleUtils.GetModulesType().Debug();
-            //var a = new A();
-            //a.other = new();
-
-            //Debug.Log(a.GetType() + " " + a.GetType().DeclaringType);
-
-            SaveReference references = new SaveReference();
-
-            var c = new ComponentConverter(references);
-
-            //a.GetType().GetFields().Debug();
-
-            // var a = gameobjects.SelectMany(o => o.GetComponentsInChildren<TestObjWiithRef>()).FirstOrDefault(e => e != null);
-            var a = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null);
-
-            var data = JsonConvert.SerializeObject(a, Formatting.Indented, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                Converters = new[] { (JsonConverter)c, new VectorConverter() }
-            });
-
-            Debug.Log(data.ToString());
-
-            //var g = new GameObject();
-            //g.name = "Test";
-            //g.transform.SetParent(a.transform);
-            //var b = g.AddComponent<TestObjWiithRef>();
-
-            //JsonConvert.PopulateObject(data,b, new JsonSerializerSettings
-            //{
-            //    TypeNameHandling = TypeNameHandling.All,
-            //    Converters = new[] { (JsonConverter)c, new VectorConverter() }
-            //});
-        }
-
-        void Test3()
-        {
-            gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null).GetType().GetFields().Debug();
-            gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null).GetType().GetFields(System.Reflection.BindingFlags.NonPublic).Debug();
-            gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null).GetType().GetFields(System.Reflection.BindingFlags.Public).Debug();
         }
 
         protected override void Init()
         {
-            gameobjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
             draw = new ScriptableLoader<SceneSaverWindowData>(fileName);
+
+            RefreshGameObjects();
+        }
+
+        protected void RefreshGameObjects()
+        {
+            gameobjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
         }
     }
 }

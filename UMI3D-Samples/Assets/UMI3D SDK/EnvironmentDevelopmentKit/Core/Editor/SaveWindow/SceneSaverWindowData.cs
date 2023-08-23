@@ -17,14 +17,15 @@ limitations under the License.
 
 namespace umi3d.edk.editor
 {
+    using System.Collections.Generic;
+    using UnityEditor.Compilation;
+    using UnityEditorInternal;
     using UnityEngine;
 
     //[CreateAssetMenu(fileName = "UpdateHelperData", menuName = "Build Helper/Build Helper Data", order = 1)]
     public class SceneSaverWindowData : ScriptableObject
     {
-        //public List<ProjectData> projects = new List<ProjectData>();
-        [TextArea(3,40)]
-        public string tmp;
+        public List<AssemblyDefinitionAsset> assemblies;
     }
 }
 #endif
