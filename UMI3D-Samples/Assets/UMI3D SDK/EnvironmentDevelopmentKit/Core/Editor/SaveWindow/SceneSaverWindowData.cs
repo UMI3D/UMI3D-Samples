@@ -25,6 +25,10 @@ namespace umi3d.edk.editor
     //[CreateAssetMenu(fileName = "UpdateHelperData", menuName = "Build Helper/Build Helper Data", order = 1)]
     public class SceneSaverWindowData : ScriptableObject
     {
+        public string id;
+        public string name;
+        public string version;
+
         public List<AssemblyDefinitionAsset> assemblies;
     }
 }

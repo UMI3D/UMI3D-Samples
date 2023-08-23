@@ -15,16 +15,17 @@ limitations under the License.
 */
 
 using System.Collections.Generic;
+using umi3d.common;
+using umi3d.edk;
+using UnityEngine;
 
-namespace umi3d.common
+public class UMI3DNetworking : UMI3DDto
 {
-    [System.Serializable]
-    public class GlTFEnvironmentDto : AbstractEntityDto
-    {
-        public GlTFAsset asset { get; set; } = new GlTFAsset();
-
-        public List<GlTFSceneDto> scenes { get; set; } = new List<GlTFSceneDto>();
-
-        public object extensions { get; set; } = new GlTFEnvironmentExtensions();
-    }
+    public string serverDomain;
+    public int httpPort;
+    public int udpPort;
+    public int natPort;
+    public string natDomain;
+    public int masterPort;
+    public string worldControllerUrl;
 }

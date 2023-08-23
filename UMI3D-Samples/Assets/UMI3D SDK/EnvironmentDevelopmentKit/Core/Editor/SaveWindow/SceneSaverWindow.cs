@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using umi3d.common;
+using umi3d.edk.collaboration;
 using umi3d.edk.save;
 using UnityEditor;
 using UnityEditor.Compilation;
@@ -59,6 +60,38 @@ namespace umi3d.edk.editor
                 if (Directory.Exists(Application.dataPath + "/../mod"))
                     Directory.Delete(Application.dataPath + "/../mod", true);
                 Directory.CreateDirectory(Application.dataPath + "/../mod");
+
+                using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/info.json"))
+                {
+                    sw.Write(new UMI3DInfo()
+                    {
+                        id = draw.data.id,
+                        name = draw.data.name,
+                        version = draw.data.version,
+                        umi3dVersion = UMI3DVersion.version,
+                        type = ""
+                    }.ToJson());
+                    sw.Dispose();
+                }
+
+                UMI3DCollaborationServer server = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DCollaborationServer>()).FirstOrDefault(s => s != null);
+                if (server != null)
+                {
+                    using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/networking.json"))
+                    {
+                        sw.Write(new UMI3DNetworking()
+                        {
+                            serverDomain = "",
+                            httpPort = server.httpPort,
+                            udpPort = -1,
+                            natPort = server.forgeNatServerPort,
+                            natDomain = server.forgeNatServerHost,
+                            masterPort = server.forgeMasterServerPort,
+                            worldControllerUrl = ""
+                        }.ToJson());
+                        sw.Dispose();
+                    }
+                }
 
                 if (env != null)
                 {
