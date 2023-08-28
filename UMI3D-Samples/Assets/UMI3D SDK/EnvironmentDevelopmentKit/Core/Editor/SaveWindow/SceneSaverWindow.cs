@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using umi3d.common;
-using umi3d.edk.collaboration;
 using umi3d.edk.save;
 using UnityEditor;
 using UnityEditor.Compilation;
@@ -74,25 +73,27 @@ namespace umi3d.edk.editor
                     sw.Dispose();
                 }
 
-                UMI3DCollaborationServer server = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DCollaborationServer>()).FirstOrDefault(s => s != null);
+                UMI3DServer server = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DServer>()).FirstOrDefault(s => s != null);
                 if (server != null)
                 {
                     using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/networking.json"))
                     {
                         sw.Write(new UMI3DNetworking()
                         {
-                            serverDomain = "",
-                            httpPort = server.httpPort,
+                            serverDomain = UMI3DServer.GetHttpUrl(),
+                            httpPort = 50043,//server.httpPort,
                             udpPort = -1,
-                            natPort = server.forgeNatServerPort,
-                            natDomain = server.forgeNatServerHost,
-                            masterPort = server.forgeMasterServerPort,
+                            natPort = -1,//server.forgeNatServerPort,
+                            natDomain = "",//server.forgeNatServerHost,
+                            masterPort = -1,//server.forgeMasterServerPort,
                             worldControllerUrl = ""
                         }.ToJson());
                         sw.Dispose();
                     }
                 }
 
+                Directory.CreateDirectory(Application.dataPath + "/../mod/contents");
+                Directory.CreateDirectory(Application.dataPath + "/../mod/contents/jsons");
                 if (env != null)
                 {
                     string json = SceneSaver.SaveEnvironment(env, gameobjects.ToList() ,references);
@@ -103,6 +104,10 @@ namespace umi3d.edk.editor
                         sw.Dispose();
                     }
                 }
+
+                DirectoryInfo source = new DirectoryInfo(Application.dataPath + "/../data");
+                DirectoryInfo target = Directory.CreateDirectory(Application.dataPath + "/../mod/data");
+                CopyFilesRecursively(source, target);
 
                 if (draw.data.assemblies != null && draw.data.assemblies.Count > 0)
                 {
@@ -165,6 +170,15 @@ namespace umi3d.edk.editor
                 
                 Debug.Log($"<color=#0000FF>Done Loading Environment</color>");
             }
+        }
+
+        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
+        {
+            foreach (DirectoryInfo dir in source.GetDirectories())
+                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+
+            foreach (FileInfo file in source.GetFiles())
+                file.CopyTo(System.IO.Path.Combine(target.FullName, file.Name));
         }
 
         protected override void Init()
