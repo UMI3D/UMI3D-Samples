@@ -14,24 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
-namespace umi3d.common.userCapture.pose
+namespace umi3d.common.dto.binding
 {
-    public class UMI3DPoseOverriderContainerDto : UMI3DDto, IEntity
+    /// <summary>
+    /// Node binding data, required to bind two nodes together.
+    /// </summary>
+    [System.Serializable]
+    public class RigNodeBindingDataDto : NodeBindingDataDto
     {
         /// <summary>
-        /// The id of the entity
+        /// Name of the rig
         /// </summary>
-        public ulong id { get; set; }
-
-        /// <summary>
-        /// Id the corresponding node in the scene
-        /// </summary>
-        public ulong relatedNodeId { get; set; }
-
-        /// <summary>
-        /// All the pose overriders of the linked container
-        /// </summary>
-        public PoseOverriderDto[] poseOverriderDtos { get; set; }
+        public string rigName { get; set; }
     }
 }

@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.edk.save;
 using UnityEngine;
+using static UnityEngine.Mesh;
 
 namespace umi3d.edk
 {
@@ -46,6 +47,11 @@ namespace umi3d.edk
 
         [HideInInspector] public string idGenerator = "{{pid}}_[{{name}}]";
 
+        /// <summary>
+        /// Should the skinnedmeshrenderers always be updated?
+        /// </summary>
+        [Tooltip("Should the skinnedmeshrenderers always be updated?")]
+        public bool updateSkinnedMeshRendererWhenOffscreen = false;
         /// <summary>
         /// Should the subobjects considered as seperated nodes?
         /// </summary>
@@ -312,6 +318,7 @@ namespace umi3d.edk
             var meshDto = dto as UMI3DMeshNodeDto;
             meshDto.mesh = objectModel.GetValue(user).ToDto();
             //   meshDto.isSubHierarchyAllowedToBeModified = isSubHierarchyAllowedToBeModified;
+            meshDto.updateSkinnedMeshRendererWhenOffscreen = updateSkinnedMeshRendererWhenOffscreen;
             meshDto.areSubobjectsTracked = areSubobjectsTracked;
             meshDto.isRightHanded = !areSubobjectsTracked || isRightHanded;
             meshDto.idGenerator = idGenerator;
@@ -324,6 +331,7 @@ namespace umi3d.edk
         {
             return base.ToBytes(user)
                 + UMI3DSerializer.Write(areSubobjectsTracked)
+                + UMI3DSerializer.Write(updateSkinnedMeshRendererWhenOffscreen)
                 + UMI3DSerializer.Write(!areSubobjectsTracked || isRightHanded)
                 + UMI3DSerializer.Write(idGenerator)
                 + UMI3DSerializer.Write(isPartOfNavmesh)
