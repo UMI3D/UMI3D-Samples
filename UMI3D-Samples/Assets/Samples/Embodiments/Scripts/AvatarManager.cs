@@ -269,7 +269,7 @@ public class AvatarManager : MonoBehaviour
         SimpleModificationListener.Instance.RemoveNode(skeletonNode);
         skeletonNode.objectModel.SetValue(walkingSubskeleton.animatedSubkeletonBundleResource);
         skeletonNode.userId = user.Id();
-        skeletonNode.priority = 10;
+        skeletonNode.priority = -10;
         skeletonNode.animationStates = walkingSubskeleton.animatorStateNames;
         skeletonNode.animatorSelfTrackedParameters = new SkeletonAnimationParameter[1] {
             new()
