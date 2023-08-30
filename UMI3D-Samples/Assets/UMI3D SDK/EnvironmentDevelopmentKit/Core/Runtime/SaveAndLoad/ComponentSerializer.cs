@@ -26,7 +26,8 @@ public class ComponentConverter : JsonConverter
             objectType.IsClass 
             && !objectType.IsArray 
             && objectType != typeof(string) 
-            && !(objectType.IsGenericType && objectType.GetGenericTypeDefinition() == typeof(List<>));
+            && !(objectType.IsGenericType && objectType.GetGenericTypeDefinition() == typeof(List<>))
+            && objectType != typeof(AnimationCurve);
     }
 
     bool IsRefProperty(Type type)
@@ -122,13 +123,13 @@ public class ComponentConverter : JsonConverter
                                         }
                                         setPersistentListenerStateMethod.Invoke(obj, new object[] { index, UnityEventCallState.RuntimeOnly });
                                     }
-
-                                    return obj;
                                 }
                             }
                         }
                     }
                 }
+
+                return obj;
             }
         }
         else
@@ -156,7 +157,7 @@ public class ComponentConverter : JsonConverter
                 JsonConvert.PopulateObject(jobj.ToString(), obj, new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.All,
-                    Converters = new[] { (JsonConverter)this, new VectorConverter() },
+                    Converters = new[] { (JsonConverter)this, new VectorConverter(), new CurveConverter() },
                     ContractResolver = AllPropertiesContractResolver.Singleton
                 });
 
@@ -198,129 +199,139 @@ public class ComponentConverter : JsonConverter
         {
             Type type = value.GetType();
 
-            foreach (var prop in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            List<string> fields = new List<string>();
+            
+            do
             {
-                //if (prop.FieldType.ToString().Contains("UnityEngine.Font"))
-                //{
-                //    Debug.Log("It's a font !");
-                //    continue;
-                //}
-                if (prop != null && IsRefProperty(prop.FieldType))
+                foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    try
-                    {
-                        var v = prop.GetValue(value);
-                        var obj = FromValue(v, prop.FieldType);
-                        jObject[prop.Name] = obj;
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError(type.ToString() + " - " + prop.Name + " - " + e);
-                        jObject[prop?.Name ?? "ERROR"] = "Error 1 " + e.Message;
-                    }
-                }
-                else if (prop != null && IsEventProperty(prop.FieldType))
-                {
-                    var v = prop.GetValue(value);
+                    if (fields.Contains(field.Name) || field.FieldType.ToString().Contains("UMI3DAsyncProperty") ||
+                        field.FieldType.ToString().Contains("UMI3DAsyncListProperty") ||
+                        field.FieldType.ToString().Contains("TweenRunner"))
+                        continue;
 
-                    if (v is UnityEventBase evnt)
-                    {
-                        int n = evnt.GetPersistentEventCount();
+                    fields.Add(field.Name);
 
-                        List<JObject> objs = new();
-                        for (int i = 0; i < n; i++)
+                    if (field != null && IsRefProperty(field.FieldType))
+                    {
+                        try
                         {
-                            string methodName = evnt.GetPersistentMethodName(i);
-                            object target = evnt.GetPersistentTarget(i);
-
-                            objs.Add(FromValue(target, target.GetType(), methodName));
+                            var v = field.GetValue(value);
+                            var obj = FromValue(v, field.FieldType);
+                            jObject[field.Name] = obj;
                         }
-                        
-                        if (objs.Count > 0)
+                        catch (Exception e)
                         {
-                            JObject obj = new JObject();
-                            obj["Callbacks"] = JToken.FromObject(objs);
-
-                            jObject[prop.Name] = obj;
+                            Debug.LogError(type.ToString() + " - " + field.Name + " - " + e);
+                            jObject[field.Name ?? "ERROR"] = "Error 1 " + e.Message;
                         }
                     }
-                }
-                else
-                {
-                    try
+                    else if (field != null && IsEventProperty(field.FieldType))
                     {
-                        var v = prop.GetValue(value);
+                        var v = field.GetValue(value);
 
-                        if (v == null)
+                        if (v is UnityEventBase evnt)
                         {
-                            //jObject.Add(prop.Name, null);
-                        }
-                        else if ((v.GetType() ?? prop.FieldType).IsArray && IsRefProperty(v.GetType().GetElementType()))
-                        {
-                            if (v is Array arr)
+                            int n = evnt.GetPersistentEventCount();
+
+                            List<JObject> objs = new();
+                            for (int i = 0; i < n; i++)
                             {
-                                List<JObject> objs = new();
+                                string methodName = evnt.GetPersistentMethodName(i);
+                                object target = evnt.GetPersistentTarget(i);
 
-                                var t = v.GetType().GetElementType();
-                                foreach (var customClass in arr)
-                                {
-                                    var obj = FromValue(customClass, t);
-                                    objs.Add(obj);
-                                }
-                                jObject.Add(prop.Name, JToken.FromObject(objs.ToArray()));
+                                objs.Add(FromValue(target, target.GetType(), methodName));
                             }
-                            //else
-                             //   jObject.Add(prop.Name, null);
-                        }
-                        else if ((v.GetType() ?? prop.FieldType).IsGenericType && 
-                            ((v.GetType() ?? prop.FieldType).GetGenericTypeDefinition() == typeof(Dictionary<,>)
-                            || (v.GetType() ?? prop.FieldType).GetGenericTypeDefinition() == typeof(HashSet<>)
-                            ))
-                        {
-                            // Nothing
-                        }
-                        else if (typeof(IEnumerable).IsAssignableFrom(v.GetType() ?? prop.FieldType) && (v.GetType() ?? prop.FieldType) != typeof(string))
-                        {
-                            if (v is IEnumerable enumerable)
+
+                            if (objs.Count > 0)
                             {
-                                IEnumerator enumerator = enumerable.GetEnumerator();
-                                List<JObject> objs = new();
+                                JObject obj = new JObject();
+                                obj["Callbacks"] = JToken.FromObject(objs);
 
-                                bool atLeastOneValue = enumerator.MoveNext();
+                                jObject[field.Name] = obj;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            var v = field.GetValue(value);
 
-                                if (!atLeastOneValue)
-                                    jObject.Add(prop.Name, JToken.FromObject(objs.ToArray()));
-                                else if (!IsRefProperty(enumerator.Current.GetType()))
-                                    jObject.Add(prop.Name, JToken.FromObject(v, serializer));
-                                else
+                            if (v == null)
+                            {
+                                //jObject.Add(prop.Name, null);
+                            }
+                            else if ((v.GetType() ?? field.FieldType).IsArray && IsRefProperty(v.GetType().GetElementType()))
+                            {
+                                if (v is Array arr)
                                 {
-                                    do
+                                    List<JObject> objs = new();
+
+                                    var t = v.GetType().GetElementType();
+                                    foreach (var customClass in arr)
                                     {
-                                        object item = enumerator.Current;
-
-                                        var obj = FromValue(item, item?.GetType());
+                                        var obj = FromValue(customClass, t);
                                         objs.Add(obj);
-                                    } while (enumerator.MoveNext());
-
-                                    jObject.Add(prop.Name, JToken.FromObject(objs));
+                                    }
+                                    jObject.Add(field.Name, JToken.FromObject(objs.ToArray()));
                                 }
+                                //else
+                                //   jObject.Add(prop.Name, null);
                             }
-                            //else
-                            //    jObject.Add(prop.Name, null);
+                            else if ((v.GetType() ?? field.FieldType).IsGenericType &&
+                                ((v.GetType() ?? field.FieldType).GetGenericTypeDefinition() == typeof(Dictionary<,>)
+                                || (v.GetType() ?? field.FieldType).GetGenericTypeDefinition() == typeof(HashSet<>)
+                                ))
+                            {
+                                // Nothing
+                            }
+                            else if (typeof(IEnumerable).IsAssignableFrom(v.GetType() ?? field.FieldType) && (v.GetType() ?? field.FieldType) != typeof(string))
+                            {
+                                if (v is IEnumerable enumerable)
+                                {
+                                    IEnumerator enumerator = enumerable.GetEnumerator();
+                                    List<JObject> objs = new();
+
+                                    bool atLeastOneValue = enumerator.MoveNext();
+
+                                    if (!atLeastOneValue)
+                                        jObject.Add(field.Name, JToken.FromObject(objs.ToArray()));
+                                    else if (!IsRefProperty(enumerator.Current.GetType()))
+                                        jObject.Add(field.Name, JToken.FromObject(v, serializer));
+                                    else
+                                    {
+                                        do
+                                        {
+                                            object item = enumerator.Current;
+
+                                            var obj = FromValue(item, item?.GetType());
+                                            objs.Add(obj);
+                                        } while (enumerator.MoveNext());
+
+                                        jObject.Add(field.Name, JToken.FromObject(objs));
+                                    }
+                                }
+                                //else
+                                //    jObject.Add(prop.Name, null);
+                            }
+                            else
+                            {
+                                jObject.Add(field.Name, JToken.FromObject(v, serializer));
+                            }
                         }
-                        else
+                        catch (Exception e)
                         {
-                            jObject.Add(prop.Name, JToken.FromObject(v, serializer));
+                            Debug.LogError(type.ToString() + " - " + field.Name + " - " + e);
+                            jObject[field?.Name ?? "ERROR"] = "Error 2 " + e.Message;
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError(type.ToString() + " - " + prop.Name + " - " + e);
-                        jObject[prop?.Name ?? "ERROR"] = "Error 2 " + e.Message;
                     }
                 }
-            }
 
+                type = type.BaseType;
+            } while (type != null && type != typeof(MonoBehaviour) && type != typeof(Behaviour) && type != typeof(System.Object) &&
+                        type != typeof(UnityEngine.Object) && type != typeof(UnityEngine.Component));
+            
             jObject.WriteTo(writer);
         }
     }
@@ -447,6 +458,49 @@ public class VectorConverter : JsonConverter
                 jObject["a"] = c.a;
                 break;
         }
+        jObject.WriteTo(writer);
+    }
+}
+
+public class CurveConverter : JsonConverter
+{
+
+
+    public override bool CanConvert(Type objectType)
+    {
+        return objectType == typeof(AnimationCurve)
+            ;
+    }
+
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    {
+        JObject obj = JObject.Load(reader);
+
+        if (objectType == typeof(AnimationCurve))
+        {
+            AnimationCurve curve = new AnimationCurve(obj.ContainsKey("keys") ? obj["keys"].ToObject<Keyframe[]>() : new Keyframe[] { });
+            curve.preWrapMode = Enum.Parse<WrapMode>(obj["preWrapMode"].ToString());
+            curve.postWrapMode = Enum.Parse<WrapMode>(obj["postWrapMode"].ToString());
+
+            return curve;
+        }
+
+        return null;
+    }
+
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    {
+        JObject jObject = new JObject();
+
+        switch (value)
+        {
+            case AnimationCurve animationCurve:
+                jObject["preWrapMode"] = animationCurve.preWrapMode.ToString();
+                jObject["postWrapMode"] = animationCurve.postWrapMode.ToString();
+                jObject["keys"] = JToken.FromObject(animationCurve.keys);
+                break;
+        }
+
         jObject.WriteTo(writer);
     }
 }

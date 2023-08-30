@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb007c49f56a66e44ac0d32385d97042, type: 3}
   m_Name: SceneSaverWindowData
   m_EditorClassIdentifier: 
-  assemblies:
-  - {fileID: 5897886265953266890, guid: e48fbd1dc96ffb64fa82949be62b16fe, type: 3}
+  id: com.inetum.TestRoom
+  name: TestRoom
+  version: 0.0.1
+  assemblies: []

@@ -249,11 +249,38 @@ namespace umi3d.edk.save
 
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                            .Select(p => base.CreateProperty(p, memberSerialization))
-                        .Union(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                                   .Select(f => base.CreateProperty(f, memberSerialization)))
-                        .ToList();
+            List<JsonProperty> props = new List<JsonProperty>();
+            List<string> alreadyDone = new List<string>();
+
+            do
+            {
+                foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                {
+                    if (alreadyDone.Contains(prop.Name) || prop.PropertyType.ToString().Contains("UMI3DAsyncProperty") ||
+                        prop.PropertyType.ToString().Contains("UMI3DAsyncListProperty") ||
+                        prop.PropertyType.ToString().Contains("TweenRunner"))
+                        continue;
+
+                    alreadyDone.Add(prop.Name);
+
+                    props.Add(base.CreateProperty(prop, memberSerialization));
+                }
+
+                foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                {
+                    if (alreadyDone.Contains(field.Name) || field.FieldType.ToString().Contains("UMI3DAsyncProperty") ||
+                        field.FieldType.ToString().Contains("UMI3DAsyncListProperty") ||
+                        field.FieldType.ToString().Contains("TweenRunner"))
+                        continue;
+
+                    alreadyDone.Add(field.Name);
+
+                    props.Add(base.CreateProperty(field, memberSerialization));
+                }
+
+                type = type.BaseType;
+            } while (type != null && type != typeof(MonoBehaviour) && type != typeof(Behaviour) && type != typeof(System.Object) &&
+                        type != typeof(UnityEngine.Object) && type != typeof(UnityEngine.Component));
 
             props.ForEach(p => { p.Writable = true; p.Readable = true; });
 
@@ -276,7 +303,7 @@ namespace umi3d.edk.save
                     JsonConvert.PopulateObject((string)data, obj, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
-                        Converters = new[] { (JsonConverter)c, new VectorConverter() },
+                        Converters = new[] { (JsonConverter)c, new VectorConverter(), new CurveConverter() },
                         ContractResolver = AllPropertiesContractResolver.Singleton
                     });
                 }
@@ -300,7 +327,7 @@ namespace umi3d.edk.save
                     data = JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
-                        Converters = new[] { (JsonConverter)c, new VectorConverter() },
+                        Converters = new[] { (JsonConverter)c, new VectorConverter(), new CurveConverter() },
                         ContractResolver = AllPropertiesContractResolver.Singleton
                     });
                 }

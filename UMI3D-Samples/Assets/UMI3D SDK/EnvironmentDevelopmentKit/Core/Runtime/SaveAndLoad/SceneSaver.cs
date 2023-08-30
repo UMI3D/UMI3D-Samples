@@ -75,18 +75,28 @@ namespace umi3d.edk
                 if (t == node.transform || t.GetComponent<UMI3DScene>() != null)
                     continue;
 
-                GlTFNodeDto glTFNodeDto = new()
-                {
-                    name = t.name,
-                    position = t.localPosition.Dto(),
-                    rotation = t.localRotation.Dto(),
-                    scale = t.localScale.Dto(),
-                    extensions = new NodeExtension()
+                GlTFNodeDto glTFNodeDto = null;
+
+                if (t is RectTransform rt)
+                    glTFNodeDto = new GlTFRectNodeDto()
                     {
-                        sceneIndex = glTFSceneDto.nodes.Count,
-                        id = references.GetId(t.gameObject),
-                        extensions = t.GetComponentExtensionSOs(references).ToList<ExtensionSO>()
-                    }
+                        sizeDelta = rt.sizeDelta.Dto(),
+                        anchorMin = rt.anchorMin.Dto(),
+                        anchorMax = rt.anchorMax.Dto(),
+                        pivot = rt.pivot.Dto()
+                    };
+                else
+                    glTFNodeDto = new GlTFNodeDto();
+
+                glTFNodeDto.name = t.name;
+                glTFNodeDto.position = t.localPosition.Dto();
+                glTFNodeDto.rotation = t.localRotation.Dto();
+                glTFNodeDto.scale = t.localScale.Dto();
+                glTFNodeDto.extensions = new NodeExtension()
+                {
+                    sceneIndex = glTFSceneDto.nodes.Count,
+                    id = references.GetId(t.gameObject),
+                    extensions = t.GetComponentExtensionSOs(references).ToList<ExtensionSO>()
                 };
 
                 l.Add(glTFSceneDto.nodes.Count);
@@ -177,6 +187,15 @@ namespace umi3d.edk
                     }
                 }
             }
+
+            if (glTFNodeDto is GlTFRectNodeDto glTFRectNodeDto && node.transform is RectTransform rectTransform)
+            {
+                rectTransform.anchorMin = glTFRectNodeDto.anchorMin.Struct();
+                rectTransform.anchorMax = glTFRectNodeDto.anchorMax.Struct();
+                rectTransform.pivot = glTFRectNodeDto.pivot.Struct();
+                rectTransform.sizeDelta = glTFRectNodeDto.sizeDelta.Struct();
+            }
+
             node.transform.position = glTFNodeDto.position.Struct();
             node.transform.rotation = glTFNodeDto.rotation.Quaternion();
             node.transform.localScale = glTFNodeDto.scale.Struct();
