@@ -20,7 +20,9 @@ using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.interaction.form;
 using umi3d.edk;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEditor.UIElements.ToolbarMenu;
 
 namespace umi3d.worldController
@@ -37,6 +39,7 @@ namespace umi3d.worldController
 
         public virtual async Task<common.interaction.form.FormDto> GenerateForm(User user)
         {
+
             var form = new common.interaction.form.FormDto()
             {
                 Name = "World",
@@ -45,244 +48,121 @@ namespace umi3d.worldController
                     {
                         Group = new GroupScrollViewDto()
                         {
-                            Mode = UnityEngine.UIElements.ScrollViewMode.Horizontal,
-                            Children = new List<DivDto>
+                            Mode = ScrollViewMode.Horizontal,
+                            Children = new List<DivDto>(),
+                            Styles = new List<StyleDto>()
                             {
-                                new GroupDto()
+                                new StyleDto()
                                 {
-                                    SubmitOnValidate = true,
-                                    Children = new List<DivDto>
+                                    Variants = new ()
                                     {
-                                        new ImageDto()
+                                        new SizeStyleDto ()
                                         {
-                                            Resource = new ResourceDto()
-                                            {
-                                                variants = new List<FileDto>()
-                                                {
-                                                    new FileDto()
-                                                    {
-                                                        format = "png",
-                                                        extension = ".png",
-                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
-                                                    }
-                                                }
-                                            },
-                                            Styles = new List<StyleDto>()
-                                            {
-                                                new StyleDto()
-                                                {  
-                                                    Variants = new ()
-                                                    {
-                                                        new SizeStyleDto ()
-                                                        {
-                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        new LabelDto()
-                                        {
-                                            Text = "Test"
-                                        },
-                                        new ButtonDto()
-                                        {
-                                            Label = "G",
+                                            Width = new Length(711, LengthUnit.Pixel),
+                                            Height = StyleKeyword.Auto,
                                         }
                                     }
-                                },
-                                new GroupDto()
-                                {
-                                    SubmitOnValidate = true,
-                                    Children = new List<DivDto>
-                                    {
-                                        new ImageDto()
-                                        {
-                                            Resource = new ResourceDto()
-                                            {
-                                                variants = new List<FileDto>()
-                                                {
-                                                    new FileDto()
-                                                    {
-                                                        format = "png",
-                                                        extension = ".png",
-                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
-                                                    }
-                                                }
-                                            },
-                                            Styles = new List<StyleDto>()
-                                            {
-                                                new StyleDto()
-                                                {
-                                                    Variants = new ()
-                                                    {
-                                                        new SizeStyleDto ()
-                                                        {
-                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        new LabelDto()
-                                        {
-                                            Text = "Test"
-                                        },
-                                        new ButtonDto()
-                                        {
-                                            Label = "G",
-                                        }
-                                    }
-                                },
-                                new GroupDto()
-                                {
-                                    SubmitOnValidate = true,
-                                    Children = new List<DivDto>
-                                    {
-                                        new ImageDto()
-                                        {
-                                            Resource = new ResourceDto()
-                                            {
-                                                variants = new List<FileDto>()
-                                                {
-                                                    new FileDto()
-                                                    {
-                                                        format = "png",
-                                                        extension = ".png",
-                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
-                                                    }
-                                                }
-                                            },
-                                            Styles = new List<StyleDto>()
-                                            {
-                                                new StyleDto()
-                                                {
-                                                    Variants = new ()
-                                                    {
-                                                        new SizeStyleDto ()
-                                                        {
-                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        new LabelDto()
-                                        {
-                                            Text = "Test"
-                                        },
-                                        new ButtonDto()
-                                        {
-                                            Label = "G",
-                                        }
-                                    }
-                                },
-                                new GroupDto()
-                                {
-                                    SubmitOnValidate = true,
-                                    Children = new List<DivDto>
-                                    {
-                                        new ImageDto()
-                                        {
-                                            Resource = new ResourceDto()
-                                            {
-                                                variants = new List<FileDto>()
-                                                {
-                                                    new FileDto()
-                                                    {
-                                                        format = "png",
-                                                        extension = ".png",
-                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
-                                                    }
-                                                }
-                                            },
-                                            Styles = new List<StyleDto>()
-                                            {
-                                                new StyleDto()
-                                                {
-                                                    Variants = new ()
-                                                    {
-                                                        new SizeStyleDto ()
-                                                        {
-                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        new LabelDto()
-                                        {
-                                            Text = "Test"
-                                        },
-                                        new ButtonDto()
-                                        {
-                                            Label = "G",
-                                        }
-                                    }
-                                },
-                                new GroupDto()
-                                {
-                                    SubmitOnValidate = true,
-                                    Children = new List<DivDto>
-                                    {
-                                        new ImageDto()
-                                        {
-                                            Resource = new ResourceDto()
-                                            {
-                                                variants = new List<FileDto>()
-                                                {
-                                                    new FileDto()
-                                                    {
-                                                        format = "png",
-                                                        extension = ".png",
-                                                        url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
-                                                    }
-                                                }
-                                            },
-                                            Styles = new List<StyleDto>()
-                                            {
-                                                new StyleDto()
-                                                {
-                                                    Variants = new ()
-                                                    {
-                                                        new SizeStyleDto ()
-                                                        {
-                                                            Width = new UnityEngine.UIElements.Length(150, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                            Height = new UnityEngine.UIElements.Length(200, UnityEngine.UIElements.LengthUnit.Pixel),
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        new LabelDto()
-                                        {
-                                            Text = "Test"
-                                        },
-                                        new ButtonDto()
-                                        {
-                                            Label = "G",
-                                        }
-                                    }
-                                },
+                                }
                             }
                         }
                     }
                 }
             };
 
-            /*
-            var form = new common.interaction.form.FormDto()
+            for (int i = 0; i < 5; i++)
             {
+                var group = new GroupDto()
+                {
+                    SubmitOnValidate = true,
+                    Children = new List<DivDto>
+                    {
+                        new GroupDto()
+                        {
+                            Children = new List<DivDto>
+                            {
+                                new ImageDto()
+                                {
+                                    Resource = new ResourceDto()
+                                    {
+                                        variants = new List<FileDto>()
+                                        {
+                                            new FileDto()
+                                            {
+                                                format = "png",
+                                                extension = ".png",
+                                                url = System.Uri.EscapeUriString(inetum.unityUtils.Path.Combine(UMI3DServer.GetResourcesUrl(), UMI3DNetworkingKeys.files, "public/picture.png"))
+                                            }
+                                        }
+                                    },
+                                    Styles = new List<StyleDto>()
+                                    {
+                                        new StyleDto()
+                                        {
+                                            Variants = new ()
+                                            {
+                                                new SizeStyleDto ()
+                                                {
+                                                    Width = new Length(227, LengthUnit.Pixel),
+                                                    Height = new Length(265, LengthUnit.Pixel),
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                new ButtonDto()
+                                {
+
+                                    Styles = new List<StyleDto>()
+                                    {
+                                        new StyleDto()
+                                        {
+                                            Variants = new ()
+                                            {
+                                                new SizeStyleDto ()
+                                                {
+                                                    Width = new Length(49, LengthUnit.Pixel),
+                                                    Height = new Length(49, LengthUnit.Pixel),
+                                                }
+                                            }
+                                        },
+                                        new StyleDto()
+                                        {
+                                            Variants = new ()
+                                            {
+                                                new PositionStyleDto ()
+                                                {
+                                                    Position = Position.Absolute,
+                                                    Top = StyleKeyword.Auto,
+                                                    Bottom = new Length(8, LengthUnit.Pixel),
+                                                    Left = StyleKeyword.Auto,
+                                                    Right = new Length(8, LengthUnit.Pixel),
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new LabelDto()
+                        {
+                            Text = "Test"
+                        }
+                    }
+                };
+                form.Pages[0].Group.Children.Add(group);
+            }
+
+
+            /*var form = new common.interaction.form.FormDto()
+            {
+                Id = 1,
                 Name = "Login",
                 Description = "",
                 Pages = new List<PageDto>()
                 {
                     new PageDto()
                     {
+                        Id = 11,
                         Name = "Mail",
                         Group = new GroupDto()
                         {
@@ -291,6 +171,7 @@ namespace umi3d.worldController
                             {
                                 new TextDto()
                                 {
+                                    Id = 2,
                                     Label = "Mail",
                                     PlaceHolder = "example@inetum.com",
                                     Type = TextType.Mail,
@@ -298,6 +179,7 @@ namespace umi3d.worldController
                                 },
                                 new TextDto()
                                 {
+                                    Id = 3,
                                     Label = "Password",
                                     PlaceHolder = "password",
                                     Type = TextType.Password,
@@ -305,11 +187,7 @@ namespace umi3d.worldController
                                 },
                                 new ButtonDto()
                                 {
-                                    Label = "< Back",
-                                    Type = ButtonType.Back
-                                },
-                                new ButtonDto()
-                                {
+                                    Id = 4,
                                     Label = "Ok",
                                     Type = ButtonType.Submit
                                 }
@@ -318,24 +196,21 @@ namespace umi3d.worldController
                     },
                     new PageDto()
                     {
+                        Id = 12,
                         Name = "Pin",
                         Group = new GroupDto()
                         {
-                            CanRemember = true,
                             Children = new List<DivDto> { 
                                 new TextDto()
                                 {
+                                    Id = 5,
                                     Label = "Pin",
                                     PlaceHolder = "123456",
                                     Type = TextType.Number
                                 },
                                 new ButtonDto()
                                 {
-                                    Label = "< Back",
-                                    Type = ButtonType.Back
-                                },
-                                new ButtonDto()
-                                {
+                                    Id = 6,
                                     Label = "Ok",
                                     Type = ButtonType.Submit
                                 }
