@@ -18,8 +18,8 @@ MonoBehaviour:
   - name: default
     path: private\com.gfi.avatar\default
     formats:
-    - unity_standalone
+    - unity_standalone_urp
   - name: android_quest
     path: private/com.gfi.avatar/android
     formats:
-    - unity_android
+    - unity_android_urp
