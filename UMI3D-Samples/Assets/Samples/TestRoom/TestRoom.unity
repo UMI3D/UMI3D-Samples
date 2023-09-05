@@ -5507,8 +5507,9 @@ MonoBehaviour:
           size: 2189.07
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+    playAnimation: 0
     animatorStateNames:
-    - Idle
+    - 
   sendEmotes: 0
   emotesSubskeletonData:
     animatedSubkeletonBundleResource:
@@ -5537,6 +5538,7 @@ MonoBehaviour:
           size: 231.409
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+    playAnimation: 0
     animatorStateNames:
     - Waving
     - Yes

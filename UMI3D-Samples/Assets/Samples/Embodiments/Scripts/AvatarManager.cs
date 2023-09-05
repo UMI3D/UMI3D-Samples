@@ -274,11 +274,13 @@ public class AvatarManager : MonoBehaviour
         skeletonNode.animatorSelfTrackedParameters = new SkeletonAnimationParameter[] {
             new()
             {
+                parameterName = SkeletonAnimatorParameterKeys.SPEED_Z.ToString(),
                 parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_Z,
                 ranges = new()
             },
             new()
             {
+                parameterName = SkeletonAnimatorParameterKeys.SPEED_X.ToString(),
                 parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X,
                 ranges = new List<SkeletonAnimationParameter.Range>()
                 {
@@ -287,11 +289,13 @@ public class AvatarManager : MonoBehaviour
             },
             new()
             {
+                parameterName = SkeletonAnimatorParameterKeys.SPEED_X_Z.ToString(),
                 parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z,
                 ranges = new()
             },
             new()
             {
+                parameterName = SkeletonAnimatorParameterKeys.JUMP.ToString(),
                 parameterKey = (uint)SkeletonAnimatorParameterKeys.JUMP,
                 ranges = new()
             },
