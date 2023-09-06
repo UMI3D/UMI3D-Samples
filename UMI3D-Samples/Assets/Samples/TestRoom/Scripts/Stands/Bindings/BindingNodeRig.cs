@@ -1,66 +1,74 @@
 using inetum.unityUtils;
-using System.Collections;
+
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
+
 using umi3d.edk;
 using umi3d.edk.binding;
+
 using UnityEngine;
 
 public class BindingNodeRig : MonoBehaviour
 {
     public UMI3DModel model;
-    public Transform transform;
-    Dictionary<string,UMI3DNode> nodes;
-    bool isBinding = false;
-    MultiBinding binding;
+
+    [SerializeField]
+    private Transform dancerRoot;
+
+    private SkeletonStructure dancerStructure = new();
+
+    private class SkeletonStructure
+    {
+        public Transform root;
+        public List<(string rigName, UMI3DNode node)> nodes = new();
+    }
+
+    private bool isDancing = false;
+
+    private MultiBinding danceBinding;
+
+    private IBindingService bindingService;
 
     private void Start()
     {
-        if(model == null)
+        if (model == null)
             model = GetComponent<UMI3DModel>();
-        if(transform == null)
-            transform = GetComponent<Transform>();
-        nodes = new();
-        InitRigRec(transform);
+
+        dancerStructure.root = dancerRoot;
+        AddNodeOnAllRigs(dancerRoot.transform, dancerStructure);
+        danceBinding = new MultiBinding(model.Id())
+        {
+            bindings = dancerStructure.nodes.Select(kp => new RigNodeBinding(model.Id(), kp.rigName, kp.node.Id())
+            {
+                syncPosition = true,
+                syncRotation = true,
+                offsetRotation = Quaternion.Euler(new Vector3(0, -90, 0))
+            }).Cast<AbstractSingleBinding>().ToList(),
+        };
+
+        bindingService = BindingManager.Instance;
     }
 
-    void InitRigRec(Transform t)
+    private void AddNodeOnAllRigs(Transform t, SkeletonStructure structure)
     {
+        // creates nodes on each transform of the hierarchy on the server
         var node = t.gameObject.GetOrAddComponent<UMI3DNode>();
-        nodes[t.name] = node;
-        foreach(Transform child in t)
+        structure.nodes.Add((rigName: t.name, node));
+        foreach (Transform child in t)
         {
             if (child != t)
-                InitRigRec(child);
+                AddNodeOnAllRigs(child, structure);
         }
     }
-
-    
 
     public void Trigger()
     {
-        Transaction t = new() { reliable = true };
-        isBinding = !isBinding;
-        if (isBinding)
+        if (!isDancing)
         {
-            binding = new MultiBinding(model.Id())
-            {
-                bindings = nodes.Select(kp => new RigNodeBinding(model.Id(), kp.Key, kp.Value.Id())
-                {
-                    syncPosition = true,
-                    syncRotation = true,
-                    offsetRotation = Quaternion.Euler(new Vector3(0,-90,0))
-                    
-                } ).Cast<AbstractSingleBinding>().ToList(),
-                
-            };
-            t.AddIfNotNull(BindingManager.Instance.AddBinding(binding));
+            Transaction t = new() { reliable = true };
+            t.AddIfNotNull(bindingService.AddBinding(danceBinding));
+            t.Dispatch();
+            isDancing = true;
         }
-        else if(binding != null)
-        {
-            t.AddIfNotNull(BindingManager.Instance.RemoveBinding(binding));
-        }
-        t.Dispatch();
     }
 }

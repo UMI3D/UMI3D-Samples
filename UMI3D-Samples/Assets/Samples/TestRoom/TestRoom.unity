@@ -1204,6 +1204,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -3222,6 +3223,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -3464,6 +3466,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -3832,6 +3835,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -3921,6 +3925,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -4760,6 +4765,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -5305,6 +5311,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -5615,6 +5622,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -5716,6 +5724,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -5946,6 +5955,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -7373,6 +7383,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -8037,6 +8048,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: c315d8382c42eaa4991dcd4bdde6ec23, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
