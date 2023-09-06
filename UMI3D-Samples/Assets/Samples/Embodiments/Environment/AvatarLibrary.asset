@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AvatarLibrary
   m_EditorClassIdentifier: 
   id: com.gfi.avatar
-  version: 0.1.3
+  version: 0.1.4
   variants:
   - name: default
     path: private\com.gfi.avatar\default

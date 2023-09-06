@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: EmotesLibrary
   m_EditorClassIdentifier: 
   id: com.inetum.emotes
-  version: 0.1.2
+  version: 0.1.5
   variants:
   - name: default
     path: private\com.inetum.emotes\default
-    metrics:
-      resolution: 0
-      size: 0
     formats:
     - png
-    - unity_standalone
+    - unity_android_urp
+  - name: android
+    path: private\com.inetum.emotes\android
+    formats:
+    - png
+    - unity_android_urp
