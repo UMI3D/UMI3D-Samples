@@ -269,19 +269,37 @@ public class AvatarManager : MonoBehaviour
         SimpleModificationListener.Instance.RemoveNode(skeletonNode);
         skeletonNode.objectModel.SetValue(walkingSubskeleton.animatedSubkeletonBundleResource);
         skeletonNode.userId = user.Id();
-        skeletonNode.priority = 10;
+        skeletonNode.priority = -10;
         skeletonNode.animationStates = walkingSubskeleton.animatorStateNames;
-        skeletonNode.animatorSelfTrackedParameters = new SkeletonAnimationParameter[1] {
+        skeletonNode.animatorSelfTrackedParameters = new SkeletonAnimationParameter[] {
             new()
             {
-                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X_Y,
+                parameterName = SkeletonAnimatorParameterKeys.SPEED_Z.ToString(),
+                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_Z,
+                ranges = new()
+            },
+            new()
+            {
+                parameterName = SkeletonAnimatorParameterKeys.SPEED_X.ToString(),
+                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X,
                 ranges = new List<SkeletonAnimationParameter.Range>()
                 {
-                    new () { startBound = 0f,   endBound = 1f,      result = 0f},
-                    new () { startBound = 1f,   endBound = 5f,      result = 3f},
-                    new () { startBound = 5f,   endBound = 10f,     result = 10f},
+                    new () { startBound = -1f,   endBound = 1f,      result = 0f},
                 }
-            }};
+            },
+            new()
+            {
+                parameterName = SkeletonAnimatorParameterKeys.SPEED_X_Z.ToString(),
+                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z,
+                ranges = new()
+            },
+            new()
+            {
+                parameterName = SkeletonAnimatorParameterKeys.JUMP.ToString(),
+                parameterKey = (uint)SkeletonAnimatorParameterKeys.JUMP,
+                ranges = new()
+            },
+        };
 
         // Create Animator animations
         ops.AddRange(skeletonNode.GenerateAnimations(areLooping: true));

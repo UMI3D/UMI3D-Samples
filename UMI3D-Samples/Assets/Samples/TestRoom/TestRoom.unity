@@ -5485,44 +5485,56 @@ MonoBehaviour:
       variants:
       - isLocalFile: 1
         domain: 
-        path: private\com.gfi.avatar\default\walkinganimator.prefab.bundle
-        format: unity_standalone
+        path: private\com.gfi.avatar\default\animation.prefab.bundle
+        format: unity_standalone_urp
         extension: .bundle
         isInBundle: 1
-        pathIfInBundle: Assets/WalkingAnimator.prefab
+        pathIfInBundle: Assets/Avatar/Animation.prefab
         metrics:
           resolution: 0
-          size: 78.162
+          size: 2113.115
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
       - isLocalFile: 1
         domain: 
-        path: private\com.gfi.avatar\android\emoteanimator.prefab.bundle
+        path: private\com.gfi.avatar\android\animation.prefab.bundle
         format: unity_android_urp
         extension: .bundle
         isInBundle: 1
-        pathIfInBundle: Assets/Samples/Embodiments/Models/EmoteAnimator.prefab
+        pathIfInBundle: Assets/Avatar/Animation.prefab
         metrics:
           resolution: 0
-          size: 231.409
+          size: 2189.07
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
     animatorStateNames:
-    - Walking (Blend tree)
-  sendEmotes: 1
+    - 
+  sendEmotes: 0
   emotesSubskeletonData:
     animatedSubkeletonBundleResource:
       variants:
       - isLocalFile: 1
         domain: 
-        path: private\com.inetum.emotes\default\emoteanimatorbundle.prefab.bundle
-        format: gltf
+        path: private\com.inetum.emotes\default\animationemote.prefab.bundle
+        format: unity_standalone_urp
         extension: .bundle
         isInBundle: 1
-        pathIfInBundle: Assets/Samples/Embodiments/Models/EmoteAnimator.prefab
+        pathIfInBundle: Assets/Avatar/Animation Emote.prefab
         metrics:
           resolution: 0
-          size: 231.378
+          size: 2091.95
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+      - isLocalFile: 1
+        domain: 
+        path: private\com.inetum.emotes\android\animationemote.prefab.bundle
+        format: unity_android_urp
+        extension: .bundle
+        isInBundle: 1
+        pathIfInBundle: Assets/Avatar/Animation Emote.prefab
+        metrics:
+          resolution: 0
+          size: 2168.892
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
     animatorStateNames:
