@@ -25,7 +25,7 @@ MonoBehaviour:
   composable: 0
   activationMode: 0
   HasMagnitudeCondition: 1
-  Magnitude: 3
+  Magnitude: 1
   BoneOrigin: 24
   HasDirectionCondition: 0
   Direction: {x: 0, y: 0, z: 0}
