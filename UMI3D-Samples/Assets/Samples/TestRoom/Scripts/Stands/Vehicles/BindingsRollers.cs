@@ -73,16 +73,16 @@ public class BindingsRollers : MonoBehaviour
         {
             syncPosition = true,
             syncRotation = true,
-            offsetRotation = Quaternion.Euler(0, 80.7f, 0),
-            offsetPosition = new Vector3(0.034f, 0, 0.065f),
+            offsetRotation = Quaternion.Euler(0, 180, 0),
+            offsetPosition = new Vector3(0.03f, 0.05f, 0.055f),
         };
 
         BoneBinding RightBinding = new BoneBinding(RightRoller.GetComponent<UMI3DNode>().Id(), tempUser.Id(), BoneType.RightAnkle)
         {
             syncPosition = true,
             syncRotation = true,
-            offsetRotation = Quaternion.Euler(0, 94.42f, 0),
-            offsetPosition = new Vector3(-0.034f, 0, 0.065f),
+            offsetRotation = Quaternion.Euler(0, 180, 0),
+            offsetPosition = new Vector3(-0.03f, 0.05f, 0.055f),
         };
 
         rollerBindings.Add(LeftBinding);
