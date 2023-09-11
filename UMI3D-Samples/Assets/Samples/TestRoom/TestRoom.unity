@@ -5479,6 +5479,18 @@ MonoBehaviour:
       rigName: mixamorig:Spine
       positionOffset: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 30
+      rigName: mixamorig:LeftHandIndex1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 31
+      rigName: mixamorig:LeftHandIndex2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 32
+      rigName: mixamorig:LeftHandIndex3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
   sendWalkingAnimator: 1
   movementSubskeletonData:
     animatedSubkeletonBundleResource:
