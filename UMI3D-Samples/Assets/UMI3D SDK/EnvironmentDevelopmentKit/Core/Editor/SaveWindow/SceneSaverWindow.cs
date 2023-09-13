@@ -16,13 +16,16 @@ limitations under the License.
 
 #if UNITY_EDITOR
 using Codice.CM.SEIDInfo;
+using GluonGui.WorkspaceWindow.Views.WorkspaceExplorer;
 using inetum.unityUtils;
 using inetum.unityUtils.editor;
 using Newtonsoft.Json;
+using NUnit;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using umi3d.common;
 using umi3d.edk.save;
@@ -30,14 +33,28 @@ using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace umi3d.edk.editor
 {
     public class SceneSaverWindow : InitedWindow<SceneSaverWindow>
     {
+        #region Fields
+
         private const string fileName = "SceneSaverWindowData";
         private ScriptableLoader<SceneSaverWindowData> draw;
         private UnityEngine.GameObject[] gameobjects;
+
+        #endregion
+
+        #region Window
+
+        protected override void Init()
+        {
+            draw = new ScriptableLoader<SceneSaverWindowData>(fileName);
+
+            RefreshGameObjects();
+        }
 
         [MenuItem("UMI3D/Scene Save")]
         private static void Open()
@@ -51,126 +68,140 @@ namespace umi3d.edk.editor
 
             if (GUILayout.Button("Save"))
             {
-                RefreshGameObjects();
-
-                SaveReference references = new SaveReference();
-                UMI3DEnvironment env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null);
-
-                if (Directory.Exists(Application.dataPath + "/../mod"))
-                    Directory.Delete(Application.dataPath + "/../mod", true);
-                Directory.CreateDirectory(Application.dataPath + "/../mod");
-
-                using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/info.json"))
-                {
-                    sw.Write(new UMI3DInfo()
-                    {
-                        id = draw.data.id,
-                        name = draw.data.name,
-                        version = draw.data.version,
-                        umi3dVersion = UMI3DVersion.version,
-                        type = ""
-                    }.ToJson());
-                    sw.Dispose();
-                }
-
-                UMI3DServer server = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DServer>()).FirstOrDefault(s => s != null);
-                if (server != null)
-                {
-                    using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/networking.json"))
-                    {
-                        sw.Write(new UMI3DNetworking()
-                        {
-                            serverDomain = UMI3DServer.GetHttpUrl(),
-                            httpPort = 50043,//server.httpPort,
-                            udpPort = -1,
-                            natPort = -1,//server.forgeNatServerPort,
-                            natDomain = "",//server.forgeNatServerHost,
-                            masterPort = -1,//server.forgeMasterServerPort,
-                            worldControllerUrl = ""
-                        }.ToJson());
-                        sw.Dispose();
-                    }
-                }
-
-                Directory.CreateDirectory(Application.dataPath + "/../mod/contents");
-                Directory.CreateDirectory(Application.dataPath + "/../mod/contents/jsons");
-                if (env != null)
-                {
-                    string json = SceneSaver.SaveEnvironment(env, gameobjects.ToList() ,references);
-
-                    using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/contents/jsons/scene.json"))
-                    {
-                        sw.Write(json);
-                        sw.Dispose();
-                    }
-                }
-
-                DirectoryInfo source = new DirectoryInfo(Application.dataPath + "/../data");
-                DirectoryInfo target = Directory.CreateDirectory(Application.dataPath + "/../mod/data");
-                CopyFilesRecursively(source, target);
-
-                if (draw.data.assemblies != null && draw.data.assemblies.Count > 0)
-                {
-                    List<string> assembliesToBuild = draw.data.assemblies.Select(assemblyDefinition => assemblyDefinition.name).ToList();
-
-                    Assembly[] playerAssemblies = CompilationPipeline.GetAssemblies(AssembliesType.Editor);
-                    foreach (var assembly in playerAssemblies)
-                    {
-                        if (assembliesToBuild.Contains(assembly.name))
-                        {
-                            if (File.Exists(assembly.outputPath))
-                            {
-                                string filename = System.IO.Path.GetFileName(assembly.outputPath);
-                                string outputfile = System.IO.Path.Combine(Application.dataPath + "/../mod/contents/dll/", filename);
-
-                                if (!Directory.Exists(Application.dataPath + "/../mod/contents/dll"))
-                                    Directory.CreateDirectory(Application.dataPath + "/../mod/contents/dll");
-
-                                File.Copy(assembly.outputPath, outputfile, true);
-                            }
-                        }
-                    }
-                }
+                Save();
 
                 Debug.Log($"<color=#0000FF>Done Saving Environment</color>");
             }
+        }
 
-            if (GUILayout.Button("Load"))
+        #endregion
+
+        #region Save
+
+        public void Save()
+        {
+            RefreshGameObjects();
+
+            SaveReference references = new SaveReference();
+            UMI3DEnvironment environment = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null);
+
+            if (Directory.Exists(Application.dataPath + "/../mod"))
+                Directory.Delete(Application.dataPath + "/../mod", true);
+            Directory.CreateDirectory(Application.dataPath + "/../mod");
+
+            SaveBase();
+
+            SaveContents(references, environment);
+
+            SaveData();
+
+            if (!Directory.Exists(Application.dataPath + "/../mods"))
+                Directory.CreateDirectory(Application.dataPath + "/../mods");
+            Zip(new DirectoryInfo(Application.dataPath + "/../mod"), Application.dataPath + "/../mods/" + (draw.data.id + "-" + draw.data.version).Replace('.', '_') + ".umi3d");
+
+            Directory.Delete(Application.dataPath + "/../mod", true);
+        }
+
+        public void SaveBase()
+        {
+            using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/info.json"))
             {
-                RefreshGameObjects();
-
-                if (Directory.Exists(Application.dataPath + "/../mod/contents/dll"))
+                sw.Write(new UMI3DInfo()
                 {
-                    if (!Directory.Exists(Application.dataPath + "/Mods"))
-                        Directory.CreateDirectory(Application.dataPath + "/Mods");
+                    id = draw.data.id,
+                    name = draw.data.name,
+                    version = draw.data.version,
+                    umi3dVersion = UMI3DVersion.version,
+                    type = ""
+                }.ToJson());
+                sw.Dispose();
+            }
 
-                    foreach (string dllFile in Directory.GetFiles(Application.dataPath + "/../mod/contents/dll"))
-                    {
-                        File.Copy(dllFile, Application.dataPath + "/Mods/" + System.IO.Path.GetFileName(dllFile), true);
-                        System.Reflection.Assembly.LoadFile(Application.dataPath + "/Mods/" + System.IO.Path.GetFileName(dllFile));
-                    }
-
-                    AssetDatabase.Refresh();
-                }
-                
-                if (File.Exists(Application.dataPath + "/../mod/contents/jsons/scene.json"))
+            UMI3DServer server = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DServer>()).FirstOrDefault(s => s != null);
+            if (server != null)
+            {
+                using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/networking.json"))
                 {
-                    string json = File.ReadAllText(Application.dataPath + "/../mod/contents/jsons/scene.json");
-
-                    SaveReference references = new SaveReference();
-                    UMI3DDto dto = UMI3DDtoSerializer.FromJson(json);
-
-                    if (dto is GlTFEnvironmentDto environmentDto)
+                    sw.Write(new UMI3DNetworking()
                     {
-                        GameObject env = gameobjects.SelectMany(o => o.GetComponentsInChildren<UMI3DEnvironment>()).FirstOrDefault(e => e != null)?.gameObject ?? new GameObject("UMI3DEnvironment");
-                        SceneSaver.LoadEnvironment(environmentDto, env, references);
-                        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-                    }
+                        serverDomain = UMI3DServer.GetHttpUrl(),
+                        httpPort = 50043,//server.httpPort,
+                        udpPort = -1,
+                        natPort = -1,//server.forgeNatServerPort,
+                        natDomain = "",//server.forgeNatServerHost,
+                        masterPort = -1,//server.forgeMasterServerPort,
+                        worldControllerUrl = ""
+                    }.ToJson());
+                    sw.Dispose();
                 }
-                
-                Debug.Log($"<color=#0000FF>Done Loading Environment</color>");
             }
         }
+
+        public void SaveData()
+        {
+            DirectoryInfo source = new DirectoryInfo(Application.dataPath + "/../data");
+            DirectoryInfo target = Directory.CreateDirectory(Application.dataPath + "/../mod/data");
+            CopyFilesRecursively(source, target);
+        }
+
+            #region Contents
+
+        public void SaveContents(SaveReference references, UMI3DEnvironment environment)
+        {
+            Directory.CreateDirectory(Application.dataPath + "/../mod/contents");
+
+            SaveContentsJsons(references, environment);
+
+            SaveContentsDlls();
+        }
+
+        public void SaveContentsJsons(SaveReference references, UMI3DEnvironment environment)
+        {
+            Directory.CreateDirectory(Application.dataPath + "/../mod/contents/jsons");
+
+            if (environment != null)
+            {
+                string json = SceneSaver.SaveEnvironment(environment, gameobjects.ToList(), references);
+
+                using (StreamWriter sw = File.CreateText(Application.dataPath + "/../mod/contents/jsons/scene.json"))
+                {
+                    sw.Write(json);
+                    sw.Dispose();
+                }
+            }
+        }
+
+        public void SaveContentsDlls()
+        {
+            if (draw.data.assemblies != null && draw.data.assemblies.Count > 0)
+            {
+                List<string> assembliesToBuild = draw.data.assemblies.Select(assemblyDefinition => assemblyDefinition.name).ToList();
+
+                Assembly[] playerAssemblies = CompilationPipeline.GetAssemblies(AssembliesType.Editor);
+                foreach (var assembly in playerAssemblies)
+                {
+                    if (assembliesToBuild.Contains(assembly.name))
+                    {
+                        if (File.Exists(assembly.outputPath))
+                        {
+                            string filename = System.IO.Path.GetFileName(assembly.outputPath);
+                            string outputfile = System.IO.Path.Combine(Application.dataPath + "/../mod/contents/dll/", filename);
+
+                            if (!Directory.Exists(Application.dataPath + "/../mod/contents/dll"))
+                                Directory.CreateDirectory(Application.dataPath + "/../mod/contents/dll");
+
+                            File.Copy(assembly.outputPath, outputfile, true);
+                        }
+                    }
+                }
+            }
+        }
+
+            #endregion
+
+        #endregion
+
+        #region Utility
 
         public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
         {
@@ -181,17 +212,39 @@ namespace umi3d.edk.editor
                 file.CopyTo(System.IO.Path.Combine(target.FullName, file.Name));
         }
 
-        protected override void Init()
-        {
-            draw = new ScriptableLoader<SceneSaverWindowData>(fileName);
-
-            RefreshGameObjects();
-        }
-
         protected void RefreshGameObjects()
         {
             gameobjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
         }
+
+        protected void Zip(DirectoryInfo source, string zipPath)
+        {
+            if (File.Exists(zipPath))
+                File.Delete(zipPath);
+
+            using (var fs = new FileStream(zipPath, FileMode.Create))
+            using (var zip = new ZipArchive(fs, ZipArchiveMode.Create))
+            {
+                byte[] bytes = new byte[10240];
+                int numbytes;
+
+                foreach (FileInfo file in source.EnumerateFiles("*", SearchOption.AllDirectories))
+                {
+                    string path = file.FullName.Remove(0, source.FullName.Length+1);
+
+                    using (FileStream fileStream = File.OpenRead(file.FullName))
+                    using (Stream zipEntryStream = zip.CreateEntry(path).Open())
+                    {
+                        while ((numbytes = fileStream.Read(bytes, 0, 10240)) > 0)
+                        {
+                            zipEntryStream.Write(bytes, 0, numbytes);
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }
 #endif
