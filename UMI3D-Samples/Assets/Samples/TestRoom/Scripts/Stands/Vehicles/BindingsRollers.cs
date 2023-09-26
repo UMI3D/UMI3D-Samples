@@ -38,8 +38,6 @@ public class BindingsRollers : MonoBehaviour
     public float MovementRadius;
     public float MovementSpeed;
 
-    public SimpleModificationListener Listener;
-
     private UMI3DTrackedUser tempUser;
     private List<BoneBinding> rollerBindings = new List<BoneBinding>();
 
@@ -54,8 +52,6 @@ public class BindingsRollers : MonoBehaviour
     private void Start()
     {
         bindingHelperServer = BindingManager.Instance;
-        Listener = SimpleModificationListener.Exists ? SimpleModificationListener.Instance : null;
-        Listener?.SetNodes.AddListener(() => Listener.RemoveNode(VehicleModel));
     }
 
     public void BindRollers(umi3d.edk.interaction.AbstractInteraction.InteractionEventContent content)

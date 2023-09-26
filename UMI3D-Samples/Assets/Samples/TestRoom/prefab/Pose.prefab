@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4391323536028977952}
   - component: {fileID: 4391323536028977953}
-  - component: {fileID: 2855740249372619023}
+  - component: {fileID: 2247574745900441714}
   m_Layer: 0
   m_Name: Pose
   m_TagString: Untagged
@@ -65,7 +65,7 @@ MonoBehaviour:
   isMeshCustom: 0
   customMeshCollider:
     variants: []
---- !u!114 &2855740249372619023
+--- !u!114 &2247574745900441714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,22 +74,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 4391323536028977959}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fda772758419a3841b7a841ff7ecf49d, type: 3}
+  m_Script: {fileID: 11500000, guid: 0267537928b360f448408f2eaf4035b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allServerPoses:
-  - {fileID: 11400000, guid: 3a3b78d3519238d47a15bf8f4018a0f1, type: 2}
-  allPoseOverriders:
-  - poseOverriderContainer:
-      poseOverriders:
-      - {fileID: 11400000, guid: f985c36d871c2584ba657431c34e5dcb, type: 2}
-      isStart: 0
-    _uMI3DModel: {fileID: 4391323536371306106}
-  - poseOverriderContainer:
-      poseOverriders:
-      - {fileID: 11400000, guid: 9d6914d861a8e83418d306e97acf9746, type: 2}
-      isStart: 0
-    _uMI3DModel: {fileID: 6647562059469304826}
+  environmentPoses:
+  - {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d, type: 2}
+  poseOverriderFields:
+  - poseOverriders:
+    - {fileID: 11400000, guid: e463e04c6abfd2a4a94813b2b0a8e14e, type: 2}
+    isStart: 0
+    model: {fileID: 4391323536371306106}
+  - poseOverriders:
+    - {fileID: 11400000, guid: e463e04c6abfd2a4a94813b2b0a8e14e, type: 2}
+    isStart: 0
+    model: {fileID: 6647562059469304826}
 --- !u!1001 &4391323536371306104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -276,6 +274,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -562,6 +561,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1

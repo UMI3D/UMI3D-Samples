@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common;
 using umi3d.edk;
 
 using UnityEngine;
@@ -49,6 +50,13 @@ namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
             startPosition = transform.position;
             startTime = Time.time;
             node = GetComponent<UMI3DNode>();
+
+            UMI3DServer.Instance.OnUserJoin.AddListener((user) =>
+            {
+                var t = new Transaction() { reliable = true };
+                t.AddIfNotNull(new StartInterpolationProperty() { users = new() { user }, entityId = node.Id(), property = UMI3DPropertyKeys.Position, startValue = transform.localPosition });
+                t.Dispatch();
+            });
         }
 
         private void Update()
@@ -76,7 +84,7 @@ namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
                 if ((Time.time - lastTime) > 1 / updateFrequency)
                 {
                     var t = new Transaction() { reliable = true };
-                    t.AddIfNotNull(node.objectPosition.SetValue(transform.position));
+                    t.AddIfNotNull(node.objectPosition.SetValue(transform.localPosition));
                     t.Dispatch();
                     lastTime = Time.time;
                 }

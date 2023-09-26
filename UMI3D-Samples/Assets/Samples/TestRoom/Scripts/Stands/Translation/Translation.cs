@@ -13,26 +13,34 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+using umi3d.common;
 using umi3d.edk;
+
 using UnityEngine;
 
 public class Translation : MonoBehaviour
 {
-    public GameObject frameOfReference;
-
-    bool isInit = false;
-
-    Vector3 lastPosition = Vector3.zero;
+    private UMI3DModel model;
 
     /// <summary>
-    /// Last time a user used UMI3DManipualtion linked to this class.
+    /// Last time a user used UMI3DManipulation linked to this class.
     /// </summary>
-    float lastTimeUsed;
+    private float lastTimeUsed;
 
-    /// <summary>
-    /// If OnUserManipulation has not been triggered for this time, this class will consider that the user stopped using it.
-    /// </summary>
-    float timeToDetectStopUsing = .2f;
+    private float sendingFrequency = 5f;
+
+    private void Start()
+    {
+        model = GetComponent<UMI3DModel>();
+
+        UMI3DServer.Instance.OnUserJoin.AddListener((user) =>
+        {
+            var t = new Transaction() { reliable = true };
+            t.AddIfNotNull(new StartInterpolationProperty() { users = new() { user }, entityId = model.Id(), property = UMI3DPropertyKeys.Position, startValue = transform.localPosition });
+            t.Dispatch();
+        });
+    }
 
     /// <summary>
     /// This have on purpose to be call by a OnManipulated Event.
@@ -42,30 +50,13 @@ public class Translation : MonoBehaviour
     /// <param name="rot">The rotation delta of the manipulation</param>
     public void OnUserManipulation(umi3d.edk.interaction.UMI3DManipulation.ManipulationEventContent content)
     {
-        if (!isInit)
+        if (Time.time - lastTimeUsed > 1 / sendingFrequency)
         {
-            isInit = true;
-            lastPosition = frameOfReference.transform.TransformDirection(content.translation);
-        } else
-        {
-            
-            Vector3 newPosition = frameOfReference.transform.TransformDirection(content.translation);
-            Vector3 delta = newPosition - lastPosition;
-
-            transform.position += delta;
-
-            lastPosition = newPosition;
-        }
-
-        lastTimeUsed = Time.time;
-    }
-
-
-    private void Update()
-    {
-        if (Time.time > lastTimeUsed + timeToDetectStopUsing)
-        {
-            isInit = false;
+            Transaction t = new(true);
+            t.AddIfNotNull(model.objectPosition.SetValue(content.translation));
+            t.Dispatch();
+            Debug.Log(content.translation);
+            lastTimeUsed = Time.time;
         }
     }
 }

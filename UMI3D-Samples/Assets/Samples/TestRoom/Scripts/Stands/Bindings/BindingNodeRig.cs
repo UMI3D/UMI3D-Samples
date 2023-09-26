@@ -41,8 +41,7 @@ public class BindingNodeRig : MonoBehaviour
             bindings = dancerStructure.nodes.Select(kp => new RigNodeBinding(model.Id(), kp.rigName, kp.node.Id())
             {
                 syncPosition = true,
-                syncRotation = true,
-                offsetRotation = Quaternion.Euler(new Vector3(0, -90, 0))
+                syncRotation = true
             }).Cast<AbstractSingleBinding>().ToList(),
         };
 
