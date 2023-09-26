@@ -9165,6 +9165,11 @@ PrefabInstance:
       propertyPath: selfManaged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2889862176541500751, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4226030227542323878, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -9190,10 +9195,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5068055108556326269, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408805648294658, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: selfManaged
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408805648294658, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5141408805648294660, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
@@ -9205,6 +9220,11 @@ PrefabInstance:
       propertyPath: selfManaged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408806160034899, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408806160034901, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
@@ -9215,6 +9235,11 @@ PrefabInstance:
       propertyPath: selfManaged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408806178599546, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408806178599548, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
@@ -9224,6 +9249,11 @@ PrefabInstance:
         type: 3}
       propertyPath: selfManaged
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806449291001, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5141408806755233700, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
@@ -9290,6 +9320,11 @@ PrefabInstance:
       propertyPath: selfManaged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408806942696411, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408806942696413, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
@@ -9299,6 +9334,11 @@ PrefabInstance:
         type: 3}
       propertyPath: selfManaged
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807196685145, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5141408807196685147, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
@@ -9310,6 +9350,11 @@ PrefabInstance:
       propertyPath: selfManaged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408807337987143, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408807337987145, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
@@ -9319,6 +9364,11 @@ PrefabInstance:
         type: 3}
       propertyPath: selfManaged
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807470138850, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5141408807470138852, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
@@ -9330,15 +9380,40 @@ PrefabInstance:
       propertyPath: selfManaged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408807679005446, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408807679005448, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5565827404646337264, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6553992474368672904, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: selfManaged
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6553992474368672904, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018231888136637208, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7264570337329803607, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51aedbc33e459944390e2e714e0dc1ba, type: 3}

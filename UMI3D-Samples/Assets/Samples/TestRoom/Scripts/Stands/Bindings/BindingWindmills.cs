@@ -49,7 +49,7 @@ public class BindingWindmills : MonoBehaviour
             NodeBinding binding = new(node.Id(), mainWindmill.Id())
             {
                 syncRotation = true,
-                offsetRotation = Quaternion.Inverse(mainWindmill.transform.rotation) * node.objectRotation.GetValue()
+                offsetRotation = node.objectRotation.GetValue()
             };
 
             var op = bindingHelperServer.AddBinding(binding);

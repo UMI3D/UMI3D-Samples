@@ -112,7 +112,7 @@ MonoBehaviour:
   Speed: 1
   Amplitude: 0.1
   selfManaged: 1
-  updateFrequency: 10
+  updateFrequency: 5
 --- !u!1 &584282546401875550
 GameObject:
   m_ObjectHideFlags: 0
@@ -2896,7 +2896,7 @@ MonoBehaviour:
   Speed: 0.5
   Amplitude: 0.1
   selfManaged: 1
-  updateFrequency: 10
+  updateFrequency: 5
 --- !u!1 &7946673171068443646
 GameObject:
   m_ObjectHideFlags: 0
