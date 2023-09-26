@@ -38,8 +38,6 @@ public class InterpolationBehavior : MonoBehaviour
 
     public int UpdateFPS = 5;
 
-    public SimpleModificationListener Listener;
-
     private float tempValue = Mathf.PI/2;
     
 
@@ -48,7 +46,6 @@ public class InterpolationBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Listener.SetNodes.AddListener(() => Listener.RemoveNode(this.GetComponent<UMI3DNode>()));
         Manager.UpdateEvent.AddListener(() => ChangeUpdateStatus());
         Manager.InterpolationEvent.AddListener(() => ChangeInterpolation());
     }

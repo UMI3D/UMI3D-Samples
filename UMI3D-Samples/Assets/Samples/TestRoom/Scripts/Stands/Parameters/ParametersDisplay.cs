@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
 using umi3d.edk;
 using umi3d.edk.interaction;
+
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ParametersDisplay : MonoBehaviour
 {
@@ -27,17 +26,17 @@ public class ParametersDisplay : MonoBehaviour
     public FloatRangeParameter rangeParameter;
     public BooleanParameter booleanParameter;
 
-    public Text enumText;
-    public Text stringText;
-    public Text rangeText;
-    public Text boolText;
+    public UIText enumText;
+    public UIText stringText;
+    public UIText rangeText;
+    public UIText boolText;
 
     private void Start()
     {
-        enumText.text = stringEnum.value;
-        stringText.text = stringParameter.value;
-        rangeText.text = rangeParameter.value.ToString();
-        boolText.text = booleanParameter.value.ToString();
+        enumText.Text.SetValue(stringEnum.value);
+        stringText.Text.SetValue(stringParameter.value);
+        rangeText.Text.SetValue(rangeParameter.value.ToString());
+        boolText.Text.SetValue(booleanParameter.value.ToString());
 
         stringEnum.onChange.AddListener(EnumParameterChange);
         stringParameter.onChange.AddListener(StringParameterChange);
@@ -45,9 +44,31 @@ public class ParametersDisplay : MonoBehaviour
         rangeParameter.onChange.AddListener(RangeParameterChange);
     }
 
-    void StringParameterChange(AbstractParameter.ParameterEventContent<string> content) { stringText.text = content.value; }
-    void EnumParameterChange(AbstractParameter.ParameterEventContent<string> content) { enumText.text = content.value; }
-    void BoolParameterChange(AbstractParameter.ParameterEventContent<bool> content) { boolText.text = content.value.ToString(); }
-    void RangeParameterChange(AbstractParameter.ParameterEventContent<float> content) { rangeText.text = content.value.ToString(); }
+    private void StringParameterChange(AbstractParameter.ParameterEventContent<string> content)
+    {
+        Transaction t = new(true);
+        t.AddIfNotNull(stringText.Text.SetValue(content.value));
+        t.Dispatch();
+    }
 
+    private void EnumParameterChange(AbstractParameter.ParameterEventContent<string> content)
+    {
+        Transaction t = new(true);
+        t.AddIfNotNull(enumText.Text.SetValue(content.value));
+        t.Dispatch();
+    }
+
+    private void BoolParameterChange(AbstractParameter.ParameterEventContent<bool> content)
+    {
+        Transaction t = new(true);
+        t.AddIfNotNull(boolText.Text.SetValue(content.value.ToString()));
+        t.Dispatch();
+    }
+
+    private void RangeParameterChange(AbstractParameter.ParameterEventContent<float> content)
+    {
+        Transaction t = new(true);
+        t.AddIfNotNull(rangeText.Text.SetValue(content.value.ToString()));
+        t.Dispatch();
+    }
 }

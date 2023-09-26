@@ -21,11 +21,14 @@ using UnityEngine;
 public class MoveForward : MonoBehaviour
 {
     public float ForwardDelta = 0.5f;
-    Vector3 localPos;
+    Vector3 initialLocalPosition;
+
+    UMI3DModel model;
 
     private void Awake()
     {
-        localPos = transform.localPosition;
+        initialLocalPosition = transform.localPosition;
+        model = GetComponent<UMI3DModel>();
     }
 
     HashSet<string> users = new HashSet<string>();
@@ -40,7 +43,12 @@ public class MoveForward : MonoBehaviour
         var name = ToName(content.user, content.boneType);
         if(!users.Contains(name))
             users.Add(name);
-        if (users.Count > 0) transform.localPosition = localPos + Vector3.right * ForwardDelta;
+        if (users.Count > 0)
+        {
+            Transaction t = new(true);
+            t.AddIfNotNull(model.objectPosition.SetValue(initialLocalPosition + Vector3.right * ForwardDelta));
+            t.Dispatch();
+        }
     }
 
     public void Backward(umi3d.edk.interaction.AbstractInteraction.InteractionEventContent content)
@@ -53,7 +61,9 @@ public class MoveForward : MonoBehaviour
 
     public void ResetPosition()
     {
-        transform.localPosition = localPos;
+        Transaction t = new(true);
+        t.AddIfNotNull(model.objectPosition.SetValue(initialLocalPosition));
+        t.Dispatch();
     }
 
 }

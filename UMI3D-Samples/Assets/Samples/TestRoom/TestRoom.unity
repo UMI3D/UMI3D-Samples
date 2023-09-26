@@ -4600,7 +4600,6 @@ GameObject:
   - component: {fileID: 1274528702}
   - component: {fileID: 1274528700}
   - component: {fileID: 1274528701}
-  - component: {fileID: 1274528703}
   m_Layer: 0
   m_Name: UMI3DEnvironment
   m_TagString: Untagged
@@ -4664,23 +4663,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1274528703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274528699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2bf8200172b58f4baf05f80904c4fea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 0
-  max: 0
-  SetNodes:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1294359969
 GameObject:
   m_ObjectHideFlags: 0
@@ -8534,7 +8516,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 103469935608539469, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_RootOrder
@@ -8604,7 +8586,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 103469936290098972, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -8614,7 +8596,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 4817552009550151438, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -9141,15 +9123,11 @@ MonoBehaviour:
   environmentPoses:
   - {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d, type: 2}
   poseOverriderFields:
-  - poseOverriderContainer:
-      poseOverriders:
-      - {fileID: 11400000, guid: e463e04c6abfd2a4a94813b2b0a8e14e, type: 2}
-      isStart: 0
+  - poseOverriders: []
+    isStart: 0
     model: {fileID: 4391323535506847192}
-  - poseOverriderContainer:
-      poseOverriders:
-      - {fileID: 11400000, guid: e463e04c6abfd2a4a94813b2b0a8e14e, type: 2}
-      isStart: 0
+  - poseOverriders: []
+    isStart: 0
     model: {fileID: 4391323535506847191}
 --- !u!114 &4391323535506847191 stripped
 MonoBehaviour:
@@ -9182,6 +9160,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 2889862176541500751, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4226030227542323878, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -9207,20 +9190,40 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408805648294658, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408805648294660, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806160034899, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5141408806160034901, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408806178599546, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408806178599548, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806449291001, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5141408806755233700, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
@@ -9282,30 +9285,60 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bindings
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408806942696411, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408806942696413, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807196685145, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5141408807196685147, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408807337987143, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408807337987145, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807470138850, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5141408807470138852, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408807679005446, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408807679005448, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6553992474368672904, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51aedbc33e459944390e2e714e0dc1ba, type: 3}
@@ -9385,7 +9418,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 5269527785633633317, guid: 2b7b70a2502ea194aae6806ffb51f44f,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -9811,7 +9844,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Translation
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7736137849239311037, guid: 55f3a73bacb78e34094131a72026efec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2126812512677542740, guid: 55f3a73bacb78e34094131a72026efec, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 55f3a73bacb78e34094131a72026efec, type: 3}
 --- !u!1001 &8478020672916029881
 PrefabInstance:
@@ -9829,6 +9868,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478020672795721026, guid: 908c4eac634e6264f967e7a433b19e74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8478020672795721029, guid: 908c4eac634e6264f967e7a433b19e74,
         type: 3}
