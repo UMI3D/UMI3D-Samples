@@ -16,7 +16,6 @@ limitations under the License.
 
 using System.Collections.Generic;
 using umi3d.common.collaboration;
-using umi3d.common.userCapture;
 using umi3d.common;
 using UnityEngine;
 using System.Threading;
@@ -143,6 +142,14 @@ namespace umi3d.edk.collaboration.tracking
 
         protected UMI3DRelay()
         {
+            UMI3DCollaborationServer.Instance.OnServerStart.AddListener(() => {
+                StartLoop();
+            });
+
+            UMI3DCollaborationServer.Instance.OnServerStop.AddListener(() => {
+                StopLoop();
+            });
+
             QuittingManager.OnApplicationIsQuitting.AddListener(() => {
                 StopLoop();
             });
@@ -222,14 +229,6 @@ namespace umi3d.edk.collaboration.tracking
                     RemoveTo(uc);
                     RemoveSource(uc.networkPlayer);
                 }
-            });
-
-            UMI3DCollaborationServer.Instance.OnServerStart.AddListener(() => {
-                StartLoop();
-            });
-
-            UMI3DCollaborationServer.Instance.OnServerStop.AddListener(() => {
-                StopLoop();
             });
 
             UMI3DCollaborationServer.Instance.OnUserActive.AddListener((user) => forceSendToAll = true);
