@@ -46,7 +46,7 @@ namespace umi3d.edk.collaboration
 
         private void Start()
         {
-            UMI3DCollaborationServer.Instance.OnUserJoin.AddListener(newUser);
+            UMI3DCollaborationServer.Instance.OnUserActive.AddListener(newUser);
             UMI3DCollaborationServer.Instance.OnUserLeave.AddListener(x => RemoveAudioSource(x as UMI3DCollaborationUser));
         }
 
