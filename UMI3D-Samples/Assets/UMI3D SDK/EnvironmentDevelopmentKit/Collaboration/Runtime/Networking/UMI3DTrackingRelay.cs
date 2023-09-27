@@ -31,6 +31,7 @@ namespace umi3d.edk.collaboration.tracking
     {
         public UMI3DTrackingRelay(IForgeServer server) : base(server)
         {
+            dataChannel = DataChannelTypes.Tracking;
         }
 
         /// <inheritdoc/>
