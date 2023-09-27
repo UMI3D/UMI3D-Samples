@@ -15,6 +15,9 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+
+using PlasticGui.WorkspaceWindow.Diff;
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,6 +47,8 @@ namespace umi3d.edk.binding
         private readonly IUMI3DServer umi3dServerService;
         private readonly IUMI3DEnvironmentManager umi3dEnvironmentService;
 
+        private HashSet<UMI3DUser> usersWithBindingsReceived = new();
+
         public BindingManager() : base()
         {
             umi3dServerService = UMI3DServer.Instance;
@@ -64,7 +69,9 @@ namespace umi3d.edk.binding
 
         protected void Init()
         {
-            umi3dServerService.OnUserJoin.AddListener(DispatchBindings);
+            umi3dServerService.OnUserActive.AddListener(DispatchBindings);
+            umi3dServerService.OnUserMissing.AddListener(CleanBindings);
+            umi3dServerService.OnUserLeave.AddListener(CleanBindings);
         }
 
         /// <summary>
@@ -73,6 +80,9 @@ namespace umi3d.edk.binding
         /// <param name="user"></param>
         protected virtual void DispatchBindings(UMI3DUser user)
         {
+            if (usersWithBindingsReceived.Contains(user))
+                return;
+
             if (bindings.GetValue().Count > 0)
             {
                 Transaction t = new() { reliable = true };
@@ -85,6 +95,16 @@ namespace umi3d.edk.binding
                 }
                 t.Dispatch();
             }
+
+            usersWithBindingsReceived.Add(user);
+        }
+
+        protected virtual void CleanBindings(UMI3DUser user)
+        {
+            if (!usersWithBindingsReceived.Contains(user))
+                return;
+
+            usersWithBindingsReceived.Remove(user);
         }
 
         #endregion Initialization

@@ -16,42 +16,38 @@ limitations under the License.
 
 using inetum.unityUtils;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using umi3d.common.userCapture;
-using umi3d.common.userCapture.animation;
 using umi3d.edk;
 using umi3d.edk.binding;
 using umi3d.edk.collaboration;
-using umi3d.edk.collaboration.emotes;
-using umi3d.edk.userCapture.animation;
 using umi3d.edk.userCapture.binding;
 using umi3d.edk.userCapture.tracking;
 
 using UnityEngine;
 
-public class AvatarManager : MonoBehaviour
+public class AvatarManager : MonoBehaviour, IAvatarManager
 {
     #region Fields
 
-    private Dictionary<UMI3DUser, HandledInfos> HandledAvatars = new();
+    [HideInInspector]
+    public IReadOnlyDictionary<UMI3DUser, UMI3DModel> HandledAvatars => handledAvatars;
 
-    private class HandledInfos
-    {
-        public UMI3DModel avatar;
-        public UMI3DSkeletonAnimationNode emotesSkeletonNode;
-        public UMI3DSkeletonAnimationNode walkingSkeletonNode;
-    }
+    private readonly Dictionary<UMI3DUser, UMI3DModel> handledAvatars = new();
+
+    public event System.Action<UMI3DCollaborationUser> UserHandled;
+
+    public event System.Action<UMI3DCollaborationUser> UserUnhandled;
 
     #region Avatar Model
 
     [Header("Avatar")]
-    [SerializeField, EditorReadOnly]
+    [SerializeField, EditorReadOnly, Tooltip("Scene where to instantiate avatar.")]
     private UMI3DScene AvatarScene;
 
-    [SerializeField, EditorReadOnly]
+    [SerializeField, EditorReadOnly, Tooltip("Avatar model to load.")]
     private UMI3DResource AvatarModel;
 
     [System.Serializable]
@@ -65,296 +61,113 @@ public class AvatarManager : MonoBehaviour
         public Vector3 rotationOffset;
     }
 
+    // List all the required binding to make with their offsets
     [System.Serializable]
     public class RigList
     {
         public List<RigBindingData> binds;
     }
 
-    [SerializeField, EditorReadOnly]
-    private bool bindRig;
+    [Header("Rigging")]
+    [SerializeField, EditorReadOnly, Tooltip("If true, the rigs of the avatar are bound to the user's skeleton bones.")]
+    private bool shouldBindAvatarRigs;
 
-    [SerializeField, EditorReadOnly]
+    [SerializeField, EditorReadOnly, Tooltip("List all the required binding to make with their offsets.")]
     private RigList Rigs;
 
     #endregion Avatar Model
 
-    [Serializable]
-    public class SubskeletonDescription
-    {
-        [SerializeField, EditorReadOnly]
-        public UMI3DResource animatedSubkeletonBundleResource;
-
-        [SerializeField, EditorReadOnly]
-        public List<string> animatorStateNames;
-    }
-
-    #region MovementAnimation
-
-    [Header("Movement animation")]
-    [SerializeField, EditorReadOnly]
-    private bool sendWalkingAnimator;
-
-    [SerializeField, EditorReadOnly]
-    private SubskeletonDescription movementSubskeletonData;
-
-    #endregion MovementAnimation
-
-    #region Emotes
-
-    [Header("Emotes")]
-    [SerializeField, EditorReadOnly]
-    private bool sendEmotes;
-
-    [SerializeField, EditorReadOnly]
-    private EmotesSubskeletonDescription emotesSubskeletonData = new();
-
-    [Serializable]
-    public class EmotesSubskeletonDescription : SubskeletonDescription
-    {
-        [SerializeField, EditorReadOnly]
-        public UMI3DEmotesConfig emoteConfig;
-    }
-
-    #endregion Emotes
-
     #endregion Fields
 
-    private IBindingService bindingHelperServer;
+    private IBindingService bindingHelperService;
+    private IUMI3DServer UMI3DServerService;
 
     private void Start()
     {
-        //TODO: find a way to start newavatar
-        bindingHelperServer = BindingManager.Instance;
-        UMI3DCollaborationServer.Instance.OnUserActive.AddListener(Handle);
-        UMI3DCollaborationServer.Instance.OnUserLeave.AddListener(Unhandle);
-        UMI3DCollaborationServer.Instance.OnUserMissing.AddListener(Unhandle);
+        bindingHelperService = BindingManager.Instance;
+        UMI3DServerService = UMI3DServer.Instance;
+        UMI3DServerService.OnUserActive.AddListener((user) => Handle((UMI3DCollaborationUser)user));
+        UMI3DServerService.OnUserLeave.AddListener((user) => Unhandle((UMI3DCollaborationUser)user));
+        UMI3DServerService.OnUserMissing.AddListener((user) => Unhandle((UMI3DCollaborationUser)user));
     }
 
-    private void Handle(UMI3DUser user)
+    private void Handle(UMI3DCollaborationUser user)
     {
-        if (user is not UMI3DTrackedUser trackedUser)
+        if (handledAvatars.ContainsKey(user))
             return;
 
-        if (!HandledAvatars.ContainsKey(UMI3DCollaborationServer.Collaboration.GetUser(user.Id())))
-        {
-            HandledAvatars.Add(user, new());
-            SendAvatar(trackedUser);
-        }
+        SendAvatar(user);
     }
 
-    private void Unhandle(UMI3DUser user)
+    private void Unhandle(UMI3DCollaborationUser user)
     {
-        if (HandledAvatars.ContainsKey(user))
-        {
-            Transaction t = new() { reliable = true };
-
-            // walking animation
-            if (sendWalkingAnimator)
-            {
-                t.AddIfNotNull(HandledAvatars[user].walkingSkeletonNode.GetDeleteAnimations());
-                t.AddIfNotNull(HandledAvatars[user].walkingSkeletonNode.GetDeleteEntity());
-                UnityEngine.Object.Destroy(HandledAvatars[user].walkingSkeletonNode.gameObject);
-            }
-
-            if (sendEmotes)
-            {
-                // emotes
-                t.AddIfNotNull(HandledAvatars[user].emotesSkeletonNode.GetDeleteAnimations());
-                t.AddIfNotNull(HandledAvatars[user].emotesSkeletonNode.GetDeleteEntity());
-                UnityEngine.Object.Destroy(HandledAvatars[user].emotesSkeletonNode.gameObject);
-            }
-
-            // bindings
-            t.AddIfNotNull(bindingHelperServer.RemoveAllBindings(HandledAvatars[user].avatar.Id()));
-
-            // avatar model
-            t.AddIfNotNull(HandledAvatars[user].avatar.GetDeleteEntity());
-
-            UnityEngine.Object.Destroy(HandledAvatars[user].avatar.gameObject);
-
-            t.Dispatch();
-            HandledAvatars.Remove(user);
-        }
-    }
-
-    private void SendAvatar(UMI3DUser user)
-    {
-        var collabUser = user as UMI3DCollaborationUser;
+        if (!handledAvatars.ContainsKey(user))
+            return;
 
         Transaction t = new() { reliable = true };
-        t.AddIfNotNull(SendAvatarModel(collabUser, out UMI3DModel avatarModel));
-
-        if (bindRig)
-            t.AddIfNotNull(BindAvatar(collabUser, avatarModel));
-        if (sendWalkingAnimator)
-        {
-            foreach (var avatar in HandledAvatars.Where(x => x.Key != user))
-            {
-                t.AddIfNotNull(avatar.Value.walkingSkeletonNode.GetLoadAnimations(user));
-            }
-            t.AddIfNotNull(SendWalkingAnimations(collabUser, avatarModel, movementSubskeletonData));
-        }
-
-        if (sendEmotes)
-        {
-            foreach (var avatar in HandledAvatars.Where(x => x.Key != user))
-            {
-                t.AddIfNotNull(avatar.Value.emotesSkeletonNode.GetLoadAnimations(user));
-            }
-            t.AddIfNotNull(SendEmotes(collabUser, avatarModel, emotesSubskeletonData));
-        }
-
+        if (shouldBindAvatarRigs)
+            t.AddIfNotNull(bindingHelperService.RemoveAllBindings(handledAvatars[user].Id()));
+        t.AddIfNotNull(handledAvatars[user].GetDeleteEntity());
         t.Dispatch();
+
+        UnityEngine.Object.Destroy(handledAvatars[user].gameObject);
+
+        handledAvatars.Remove(user);
+
+        UserUnhandled?.Invoke(user);
     }
 
-    private Operation SendAvatarModel(UMI3DCollaborationUser user, out UMI3DModel avatarModel)
+    private void SendAvatar(UMI3DCollaborationUser user)
     {
-        GameObject avatarModelnode = new($"AvatarModel_User-{user.Id()}");
+        Transaction t = new() { reliable = true };
+        t.AddIfNotNull(LoadAvatarModel(user));
 
-        avatarModelnode.transform.SetParent(AvatarScene.transform);
-        avatarModelnode.transform.localPosition = Vector3.zero;
-        avatarModelnode.transform.localRotation = Quaternion.identity;
+        if (shouldBindAvatarRigs)
+            t.AddIfNotNull(BindAvatar(user, handledAvatars[user]));
 
-        avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
-        SimpleModificationListener.Instance.RemoveNode(avatarModel);
+        t.Dispatch();
+
+        UserHandled?.Invoke(user);
+    }
+
+    private Operation LoadAvatarModel(UMI3DCollaborationUser user)
+    {
+        GameObject avatarModelNode = new($"Avatar Model - user {user.Id()}");
+
+        avatarModelNode.transform.SetParent(AvatarScene.transform);
+        avatarModelNode.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
+        UMI3DModel avatarModel = avatarModelNode.AddComponent<UMI3DModel>();
 
         avatarModel.objectModel.SetValue(AvatarModel);
         avatarModel.objectScale.SetValue(user.userSize.GetValue(user).Struct());
 
-        HandledAvatars[user].avatar = avatarModel;
+        handledAvatars.Add(user, avatarModel);
 
         return avatarModel.GetLoadEntity();
     }
 
-    private List<Operation> BindAvatar(UMI3DTrackedUser user, UMI3DModel avatarModel)
+    private IEnumerable<Operation> BindAvatar(UMI3DTrackedUser user, UMI3DModel avatarModel)
     {
         List<Operation> ops = new();
+        
+        var bindings = Rigs.binds.Select(bind =>
+            new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
+            {
+                syncPosition = true,
+                offsetPosition = bind.positionOffset,
+                syncRotation = true,
+                offsetRotation = Quaternion.Euler(bind.rotationOffset),
+            }).Cast<AbstractSingleBinding>();
 
-        if (bindRig)
+        MultiBinding multiBinding = new(avatarModel.Id())
         {
-            var bindings = Rigs.binds.Select(bind =>
-                new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
-                {
-                    syncPosition = true,
-                    offsetPosition = bind.positionOffset,
-                    syncRotation = true,
-                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
-                }).Cast<AbstractSingleBinding>();
-
-            MultiBinding multiBinding = new(avatarModel.Id())
-            {
-                partialFit = false,
-                priority = 100,
-                bindings = bindings.ToList()
-            };
-
-            ops.AddRange(bindingHelperServer.AddBinding(multiBinding));
-        }
-
-        return ops;
-    }
-
-    private List<Operation> SendWalkingAnimations(UMI3DCollaborationUser user, UMI3DNode avatarNode, SubskeletonDescription walkingSubskeleton)
-    {
-        List<Operation> ops = new();
-
-        // Create skeleton node for animations
-        GameObject subskeletonNodeGo = new("Movement animation subskeleton");
-        subskeletonNodeGo.transform.SetParent(avatarNode.transform);
-        subskeletonNodeGo.transform.localPosition = Vector3.zero;
-        subskeletonNodeGo.transform.localRotation = Quaternion.identity;
-
-        UMI3DSkeletonAnimationNode skeletonNode = subskeletonNodeGo.AddComponent<UMI3DSkeletonAnimationNode>();
-        SimpleModificationListener.Instance.RemoveNode(skeletonNode);
-        skeletonNode.objectModel.SetValue(walkingSubskeleton.animatedSubkeletonBundleResource);
-        skeletonNode.userId = user.Id();
-        skeletonNode.priority = -10;
-        skeletonNode.animationStates = walkingSubskeleton.animatorStateNames;
-        skeletonNode.animatorSelfTrackedParameters = new SkeletonAnimationParameter[] {
-            new()
-            {
-                parameterName = SkeletonAnimatorParameterKeys.SPEED_Z.ToString(),
-                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_Z,
-                ranges = new()
-            },
-            new()
-            {
-                parameterName = SkeletonAnimatorParameterKeys.SPEED_X.ToString(),
-                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X,
-                ranges = new List<SkeletonAnimationParameter.Range>()
-                {
-                    new () { startBound = -1f,   endBound = 1f,      result = 0f},
-                }
-            },
-            new()
-            {
-                parameterName = SkeletonAnimatorParameterKeys.SPEED_X_Z.ToString(),
-                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z,
-                ranges = new()
-            },
-            new()
-            {
-                parameterName = SkeletonAnimatorParameterKeys.JUMP.ToString(),
-                parameterKey = (uint)SkeletonAnimatorParameterKeys.JUMP,
-                ranges = new()
-            },
+            partialFit = false,
+            priority = 100,
+            bindings = bindings.ToList()
         };
 
-        // Create Animator animations
-        ops.AddRange(skeletonNode.GenerateAnimations(areLooping: true));
-
-        HandledAvatars[user].walkingSkeletonNode = skeletonNode;
-        ops.Add(skeletonNode.GetLoadEntity());
-
-        return ops;
-    }
-
-    private List<Operation> SendEmotes(UMI3DCollaborationUser user, UMI3DNode avatarNode, EmotesSubskeletonDescription emoteSubskeleton)
-    {
-        List<Operation> ops = new();
-
-        // Create skeleton node for animations
-        GameObject subskeletonGo = new("Emote animation subskeleton");
-        subskeletonGo.transform.SetParent(avatarNode.transform);
-        subskeletonGo.transform.localPosition = Vector3.zero;
-        subskeletonGo.transform.localRotation = Quaternion.identity;
-
-        UMI3DSkeletonAnimationNode skeletonNode = subskeletonGo.AddComponent<UMI3DSkeletonAnimationNode>();
-        SimpleModificationListener.Instance.RemoveNode(skeletonNode);
-
-        var usedAnimationState = emoteSubskeleton.animatorStateNames.Take(emoteSubskeleton.emoteConfig.IncludedEmotes.Count).ToList();
-
-        // Create skeleton node as a UMI3D component
-        skeletonNode.objectModel.SetValue(emoteSubskeleton.animatedSubkeletonBundleResource);
-        skeletonNode.userId = user.Id();
-        skeletonNode.priority = 100;
-        skeletonNode.animationStates = usedAnimationState;
-
-        // Create animations
-        ops.AddRange(skeletonNode.GenerateAnimations(stateNames: usedAnimationState, arePlaying: false));
-
-        HandledAvatars[user].emotesSkeletonNode = skeletonNode;
-        ops.Add(skeletonNode.GetLoadEntity());
-
-        // Associate animation with emotes
-        EmoteDispatcher.Instance.EmotesConfigs[user.Id()] = emoteSubskeleton.emoteConfig;
-
-        int indexAnim = 0;
-        foreach (var emote in emoteSubskeleton.emoteConfig.IncludedEmotes)
-        {
-            UMI3DAbstractAnimation animation = UMI3DEnvironment.Instance._GetEntityInstance<UMI3DAbstractAnimation>(skeletonNode.relatedAnimationIds[indexAnim++]);
-
-            if (string.IsNullOrEmpty(emote.label) && animation is UMI3DAnimatorAnimation animatorAnimation)
-                emote.label = animatorAnimation.objectStateName.GetValue();
-
-            emote.AnimationId.SetValue(user, animation.Id());
-            emote.Available.SetValue(user, emoteSubskeleton.emoteConfig.allAvailableAtStartByDefault || emote.availableAtStart);
-
-            ops.Add(animation.GetLoadEntity());
-        }
-
-        ops.Add(emoteSubskeleton.emoteConfig.GetLoadEntity(new() { user }));
+        ops.AddRange(bindingHelperService.AddBinding(multiBinding));
 
         return ops;
     }
