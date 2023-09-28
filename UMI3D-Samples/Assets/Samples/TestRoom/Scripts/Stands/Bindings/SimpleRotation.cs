@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common;
 using umi3d.edk;
 
 using UnityEngine;
@@ -29,7 +30,7 @@ public class SimpleRotation : MonoBehaviour
     [Header("Transaction settings")]
     public bool selfManaged = false;
 
-    public float updateFrequency = 5;
+    public float updateFrequency = 10f;
 
     private UMI3DNode node;
     private float lastTime;
@@ -37,6 +38,13 @@ public class SimpleRotation : MonoBehaviour
     private void Start()
     {
         node = GetComponent<UMI3DNode>();
+
+        UMI3DServer.Instance.OnUserJoin.AddListener((user) =>
+        {
+            var t = new Transaction() { reliable = true };
+            t.AddIfNotNull(new StartInterpolationProperty() { users = new() { user }, entityId = node.Id(), property = UMI3DPropertyKeys.Rotation, startValue = transform.localRotation });
+            t.Dispatch();
+        });
     }
 
     // Update is called once per frame
@@ -64,7 +72,8 @@ public class SimpleRotation : MonoBehaviour
             if ((Time.time - lastTime) > 1 / updateFrequency)
             {
                 var t = new Transaction() { reliable = true };
-                t.AddIfNotNull(node.objectRotation.SetValue(transform.rotation));
+                t.AddIfNotNull(node.objectRotation.SetValue(transform.localRotation));
+                t.AddIfNotNull(new StartInterpolationProperty() { entityId=node.Id(), property=UMI3DPropertyKeys.Rotation });
                 t.Dispatch();
                 lastTime = Time.time;
             }

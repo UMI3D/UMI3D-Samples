@@ -111,7 +111,7 @@ MonoBehaviour:
   Axe: 0
   Speed: 1
   Amplitude: 0.1
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!1 &584282546401875550
 GameObject:
@@ -859,7 +859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 1
   Speed: 60
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &770203870103457070
 MonoBehaviour:
@@ -1656,7 +1656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 1
   Speed: 30
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5068055108556326269
 MonoBehaviour:
@@ -1673,7 +1673,7 @@ MonoBehaviour:
   Axe: 2
   Speed: 1
   Amplitude: 0.2
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!1 &4839406808073861777
 GameObject:
@@ -1871,7 +1871,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 1
   Speed: 40
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!1 &5141408806755233703
 GameObject:
@@ -2895,7 +2895,7 @@ MonoBehaviour:
   Axe: 0
   Speed: 0.5
   Amplitude: 0.1
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!1 &7946673171068443646
 GameObject:
@@ -4401,7 +4401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 2
   Speed: 50
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5141408805648294660
 MonoBehaviour:
@@ -4569,7 +4569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 2
   Speed: 50
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5141408806160034901
 MonoBehaviour:
@@ -4737,7 +4737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 2
   Speed: 50
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5141408806178599548
 MonoBehaviour:
@@ -5221,7 +5221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 2
   Speed: 50
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5141408806942696413
 MonoBehaviour:
@@ -5389,7 +5389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 2
   Speed: 50
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5141408807196685147
 MonoBehaviour:
@@ -5826,7 +5826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 2
   Speed: 50
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5141408807337987145
 MonoBehaviour:
@@ -6255,7 +6255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 2
   Speed: 50
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5141408807470138852
 MonoBehaviour:
@@ -6581,7 +6581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 2
   Speed: 50
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!114 &5141408807679005448
 MonoBehaviour:
@@ -8837,7 +8837,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Axe: 0
   Speed: 40
-  selfManaged: 0
+  selfManaged: 1
   updateFrequency: 5
 --- !u!1001 &8720044324263100473
 PrefabInstance:

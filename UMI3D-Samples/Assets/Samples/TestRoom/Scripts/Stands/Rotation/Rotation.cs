@@ -13,36 +13,33 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+using umi3d.common;
 using umi3d.edk;
+
 using UnityEngine;
 
 public class Rotation : MonoBehaviour
 {
-    public GameObject frameOfReference;
-
-    bool isInit = false;
-
-    Quaternion lastRotation;
-
-    GameObject helper;
+    private UMI3DModel model;
 
     /// <summary>
     /// Last time a user used UMI3DManipualtion linked to this class.
     /// </summary>
-    float lastTimeUsed;
+    private float lastTimeUsed;
 
-    /// <summary>
-    /// If OnUserManipulation has not been triggered for this time, this class will consider that the user stopped using it.
-    /// </summary>
-    float timeToDetectStopUsing = .2f;
+    private float sendingFrequency = 5f;
 
     private void Start()
     {
-        helper = new GameObject("Rotation helper");
-        if (frameOfReference != null)
-            helper.transform.SetParent(frameOfReference.transform);
+        model = GetComponent<UMI3DModel>();
 
-        helper.transform.rotation = Quaternion.identity;
+        UMI3DServer.Instance.OnUserJoin.AddListener((user) =>
+        {
+            var t = new Transaction() { reliable = true };
+            t.AddIfNotNull(new StartInterpolationProperty() { users = new() { user }, entityId = model.Id(), property = UMI3DPropertyKeys.Rotation, startValue = transform.localRotation });
+            t.Dispatch();
+        });
     }
 
     /// <summary>
@@ -53,32 +50,13 @@ public class Rotation : MonoBehaviour
     /// <param name="rot">The rotation delta of the manipulation</param>
     public void OnUserManipulation(umi3d.edk.interaction.UMI3DManipulation.ManipulationEventContent content)
     {
-        if (!isInit)
+        if (Time.time - lastTimeUsed > 1 / sendingFrequency)
         {
-            isInit = true;
-            lastRotation = Quaternion.Euler(content.rotation.eulerAngles);
-        } else
-        {
-            Quaternion newRotation = Quaternion.Euler(content.rotation.eulerAngles);
+            Transaction t = new(true);
+            t.AddIfNotNull(model.objectRotation.SetValue(content.rotation));
+            t.Dispatch();
 
-            Quaternion delta = Quaternion.Inverse(lastRotation) * newRotation;
-
-            helper.transform.rotation = transform.rotation;
-            helper.transform.localRotation *= delta;
-
-            transform.rotation = helper.transform.rotation;
-
-            lastRotation = newRotation;
-        }
-
-        lastTimeUsed = Time.time;
-    }
-
-    private void Update()
-    {
-        if (Time.time > lastTimeUsed + timeToDetectStopUsing)
-        {
-            isInit = false;
+            lastTimeUsed = Time.time;
         }
     }
 }

@@ -3139,6 +3139,69 @@ MonoBehaviour:
   onChangeFalse:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &969586226
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 969586227}
+  - component: {fileID: 969586228}
+  m_Layer: 0
+  m_Name: WalkingSkeletonAnimationsRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &969586227
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969586226}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1183297984}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &969586228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969586226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1b8f010a6494546a92b9e4cb66b65e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStatic: 0
+  active: 1
+  UMI3DAnchor: {fileID: 0}
+  immersiveOnly: 0
+  VolumeId: 0
+  nodeName: 
+  xBillboard: 0
+  yBillboard: 0
+  hasCollider: 0
+  colliderType: 3
+  convex: 0
+  colliderCenter: {x: 0, y: 0, z: 0}
+  colliderRadius: 1
+  colliderBoxSize: {x: 1, y: 1, z: 1}
+  colliderHeight: 1
+  colliderDirection: 1
+  isMeshCustom: 0
+  customMeshCollider:
+    variants: []
 --- !u!1 &972520207
 GameObject:
   m_ObjectHideFlags: 0
@@ -4231,7 +4294,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1921123121}
+  - {fileID: 969586227}
   m_Father: {fileID: 1274528702}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4600,7 +4665,6 @@ GameObject:
   - component: {fileID: 1274528702}
   - component: {fileID: 1274528700}
   - component: {fileID: 1274528701}
-  - component: {fileID: 1274528703}
   m_Layer: 0
   m_Name: UMI3DEnvironment
   m_TagString: Untagged
@@ -4664,23 +4728,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1274528703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274528699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2bf8200172b58f4baf05f80904c4fea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 0
-  max: 0
-  SetNodes:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1294359969
 GameObject:
   m_ObjectHideFlags: 0
@@ -5327,6 +5374,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1528412417}
   - component: {fileID: 1528412419}
+  - component: {fileID: 1528412421}
+  - component: {fileID: 1528412420}
   m_Layer: 0
   m_Name: AvatarManager
   m_TagString: Untagged
@@ -5388,7 +5437,7 @@ MonoBehaviour:
         size: 1213.481
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
-  bindRig: 1
+  shouldBindAvatarRigs: 1
   Rigs:
     binds:
     - boneType: 13
@@ -5491,71 +5540,93 @@ MonoBehaviour:
       rigName: mixamorig:LeftHandIndex3
       positionOffset: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
-  sendWalkingAnimator: 1
-  movementSubskeletonData:
-    animatedSubkeletonBundleResource:
-      variants:
-      - isLocalFile: 1
-        domain: 
-        path: private\com.gfi.avatar\default\animation.prefab.bundle
-        format: unity_standalone_urp
-        extension: .bundle
-        isInBundle: 1
-        pathIfInBundle: Assets/Avatar/Animation.prefab
-        metrics:
-          resolution: 0
-          size: 2113.115
-        isInLibrary: 1
-        libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
-      - isLocalFile: 1
-        domain: 
-        path: private\com.gfi.avatar\android\animation.prefab.bundle
-        format: unity_android_urp
-        extension: .bundle
-        isInBundle: 1
-        pathIfInBundle: Assets/Avatar/Animation.prefab
-        metrics:
-          resolution: 0
-          size: 2189.07
-        isInLibrary: 1
-        libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
-    animatorStateNames:
-    - 
-  sendEmotes: 0
-  emotesSubskeletonData:
-    animatedSubkeletonBundleResource:
-      variants:
-      - isLocalFile: 1
-        domain: 
-        path: private\com.inetum.emotes\default\animationemote.prefab.bundle
-        format: unity_standalone_urp
-        extension: .bundle
-        isInBundle: 1
-        pathIfInBundle: Assets/Avatar/Animation Emote.prefab
-        metrics:
-          resolution: 0
-          size: 2091.95
-        isInLibrary: 1
-        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
-      - isLocalFile: 1
-        domain: 
-        path: private\com.inetum.emotes\android\animationemote.prefab.bundle
-        format: unity_android_urp
-        extension: .bundle
-        isInBundle: 1
-        pathIfInBundle: Assets/Avatar/Animation Emote.prefab
-        metrics:
-          resolution: 0
-          size: 2168.892
-        isInLibrary: 1
-        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
-    animatorStateNames:
-    - Waving
-    - Yes
-    - No
-    - Dancing
-    - Dive Roll
-    emoteConfig: {fileID: 11400000, guid: 757f65e158d2523429d16f68d9d81109, type: 2}
+--- !u!114 &1528412420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528412416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679357b1291fe3d4f91873f01fd7e153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shouldSendEmotes: 1
+  emoteConfig: {fileID: 11400000, guid: 757f65e158d2523429d16f68d9d81109, type: 2}
+  emoteBundleResource:
+    variants:
+    - isLocalFile: 1
+      domain: 
+      path: private\com.inetum.emotes\default\emoteanimator.prefab.bundle
+      format: unity_standalone_urp
+      extension: .bundle
+      isInBundle: 1
+      pathIfInBundle: Assets/Samples/Embodiments/Models/EmoteAnimator.prefab
+      metrics:
+        resolution: 0
+        size: 231.335
+      isInLibrary: 1
+      libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+    - isLocalFile: 1
+      domain: 
+      path: private\com.inetum.emotes\android\animationemote.prefab.bundle
+      format: unity_android_urp
+      extension: .bundle
+      isInBundle: 1
+      pathIfInBundle: Assets/Avatar/Animation Emote.prefab
+      metrics:
+        resolution: 0
+        size: 2168.892
+      isInLibrary: 1
+      libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+  animatorStateNames:
+  - Waving
+  - Yes
+  - No
+  - Dancing
+  - Dive Roll
+  emotesNodeRoot: {fileID: 1921123120}
+--- !u!114 &1528412421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528412416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 600ab7dd0d02b3745a61a6d2e06e6e34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shouldSendWalkingAnimator: 1
+  animatedSubskeletonBundleResource:
+    variants:
+    - isLocalFile: 1
+      domain: 
+      path: private\com.gfi.avatar\default\animation.prefab.bundle
+      format: unity_standalone_urp
+      extension: .bundle
+      isInBundle: 1
+      pathIfInBundle: Assets/Avatar/Animation.prefab
+      metrics:
+        resolution: 0
+        size: 2091.736
+      isInLibrary: 1
+      libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+    - isLocalFile: 1
+      domain: 
+      path: private\com.gfi.avatar\android\animation.prefab.bundle
+      format: unity_android_urp
+      extension: .bundle
+      isInBundle: 1
+      pathIfInBundle: Assets/Avatar/Animation.prefab
+      metrics:
+        resolution: 0
+        size: 2168.546
+      isInLibrary: 1
+      libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
+  animationsRootNode: {fileID: 969586228}
 --- !u!4 &1532318487 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 201602353761364307, guid: fc37607fd0d1cbe418719468011efbf6,
@@ -7172,6 +7243,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907152573}
   m_CullTransparentMesh: 0
+--- !u!1 &1921123119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1921123121}
+  - component: {fileID: 1921123120}
+  m_Layer: 0
+  m_Name: EmotesSkeletonAnimationsRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1921123120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921123119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1b8f010a6494546a92b9e4cb66b65e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStatic: 0
+  active: 1
+  UMI3DAnchor: {fileID: 0}
+  immersiveOnly: 0
+  VolumeId: 0
+  nodeName: 
+  xBillboard: 0
+  yBillboard: 0
+  hasCollider: 0
+  colliderType: 3
+  convex: 0
+  colliderCenter: {x: 0, y: 0, z: 0}
+  colliderRadius: 1
+  colliderBoxSize: {x: 1, y: 1, z: 1}
+  colliderHeight: 1
+  colliderDirection: 1
+  isMeshCustom: 0
+  customMeshCollider:
+    variants: []
+--- !u!4 &1921123121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921123119}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1183297984}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1951587529
 GameObject:
   m_ObjectHideFlags: 0
@@ -8534,7 +8668,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 103469935608539469, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_RootOrder
@@ -8604,7 +8738,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 103469936290098972, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -8614,7 +8748,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 4817552009550151438, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -9141,15 +9275,11 @@ MonoBehaviour:
   environmentPoses:
   - {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d, type: 2}
   poseOverriderFields:
-  - poseOverriderContainer:
-      poseOverriders:
-      - {fileID: 11400000, guid: e463e04c6abfd2a4a94813b2b0a8e14e, type: 2}
-      isStart: 0
+  - poseOverriders: []
+    isStart: 0
     model: {fileID: 4391323535506847192}
-  - poseOverriderContainer:
-      poseOverriders:
-      - {fileID: 11400000, guid: e463e04c6abfd2a4a94813b2b0a8e14e, type: 2}
-      isStart: 0
+  - poseOverriders: []
+    isStart: 0
     model: {fileID: 4391323535506847191}
 --- !u!114 &4391323535506847191 stripped
 MonoBehaviour:
@@ -9182,6 +9312,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 452904069}
     m_Modifications:
+    - target: {fileID: 2889862176541500751, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889862176541500751, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4226030227542323878, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -9207,20 +9347,65 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5068055108556326269, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408805648294658, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408805648294658, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408805648294660, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806160034899, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806160034899, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5141408806160034901, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408806178599546, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806178599546, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408806178599548, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806449291001, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806449291001, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5141408806755233700, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
@@ -9282,30 +9467,105 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bindings
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408806942696411, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408806942696411, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408806942696413, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807196685145, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807196685145, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5141408807196685147, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408807337987143, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807337987143, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408807337987145, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807470138850, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807470138850, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5141408807470138852, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5141408807679005446, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5141408807679005446, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5141408807679005448, guid: 51aedbc33e459944390e2e714e0dc1ba,
         type: 3}
       propertyPath: hasCollider
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565827404646337264, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6553992474368672904, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: selfManaged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6553992474368672904, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018231888136637208, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7264570337329803607, guid: 51aedbc33e459944390e2e714e0dc1ba,
+        type: 3}
+      propertyPath: updateFrequency
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51aedbc33e459944390e2e714e0dc1ba, type: 3}
@@ -9385,7 +9645,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
-      objectReference: {fileID: 1274528703}
+      objectReference: {fileID: 0}
     - target: {fileID: 5269527785633633317, guid: 2b7b70a2502ea194aae6806ffb51f44f,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -9811,7 +10071,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Translation
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7736137849239311037, guid: 55f3a73bacb78e34094131a72026efec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2126812512677542740, guid: 55f3a73bacb78e34094131a72026efec, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 55f3a73bacb78e34094131a72026efec, type: 3}
 --- !u!1001 &8478020672916029881
 PrefabInstance:
@@ -9829,6 +10095,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478020672795721026, guid: 908c4eac634e6264f967e7a433b19e74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8478020672795721029, guid: 908c4eac634e6264f967e7a433b19e74,
         type: 3}
