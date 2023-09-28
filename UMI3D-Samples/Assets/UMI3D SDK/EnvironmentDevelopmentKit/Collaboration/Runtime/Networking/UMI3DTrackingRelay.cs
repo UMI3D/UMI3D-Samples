@@ -102,8 +102,8 @@ namespace umi3d.edk.collaboration.tracking
 
     public abstract class UMI3DRelay<To,Source,Frame> : ThreadLoop where To : class where Source : class where Frame : class
     {
-        object framesPerSourceLock = new();
-        object lastFrameSentToLock = new();
+        protected readonly object framesPerSourceLock = new();
+        protected readonly object lastFrameSentToLock = new();
 
         protected Dictionary<Source, Frame> framesPerSource = new();
         protected Dictionary<To, Dictionary<Source, Frame>> lastFrameSentTo = new();

@@ -24,7 +24,7 @@ using UnityEngine;
 
 namespace umi3d.edk.collaboration
 {
-    public class UMI3DForgeEnvironmentServer : UMI3DForgeSocketBase, IForgeServer
+    public class UMI3DForgeEnvironmentServer : ForgeSocketBase, IForgeServer
     {
         private const DebugScope scope = DebugScope.EDK | DebugScope.Collaboration | DebugScope.Networking;
 
@@ -50,7 +50,7 @@ namespace umi3d.edk.collaboration
         /// </summary>
         public ushort connectionPort;
 
-        UMI3DTrackingRelay trackingRelay;
+        public UMI3DStreamableSceneRelay streamableRelay;
 
         object timeLock = new object();
         public ulong Time
@@ -92,7 +92,7 @@ namespace umi3d.edk.collaboration
             server.natServerPort = natServerPort;
             server.maxNbPlayer = maxNbPlayer;
             server.connectionPort = connectionPort;
-            server.trackingRelay = new UMI3DTrackingRelay(server);
+            server.streamableRelay = new UMI3DStreamableSceneRelay(server, () => { return server.server.Players; });
 
             return server;
         }
@@ -226,13 +226,27 @@ namespace umi3d.edk.collaboration
 
         }
 
+        #endregion
+        protected override void _ReadBinary(NetworkingPlayer player, Binary frame, NetWorker sender)
+        {
+            switch (frame.GroupId)
+            {
+                case MessageGroupIds.AUTHENTICATION_FAILURE:
+                    OnAuthenticationFailure(player, frame, sender);
+                    break;
+                default:
+                    OnFrame(player, frame, sender);
+                    break;
+            }
+        }
+
+        protected virtual void OnAuthenticationFailure(NetworkingPlayer player, Binary frame, NetWorker sender) { }
 
         /// <inheritdoc/>
-        protected override void OnSignalingFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
+        protected void OnFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
         {
 
         }
-        #endregion
 
         #region data
 
@@ -241,50 +255,6 @@ namespace umi3d.edk.collaboration
         public void SendData(NetworkingPlayer player, byte[] data, bool reliable)
         {
 
-        }
-
-        /// <inheritdoc/>
-        protected override void OnDataFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
-        {
-           
-        }
-
-        #endregion
-
-        #region avatar
-
-        /// <inheritdoc/>
-        protected override void OnAvatarFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
-        {
-          
-        }
-
-        #endregion
-
-        #region video
-
-        /// <inheritdoc/>
-        protected override void OnVideoFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
-        {
-
-        }
-
-        #endregion
-
-        #region VoIP
-
-        private static readonly List<UMI3DCollaborationUser> VoipInterceptionList = new List<UMI3DCollaborationUser>();
-
-        public delegate void AudioFrame(UMI3DCollaborationUser user, Binary frame);
-        public static AudioFrame OnAudioFrame;
-
-        /// <inheritdoc/>
-        protected override void OnVoIPFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
-        {
-            MainThreadManager.Run(() =>
-            {
-                UMI3DLogger.Log($"Received a VoIP frame", scope);
-            });
         }
 
         #endregion
@@ -298,7 +268,7 @@ namespace umi3d.edk.collaboration
         /// <param name="isReliable"></param>
         protected void SendBinaryDataTo(int channel, NetworkingPlayer player, byte[] data, bool isReliable)
         {
-           
+
         }
 
         /// <summary>
@@ -310,7 +280,7 @@ namespace umi3d.edk.collaboration
         /// <param name="isRealiable"></param>
         public void RelayBinaryDataTo(int channel, NetworkingPlayer player, byte[] data, bool isRealiable)
         {
-           
+
         }
 
         /// <summary>
