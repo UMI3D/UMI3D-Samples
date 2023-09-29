@@ -76,7 +76,7 @@ namespace umi3d.edk.userCapture.animation
         /// <summary>
         /// Get load operations for animations related to skeleton node.
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="users"></param>
         /// <returns></returns>
         public Operation[] GetLoadAnimations(IEnumerable<UMI3DUser> users = null)
         {
@@ -95,17 +95,22 @@ namespace umi3d.edk.userCapture.animation
             return ops.ToArray();
         }
 
-        public Operation[] GetLoadAnimations(UMI3DUser user = null)
+        /// <summary>
+        /// Get load operations for animations related to skeleton node.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public Operation[] GetLoadAnimations(UMI3DUser user)
         {
-            return GetLoadAnimations(new UMI3DUser[1] { user });
+            return GetLoadAnimations(user != null ? new UMI3DUser[1] { user } : null);
         }
 
         /// <summary>
         /// Get delete operations for animations relation to skeleton node.
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="users"></param>
         /// <returns></returns>
-        public Operation[] GetDeleteAnimations(UMI3DUser user = null)
+        public Operation[] GetDeleteAnimations(IEnumerable<UMI3DUser> users = null)
         {
             if (!AreAnimationsGenerated)
             {
@@ -117,9 +122,19 @@ namespace umi3d.edk.userCapture.animation
             foreach (var id in relatedAnimationIds)
             {
                 var animation = UMI3DEnvironment.Instance._GetEntityInstance<UMI3DAnimatorAnimation>(id);
-                ops.Enqueue(animation.GetDeleteEntity(user is not null ? new() { user } : null));
+                ops.Enqueue(animation.GetDeleteEntity(users is not null ? users.ToHashSet() : null));
             }
             return ops.ToArray();
+        }
+
+        /// <summary>
+        /// Get load operations for animations related to skeleton node.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public Operation[] GetDeleteAnimations(UMI3DUser user)
+        {
+            return GetDeleteAnimations(user != null ? new UMI3DUser[1] { user } : null);
         }
 
         /// <summary>

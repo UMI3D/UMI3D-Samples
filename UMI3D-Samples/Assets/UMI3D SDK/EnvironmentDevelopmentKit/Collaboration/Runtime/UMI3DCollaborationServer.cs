@@ -221,7 +221,6 @@ namespace umi3d.edk.collaboration
 
             httpPort = (ushort)FreeTcpPort(useRandomHttpPort ? 0 : httpPort);
             forgePort = (ushort)FreeTcpPort(useRandomForgePort ? 0 : forgePort);
-            //websocketPort = FreeTcpPort(useRandomWebsocketPort ? 0 : websocketPort);
 
             UMI3DHttp.Destroy();
             http = new UMI3DHttp(httpPort);
@@ -257,12 +256,13 @@ namespace umi3d.edk.collaboration
             UMI3DCollaborationServer.Collaboration.ConnectUser(player, identity, action, UserCreatedCallback);
         }
 
-        protected void UserRegisteredCallback(UMI3DCollaborationUser user, bool reconnection)
+        protected void UserRegisteredCallback(UMI3DCollaborationAbstractUser user, bool reconnection)
         {
             user.SetStatus(StatusType.REGISTERED);
             if (!reconnection)
             {
-                WorldController.NotifyUserRegister(user);
+                if(user is UMI3DCollaborationUser collaborationUser)
+                    WorldController.NotifyUserRegister(collaborationUser);
                 UMI3DLogger.Log($"User Registered", scope);
                 OnUserRegistered.Invoke(user);
             }

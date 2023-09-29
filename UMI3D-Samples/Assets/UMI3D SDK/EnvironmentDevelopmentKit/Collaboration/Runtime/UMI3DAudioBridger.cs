@@ -30,11 +30,13 @@ namespace umi3d.edk.collaboration
     public class UMI3DAudioBridger : inetum.unityUtils.SingleBehaviour<UMI3DAudioBridger>
     {
         public Transform parent;
+
         /// <summary>
         /// Is sound spatialized?
         /// </summary>
         [SerializeField, Tooltip("Should sound be spatialized?")]
         private bool _Spacialized = false;
+
         public bool Spacialized
         {
             get => _Spacialized; set
@@ -76,7 +78,6 @@ namespace umi3d.edk.collaboration
                 GameObject go = new GameObject($"AudioSource_user_{user.Id()}");
                 go.transform.SetParent(parent);
                 audioSourceNode = go.AddComponent<UMI3DNode>();
-                
 
                 user.audioPlayer = audioSourceNode.gameObject.AddComponent<UMI3DAudioPlayer>();
                 user.audioPlayer.ObjectSpacialBlend.SetValue(Spacialized ? 1 : 0);
