@@ -66,6 +66,8 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public readonly UMI3DVersion.Version version;
 
+        private readonly UMI3DWorldControllerClient1 worldControllerClient;
+
         static public UnityEvent EnvironementJoinned = new UnityEvent();
         static public UnityEvent EnvironementLoaded = new UnityEvent();
 
@@ -199,7 +201,7 @@ namespace umi3d.cdk.collaboration
         public UserInfo UserDto = new UserInfo();
 
 
-        public UMI3DEnvironmentClient1(EnvironmentConnectionDto connectionDto)
+        public UMI3DEnvironmentClient1(EnvironmentConnectionDto connectionDto, UMI3DWorldControllerClient1 worldControllerClient)
         {
             this.isJoinning = false;
             this.isConnecting = false;
@@ -207,6 +209,7 @@ namespace umi3d.cdk.collaboration
             this.disconected = false;
             this.connectionDto = connectionDto;
             this.version = new UMI3DVersion.Version(connectionDto.version);
+            this.worldControllerClient = worldControllerClient;
 
             lastTokenUpdate = default;
             HttpClient = new HttpClient1(this);
@@ -238,7 +241,7 @@ namespace umi3d.cdk.collaboration
             ForgeClient.natServerPort = connectionDto.forgeNatServerPort;
 
             var Auth = new common.collaboration.UMI3DAuthenticator(GetLocalToken);
-            //SetToken(worldControllerClient.Identity.localToken); TODo
+            SetToken(worldControllerClient.Identity.localToken);
             JoinForge(Auth);
 
 
@@ -449,6 +452,7 @@ namespace umi3d.cdk.collaboration
         private async void UpdateIdentity(UserConnectionDto user)
         {
             //?????
+            UnityEngine.Debug.Log("UpdateIdentity " + user);
             await Task.CompletedTask;
             //try
             //{

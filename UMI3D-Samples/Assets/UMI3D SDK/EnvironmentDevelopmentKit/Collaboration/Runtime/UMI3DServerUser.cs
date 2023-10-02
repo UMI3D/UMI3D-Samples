@@ -22,6 +22,7 @@ namespace umi3d.edk.collaboration
     {
         public UMI3DServerUser(RegisterIdentityDto identity) : base(identity)
         {
+            UnityEngine.Debug.Log("Create USer");
         }
 
     }
