@@ -16,8 +16,6 @@ limitations under the License.
 
 using inetum.unityUtils;
 
-using PlasticGui.WorkspaceWindow.Diff;
-
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,6 +45,9 @@ namespace umi3d.edk.binding
         private readonly IUMI3DServer umi3dServerService;
         private readonly IUMI3DEnvironmentManager umi3dEnvironmentService;
 
+        /// <summary>
+        /// Set of users that already got the binding entities on the scene
+        /// </summary>
         private HashSet<UMI3DUser> usersWithBindingsReceived = new();
 
         public BindingManager() : base()
@@ -59,7 +60,7 @@ namespace umi3d.edk.binding
         public BindingManager(IUMI3DServer umi3dServerService) : base()
         {
             this.umi3dServerService = umi3dServerService;
-            this.umi3dEnvironmentService= UMI3DEnvironment.Instance;
+            this.umi3dEnvironmentService = UMI3DEnvironment.Instance;
             Init();
         }
 
@@ -353,7 +354,6 @@ namespace umi3d.edk.binding
                             operations.Add(node.objectRotation.SetValue(node.objectRotation.GetValue(), true));
                             operations.Add(node.objectScale.SetValue(node.objectScale.GetValue(), true));
                         }
-
                     }
                     else if (bindingOnNode is MultiBinding existingMultiBinding // the binding is inside a multibinding
                             && bindingToRemove is AbstractSingleBinding singleBindingToRemove
@@ -517,7 +517,6 @@ namespace umi3d.edk.binding
             }
             else // some users have specific values
             {
-
                 users
                     .Where((u) => bindings.GetValue(u).ContainsKey(nodeId))
                     .GroupBy(u => bindings.GetValue(u)[nodeId])

@@ -84,7 +84,7 @@ namespace umi3d.edk.collaboration.emotes
 
         protected void Init()
         {
-            umi3dServerService.OnUserJoin.AddListener(LoadEmotesAnimations);
+            umi3dServerService.OnUserActive.AddListener(LoadEmotesAnimations);
             umi3dServerService.OnUserLeave.AddListener(CleanEmotesAnimations);
             umi3dServerService.OnUserMissing.AddListener(CleanEmotesAnimations);
         }
@@ -95,13 +95,13 @@ namespace umi3d.edk.collaboration.emotes
                 return;
 
             var operations = (from otherUser in umi3dServerService.Users()
-                                            where otherUser.Id() != user.Id() && EmotesConfigs.ContainsKey(otherUser.Id())
-                                            from emote in EmotesConfigs[otherUser.Id()].IncludedEmotes
-                                            let anim = umi3dEnvironmentService._GetEntityInstance<UMI3DAbstractAnimation>(emote.Id())
-                                            where anim != null
-                                            let op = anim.GetLoadEntity(new () { user })
-                                            where op is not null
-                                            select op).ToList();
+                              where otherUser.Id() != user.Id() && EmotesConfigs.ContainsKey(otherUser.Id())
+                              from emote in EmotesConfigs[otherUser.Id()].IncludedEmotes
+                              let anim = umi3dEnvironmentService._GetEntityInstance<UMI3DAbstractAnimation>(emote.Id())
+                              where anim != null
+                              let op = anim.GetLoadEntity(new() { user })
+                              where op is not null
+                              select op).ToList();
 
             if (operations.Count == 0)
                 return;
@@ -117,11 +117,11 @@ namespace umi3d.edk.collaboration.emotes
                 return;
 
             var operations = (from emote in EmotesConfigs[user.Id()].IncludedEmotes
-                                              let anim = umi3dEnvironmentService._GetEntityInstance<UMI3DAbstractAnimation>(emote.Id())
-                                              where anim != null
-                                              let op = anim.GetDeleteEntity()
-                                              where op is not null
-                                              select op).ToList();
+                              let anim = umi3dEnvironmentService._GetEntityInstance<UMI3DAbstractAnimation>(emote.Id())
+                              where anim != null
+                              let op = anim.GetDeleteEntity()
+                              where op is not null
+                              select op).ToList();
 
             if (operations.Count == 0)
                 return;
