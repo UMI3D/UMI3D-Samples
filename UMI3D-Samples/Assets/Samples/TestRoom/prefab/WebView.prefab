@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104405621}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.000000029802322, y: -0.66, z: 0.25000012}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalPosition: {x: 0, y: -0.79, z: 0.374}
+  m_LocalScale: {x: 0.1, y: 0.011217001, z: 0.02483}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1903173457}
@@ -61,7 +61,7 @@ MonoBehaviour:
   convex: 0
   colliderCenter: {x: 0, y: 0, z: 0}
   colliderRadius: 1
-  colliderBoxSize: {x: 1, y: 1, z: 1}
+  colliderBoxSize: {x: 2, y: 2, z: 2}
   colliderHeight: 1
   colliderDirection: 1
   isMeshCustom: 0
@@ -219,7 +219,7 @@ Transform:
   m_GameObject: {fileID: 1903173456}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 104405622}
