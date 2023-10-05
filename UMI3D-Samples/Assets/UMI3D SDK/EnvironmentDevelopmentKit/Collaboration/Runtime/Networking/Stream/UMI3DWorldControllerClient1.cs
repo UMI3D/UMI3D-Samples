@@ -101,7 +101,8 @@ namespace umi3d.cdk.collaboration
                 {
                     globalToken = this.globalToken,
                     gate = this.gate,
-                    libraryPreloading = downloadLibraryOnly
+                    libraryPreloading = downloadLibraryOnly,
+                    isServer = true
                 });
             return false;
         }
@@ -110,6 +111,8 @@ namespace umi3d.cdk.collaboration
         {
             if (!string.IsNullOrEmpty(media.url))
             {
+                UnityEngine.Debug.Log($"Is server is {dto.isServer}");
+
                 UMI3DDto answerDto = await HttpClient1.Connect(dto, media.url);
                 if (answerDto is PrivateIdentityDto identity)
                 {
@@ -125,7 +128,8 @@ namespace umi3d.cdk.collaboration
                         metadata = form.metadata,
                         globalToken = form.globalToken,
                         gate = dto.gate,
-                        libraryPreloading = dto.libraryPreloading
+                        libraryPreloading = dto.libraryPreloading,
+                        isServer = true,
                     };
                     return await Connect(_answer);
                 }

@@ -73,9 +73,10 @@ public class StreamManager : MonoBehaviour
 
     async void _Stop()
     {
-        if (nvClient != null) {
-            await nvClient.Logout(); 
+        if (nvClient != null)
+        {
+            await nvClient.Logout();
             wcClient.Logout();
-                }
+        }
     }
 }

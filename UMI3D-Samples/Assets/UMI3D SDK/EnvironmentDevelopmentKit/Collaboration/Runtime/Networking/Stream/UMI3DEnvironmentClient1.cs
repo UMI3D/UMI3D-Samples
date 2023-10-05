@@ -338,7 +338,7 @@ namespace umi3d.cdk.collaboration
 
         private void GetLocalToken(Action<string> callback)
         {
-            //callback?.Invoke(worldControllerClient.Identity.localToken);
+            callback?.Invoke(worldControllerClient.Identity.localToken);
         }
 
 

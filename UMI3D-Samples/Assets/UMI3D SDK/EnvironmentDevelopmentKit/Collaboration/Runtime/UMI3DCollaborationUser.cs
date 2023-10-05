@@ -114,76 +114,48 @@ namespace umi3d.edk.collaboration
         {
             UMI3DCollaborationServer.Collaboration.NotifyUserStatusChanged(this);
         }
-        public virtual UserConnectionDto ToUserConnectionDto()
+        public override UserConnectionDto ToUserConnectionDto()
         {
-            var source = ToUserDto(this);
-            var connectionInformation = new UserConnectionDto()
-            {
-                id = source.id,
-                login = source.login,
-                status = source.status,
+            var connectionInformation = base.ToUserConnectionDto();
 
-                audioSourceId = source.audioSourceId,
-                audioFrequency = source.audioFrequency,
-                videoSourceId = source.videoSourceId,
-                networkId = source.networkId,
-
-                microphoneStatus = source.microphoneStatus,
-                avatarStatus = source.avatarStatus,
-                attentionRequired = source.attentionRequired,
-
-                audioChannel = source.audioChannel,
-                audioServerUrl = source.audioServerUrl,
-                audioLogin = source.audioLogin,
-                audioUseMumble = source.audioUseMumble,
-
-                onStartSpeakingAnimationId = source.onStartSpeakingAnimationId,
-                onStopSpeakingAnimationId = source.onStopSpeakingAnimationId,
-                language = source.language,
-
-                audioPassword = audioPassword.GetValue(),
-
-                parameters = UMI3DCollaborationServer.Instance.Identifier.GetParameterDtosFor(this),
-                librariesUpdated = UMI3DCollaborationServer.Instance.Identifier.getLibrariesUpdateSatus(this)
-            };
-
+            connectionInformation.audioPassword = audioPassword.GetValue();
+            connectionInformation.parameters = UMI3DCollaborationServer.Instance.Identifier.GetParameterDtosFor(this);
+            connectionInformation.librariesUpdated = UMI3DCollaborationServer.Instance.Identifier.getLibrariesUpdateSatus(this);
             return connectionInformation;
         }
 
-        public virtual UserDto ToUserDto(UMI3DUser user)
+        public override UserDto ToUserDto(UMI3DUser user)
         {
-            var _user = new UserDto
-            {
-                id = Id(),
-                status = status,
-                //avatarId = Avatar == null ? 0 : Avatar.Id(),
+            var _user = base.ToUserDto(user);
 
-                userSize = userSize.GetValue(),
-                networkId = networkPlayer?.NetworkId ?? 0,
-                audioSourceId = audioPlayer?.Id() ?? 0,
-                audioFrequency = audioFrequency.GetValue(),
-                videoSourceId = videoPlayer?.Id() ?? 0,
-                login = string.IsNullOrEmpty(displayName) ? (string.IsNullOrEmpty(login) ? Id().ToString() : login) : displayName,
+            _user.userSize = userSize.GetValue();
+            _user.networkId = networkPlayer?.NetworkId ?? 0;
+            _user.audioSourceId = audioPlayer?.Id() ?? 0;
+            _user.audioFrequency = audioFrequency.GetValue();
+            _user.videoSourceId = videoPlayer?.Id() ?? 0;
+            _user.login = string.IsNullOrEmpty(displayName) ? (string.IsNullOrEmpty(login) ? Id().ToString() : login) : displayName;
 
-                language = language,
+            _user.language = language;
 
-                microphoneStatus = microphoneStatus.GetValue(user),
-                avatarStatus = avatarStatus.GetValue(user),
-                attentionRequired = attentionRequired.GetValue(user),
+            _user.microphoneStatus = microphoneStatus.GetValue(user);
+            _user.avatarStatus = avatarStatus.GetValue(user);
+            _user.attentionRequired = attentionRequired.GetValue(user);
 
-                audioChannel = audioChannel.GetValue(user),
-                audioServerUrl = audioServerUrl.GetValue(user),
-                audioUseMumble = audioUseMumble.GetValue(user),
-                audioLogin = audioLogin.GetValue(user),
+            _user.audioChannel = audioChannel.GetValue(user);
+            _user.audioServerUrl = audioServerUrl.GetValue(user);
+            _user.audioUseMumble = audioUseMumble.GetValue(user);
+            _user.audioLogin = audioLogin.GetValue(user);
 
-                onStartSpeakingAnimationId = onStartSpeakingAnimationId.GetValue(user)?.Id() ?? 0,
-                onStopSpeakingAnimationId = onStopSpeakingAnimationId.GetValue(user)?.Id() ?? 0,
-            };
+            _user.onStartSpeakingAnimationId = onStartSpeakingAnimationId.GetValue(user)?.Id() ?? 0;
+            _user.onStopSpeakingAnimationId = onStopSpeakingAnimationId.GetValue(user)?.Id() ?? 0;
+
             return _user;
         }
 
-        public async Task JoinDtoReception(Vector3Dto userSize, PoseDto[] userPoses)
+        public override async Task JoinDtoReception(Vector3Dto userSize, PoseDto[] userPoses)
         {
+            await base.JoinDtoReception(userSize, userPoses);
+
             lock (joinLock)
             {
                 UMI3DLogger.Log("PoseManager.JoinDtoReception before " + userId, scope);

@@ -47,9 +47,9 @@ namespace umi3d.edk.collaboration
         public void Stop()
         { }
 
-        private UMI3DCollaborationUser GetUserFor(HttpListenerRequest request)
+        private UMI3DCollaborationAbstractUser GetUserFor(HttpListenerRequest request)
         {
-            (UMI3DCollaborationUser user, bool oldToken) c = UMI3DCollaborationServer.GetUserFor(request);
+            (UMI3DCollaborationAbstractUser user, bool oldToken) c = UMI3DCollaborationServer.GetUserFor(request);
             return c.user;
         }
 
@@ -64,12 +64,12 @@ namespace umi3d.edk.collaboration
         [HttpGet(UMI3DNetworkingKeys.connectionInfo, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void GetConnectionInformation(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request);
+            var user = GetUserFor(e.Request);
             UMI3DLogger.Log($"Get Connection Information {user?.Id()}", scope);
             try
             {
-                var connectionInformation = user.ToUserConnectionDto();
-                e.Response.WriteContent(connectionInformation.ToBson());
+                var connectionInformation = user?.ToUserConnectionDto();
+                e.Response.WriteContent(connectionInformation?.ToBson() ?? new byte[0]);
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.status_update, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void UpdateStatus(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request);
+            UMI3DCollaborationUser user = GetUserFor(e.Request) as UMI3DCollaborationUser;
             UMI3DLogger.Log($"Update Status {user?.Id()}", scope);
             bool finished = false;
 
@@ -152,7 +152,7 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.connection_information_update, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void UpdateConnectionInformation(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request);
+            UMI3DCollaborationUser user = GetUserFor(e.Request) as UMI3DCollaborationUser;
             UMI3DLogger.Log($"Update Connection Information {user?.Id()}", scope);
             bool finished = false;
             ReadDto(e.Request, (dto) =>
@@ -190,13 +190,13 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.logout, WebServiceMethodAttribute.Security.PrivateAllowOldToken, WebServiceMethodAttribute.Type.Method)]
         public void Logout(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            (UMI3DCollaborationUser user, bool oldToken) c = UMI3DCollaborationServer.GetUserFor(e.Request);
+            (UMI3DCollaborationAbstractUser user, bool oldToken) c = UMI3DCollaborationServer.GetUserFor(e.Request);
             if (c.user != null)
             {
                 UMI3DLogger.Log($"Logout {c.user.Id()}", scope);
-                if (c.user != null)
+                if (c.user != null && c.user is UMI3DCollaborationUser cuser)
                 {
-                    UMI3DCollaborationServer.Logout(c.user);
+                    UMI3DCollaborationServer.Logout(cuser);
                 }
             }
             else if (c.oldToken)
@@ -464,7 +464,7 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.join, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void JoinEnvironment(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request);
+            var user = GetUserFor(e.Request);
             UMI3DLogger.Log($"Join environment {user?.Id()}", scope);
             bool finished = false;
 
@@ -502,7 +502,7 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.entity, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void PostEntity(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request);
+            UMI3DCollaborationUser user = GetUserFor(e.Request) as UMI3DCollaborationUser;
             UMI3DLogger.Log($"Post Entity {user?.Id()}", scope);
             bool finished2 = false;
             ReadDto(e.Request, (dto) =>
@@ -648,7 +648,7 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.uploadFile, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void PostUploadFile(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request);
+            UMI3DCollaborationUser user = GetUserFor(e.Request) as UMI3DCollaborationUser;
             UMI3DLogger.Log($"Post Upload File {user?.Id()}", scope);
             if (!uriparam.ContainsKey("param"))
             {
@@ -693,7 +693,7 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.localData, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void PostPlayerLocalInfo(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request);
+            UMI3DCollaborationUser user = GetUserFor(e.Request) as UMI3DCollaborationUser;
             UMI3DLogger.Log($"PostPlayerLocalInfo {user?.Id()}", scope);
             //UMI3DLogger.Log("Receive local data from : " + user,scope);
             if (receiveLocalInfoListener != null)
@@ -712,7 +712,7 @@ namespace umi3d.edk.collaboration
         [HttpGet(UMI3DNetworkingKeys.localData, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void GetPlayerLocalInfo(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request);
+            UMI3DCollaborationUser user = GetUserFor(e.Request) as UMI3DCollaborationUser;
             UMI3DLogger.Log($"GetPlayerLocalInfo {user?.Id()}", scope);
             UMI3DLogger.Log(user + " wants to get datas from : " + uriparam["param"], scope);
             if (sendLocalInfoListener != null)

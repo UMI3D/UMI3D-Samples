@@ -6695,6 +6695,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1716789073}
   - component: {fileID: 1716789075}
+  - component: {fileID: 1716789076}
   m_Layer: 0
   m_Name: Launcher
   m_TagString: Untagged
@@ -6738,6 +6739,21 @@ MonoBehaviour:
   StopButton: {fileID: 481684586}
   IpButton: {fileID: 428789071}
   Ip: {fileID: 149866581}
+--- !u!114 &1716789076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716789072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2694cbf639f362740bc61daff36ab9ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ServerIp: {fileID: 1966122771}
+  StartButton: {fileID: 151948683}
+  StartButtonText: {fileID: 84971123}
 --- !u!1 &1742868188
 GameObject:
   m_ObjectHideFlags: 0
