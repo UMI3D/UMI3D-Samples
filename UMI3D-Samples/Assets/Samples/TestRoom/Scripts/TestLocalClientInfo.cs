@@ -25,7 +25,7 @@ public class TestLocalClientInfo : MonoBehaviour
     {
         if(tryToWrite != oldWriteValue)
         {
-            UMI3DCollaborationUser user = UMI3DCollaborationServer.Collaboration.Users.FirstOrDefault();
+            UMI3DCollaborationAbstractUser user = UMI3DCollaborationServer.Collaboration.Users.FirstOrDefault();
             var users = new HashSet<UMI3DUser>(); users.Add(user);
             if (LocalInfoParameter.userResponses.ContainsKey((user, "testdata")) && LocalInfoParameter.userResponses[(user, "testdata")].write)
             {

@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using umi3d.common;
+using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.edk.interaction;
 using umi3d.edk.userCapture;
@@ -152,7 +153,7 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.connection_information_update, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void UpdateConnectionInformation(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            UMI3DCollaborationUser user = GetUserFor(e.Request) as UMI3DCollaborationUser;
+            var user = GetUserFor(e.Request);
             UMI3DLogger.Log($"Update Connection Information {user?.Id()}", scope);
             bool finished = false;
             ReadDto(e.Request, (dto) =>
@@ -161,7 +162,7 @@ namespace umi3d.edk.collaboration
                 {
                     var anw = dto as UserConnectionAnswerDto;
                     UnityMainThreadDispatcher.Instance().Enqueue(_updateConnectionInformation(user, anw));
-                    var pt = UMI3DCollaborationServer.Instance.IsThereTransactionPending(user);
+                    var pt = (user is UMI3DCollaborationUser cuser) ? UMI3DCollaborationServer.Instance.IsThereTransactionPending(cuser) : new PendingTransactionDto();
                     e.Response.WriteContent(pt.ToBson());
                 }
                 catch (Exception ex)
@@ -174,10 +175,13 @@ namespace umi3d.edk.collaboration
             while (!finished) System.Threading.Thread.Sleep(1);
         }
 
-        private IEnumerator _updateConnectionInformation(UMI3DCollaborationUser user, UserConnectionAnswerDto dto)
+        private IEnumerator _updateConnectionInformation(UMI3DCollaborationAbstractUser user, UserConnectionAnswerDto dto)
         {
             UMI3DLogger.Log($"Update Connection Information {user?.Id()} {dto?.status} {dto?.librariesUpdated} {dto?.parameters?.answers?.Select((a) => a.parameter.ToString()).ToString<string>()}", scope);
-            user.SetStatus(UMI3DCollaborationServer.Instance.Identifier.UpdateIdentity(user, dto));
+            if (user is UMI3DCollaborationUser cuser)
+                user.SetStatus(UMI3DCollaborationServer.Instance.Identifier.UpdateIdentity(cuser, dto));
+            else
+                user.SetStatus(dto.status);
             user.forgeServer.SendSignalingMessage(user.networkPlayer, user.ToStatusDto());
             yield break;
         }

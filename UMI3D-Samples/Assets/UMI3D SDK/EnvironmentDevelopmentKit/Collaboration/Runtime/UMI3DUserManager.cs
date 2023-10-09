@@ -154,13 +154,13 @@ namespace umi3d.edk.collaboration
         /// <summary>
         /// Return all UMI3D users.
         /// </summary>
-        public IEnumerable<UMI3DCollaborationUser> Users
+        public IEnumerable<UMI3DCollaborationAbstractUser> Users
         {
             get
             {
                 lock (users)
                 {
-                    return users.Values.Where(u => u is UMI3DCollaborationUser).Select(u => u as UMI3DCollaborationUser).ToList();
+                    return users.Values.Where(u => u is UMI3DCollaborationAbstractUser).Select(u => u as UMI3DCollaborationAbstractUser).ToList();
                 }
             }
         }
@@ -292,12 +292,12 @@ namespace umi3d.edk.collaboration
             }
             else
             {
-                user = 
+                user =
                     LoginDto.isServer ?
                         new UMI3DServerUser(LoginDto) :
                         new UMI3DCollaborationUser(LoginDto);
 
-                UMI3DLogger.Log($"CreateUser() : {user.Id()} {user.login} new, create lock", scope);
+                UMI3DLogger.Log($"CreateUser() : {user.Id()} {user.login} new, create lock [{user.GetType()}]", scope);
                 lock (users)
                 {
                     users.Add(user.Id(), user);
