@@ -221,6 +221,12 @@ namespace umi3d.edk.collaboration
             e.Response.WriteContent(UMI3DEnvironment.Instance.ToLibrariesDto(user).ToBson());
         }
 
+        [HttpPost(UMI3DNetworkingKeys.libraries + "_world", WebServiceMethodAttribute.Security.Public, WebServiceMethodAttribute.Type.Method)]
+        public void GetLibrariesBis(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
+        {
+            e.Response.WriteContent(System.Text.Encoding.UTF8.GetBytes(UMI3DEnvironment.Instance.ToLibrariesDto(null).ToJson(Newtonsoft.Json.TypeNameHandling.None)));
+        }
+
         /// <summary>
         /// GET "/file/public/"
         /// Handles the GET public file.
