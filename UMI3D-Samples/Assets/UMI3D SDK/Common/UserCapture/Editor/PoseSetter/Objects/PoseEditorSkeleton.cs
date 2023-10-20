@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,27 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#if UNITY_EDITOR
 using System.Collections.Generic;
-using umi3d.common;
-using umi3d.common.userCapture.tracking;
 
-namespace umi3d.edk.userCapture.tracking
+namespace umi3d.common.userCapture.pose.editor
 {
     /// <summary>
-    /// <see cref="UMI3DUser"/> with a UMI3D Avatar attached to it.
+    /// Wrapper for skeleton being edited in the <see cref="PoseEditorWindow"/>.
     /// </summary>
-    public class UMI3DTrackedUser : UMI3DUser
+    public class PoseEditorSkeleton
     {
-        private const DebugScope scope = DebugScope.EDK | DebugScope.UserCapture | DebugScope.User;
+        /// <summary>
+        /// Pose setter bone components collection defining each bone.
+        /// </summary>
+        public List<PoseSetterBoneComponent> boneComponents = new();
 
         /// <summary>
-        /// User's tracking current state description
+        /// Pose currently edited.
         /// </summary>
-        public UserTrackingFrameDto CurrentTrackingFrame;
-
-        /// <summary>
-        /// Bones that are associated with a controller.
-        /// </summary>
-        public List<uint> BonesWithController;
+        public UMI3DPose_so currentPose;
     }
 }
+#endif
