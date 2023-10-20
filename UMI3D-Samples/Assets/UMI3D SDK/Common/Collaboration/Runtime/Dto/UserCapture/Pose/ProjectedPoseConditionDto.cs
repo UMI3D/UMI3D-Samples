@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.userCapture.pose
+using umi3d.common.userCapture.pose;
+
+namespace umi3d.common.collaboration.userCapture.pose.dto
 {
-    /// <summary>
-    /// <inheritdoc/><br/>
-    /// A condition to check the direction
-    /// </summary>
-    [System.Serializable]
-    public class DirectionConditionDto : AbstractPoseConditionDto
+    public class ProjectedPoseConditionDto : AbstractPoseConditionDto
     {
-        public Vector3Dto Direction { get; set; }
-
-        public uint BoneId { get; set; }
-
-        public float Threshold { get; set; }
-
-        public ulong TargetNodeId {  get; set; }
+        public ulong interactableId;
     }
 }
