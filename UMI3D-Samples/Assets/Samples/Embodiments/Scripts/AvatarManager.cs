@@ -86,14 +86,14 @@ public class AvatarManager : MonoBehaviour, IAvatarManager
     {
         bindingHelperService = BindingManager.Instance;
         UMI3DServerService = UMI3DServer.Instance;
-        UMI3DServerService.OnUserActive.AddListener((user) => Handle(user as UMI3DCollaborationUser));
-        UMI3DServerService.OnUserLeave.AddListener((user) => Unhandle(user as UMI3DCollaborationUser));
-        UMI3DServerService.OnUserMissing.AddListener((user) => Unhandle(user as UMI3DCollaborationUser));
+        UMI3DServerService.OnUserActive.AddListener((user) => Handle((UMI3DCollaborationUser)user));
+        UMI3DServerService.OnUserLeave.AddListener((user) => Unhandle((UMI3DCollaborationUser)user));
+        UMI3DServerService.OnUserMissing.AddListener((user) => Unhandle((UMI3DCollaborationUser)user));
     }
 
     private void Handle(UMI3DCollaborationUser user)
     {
-        if (user == null || handledAvatars.ContainsKey(user))
+        if (handledAvatars.ContainsKey(user))
             return;
 
         SendAvatar(user);
@@ -101,7 +101,7 @@ public class AvatarManager : MonoBehaviour, IAvatarManager
 
     private void Unhandle(UMI3DCollaborationUser user)
     {
-        if (user == null || !handledAvatars.ContainsKey(user))
+        if (!handledAvatars.ContainsKey(user))
             return;
 
         Transaction t = new() { reliable = true };
@@ -151,24 +151,65 @@ public class AvatarManager : MonoBehaviour, IAvatarManager
     {
         List<Operation> ops = new();
 
-        var bindings = Rigs.binds.Select(bind =>
-            new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
+        // hide head for own user avatar (and legs in VR)
+        var bindingsForUser = Rigs.binds.Select(bind =>
+        {
+            if (bind.boneType == BoneType.Neck || (user.HasHeadMountedDisplay && bonesToHideInVR.Contains(bind.boneType)))
             {
-                syncPosition = true,
-                offsetPosition = bind.positionOffset,
-                syncRotation = true,
-                offsetRotation = Quaternion.Euler(bind.rotationOffset),
-            }).Cast<AbstractSingleBinding>();
+                return new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
+                {
+                    syncScale = true,
+                    offsetScale = Vector3.zero,
+                };
+            }
+            else
+            {
+                return new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
+                {
+                    syncPosition = true,
+                    offsetPosition = bind.positionOffset,
+                    syncRotation = true,
+                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
+                };
+            }
+        }).Cast<AbstractSingleBinding>();
 
-        MultiBinding multiBinding = new(avatarModel.Id())
+        MultiBinding multiBindingForUser = new(avatarModel.Id())
         {
             partialFit = false,
             priority = 100,
-            bindings = bindings.ToList()
+            bindings = bindingsForUser.ToList()
         };
 
-        ops.AddRange(bindingHelperService.AddBinding(multiBinding));
+        // others receive normal full avatar
+        var bindingsForOthers = Rigs.binds.Select(bind =>
+                new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
+                {
+                    syncPosition = true,
+                    offsetPosition = bind.positionOffset,
+                    syncRotation = true,
+                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
+                }).Cast<AbstractSingleBinding>();
+
+        MultiBinding multiBindingForOthers = new(avatarModel.Id())
+        {
+            partialFit = false,
+            priority = 100,
+            bindings = bindingsForOthers.ToList()
+        };
+
+        ops.AddRange(bindingHelperService.AddBinding(multiBindingForOthers)); //set value as synchronized one
+        ops.AddRange(bindingHelperService.RemoveBinding(multiBindingForOthers, new UMI3DUser[1] { user }));
+        ops.AddRange(bindingHelperService.AddBinding(multiBindingForUser, new UMI3DUser[1] { user }));
 
         return ops;
     }
+
+
+    private static HashSet<uint> bonesToHideInVR = new()
+    {
+        BoneType.Head,
+        BoneType.LeftHip,
+        BoneType.RightHip
+    };
 }

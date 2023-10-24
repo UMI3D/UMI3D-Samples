@@ -140,8 +140,12 @@ public class WalkingAnimationsManager : MonoBehaviour
 
         // Create Animator animations
         skeletonAnimationNodes.Add(user, skeletonNode);
-        ops.AddRange(skeletonNode.GenerateAnimations(areLooping: true));
-        ops.Add(skeletonNode.GetLoadEntity());
+        skeletonNode.GenerateAnimations(areLooping: true);
+
+        // don't use walking animation for own user in VR, but others receive the animations
+        var targetUsers = !user.HasHeadMountedDisplay ? null : UMI3DCollaborationServer.Instance.Users().Except(new UMI3DUser[1] { user })?.ToHashSet();
+        ops.AddRange(skeletonNode.GetLoadAnimations(targetUsers));
+        ops.Add(skeletonNode.GetLoadEntity(targetUsers));
 
         return ops;
     }

@@ -52,8 +52,12 @@ namespace umi3d.edk.collaboration
         [SerializeField, ReadOnly]
         private bool useIp = false;
         private UMI3DHttp http;
+        private UMI3DHttp _httpForWC;
+        private UMI3DHttp httpForWC => _httpForWC ?? http;
 
         public static UMI3DHttp HttpServer => Exists ? Instance.http : null;
+
+        public static UMI3DHttp HttpServerForWorldController => Exists ? Instance.httpForWC : null;
 
         private UMI3DForgeServer forgeServer;
 
@@ -101,6 +105,13 @@ namespace umi3d.edk.collaboration
         public bool useRandomHttpPort;
         [EditorReadOnly]
         public ushort httpPort;
+
+        [EditorReadOnly]
+        public bool useWorldControllerSpecificHttpPort;
+        [EditorReadOnly]
+        public bool useRandomPortForWorldController;
+        [EditorReadOnly]
+        public ushort httpPortForWorldController;
 
         [EditorReadOnly]
         [Tooltip("URL of the default resources server. Set to this HttpUrl if empty")]
@@ -197,7 +208,7 @@ namespace umi3d.edk.collaboration
         {
             base.OnDestroy();
             if (!Exists)
-                UMI3DHttp.Destroy();
+                http.Dispose();
         }
 
         /// <inheritdoc/>
@@ -214,6 +225,17 @@ namespace umi3d.edk.collaboration
             if (collaborativeModule == null)
                 collaborativeModule = UMI3DSerializerModuleUtils.GetModules().ToList();
 
+            //new List<UMI3DSerializerModule>() {
+            //new UMI3DSerializerBasicModules(),
+            //new UMI3DSerializerStringModules(),
+            //new UMI3DSerializerVectorModules(),
+            //new UMI3DSerializerAnimationModules(),
+            //new UMI3DSerializerShaderModules(),
+            //new UMI3DUserCaptureBindingSerializerModule(),
+            //new UMI3DEmotesSerializerModule(),
+            //new UMI3DEnvironmentSerializerCollaborationModule(),
+            //new common.collaboration.UMI3DCollaborationSerializerModule() };
+            
             UMI3DSerializer.AddModule(collaborativeModule);
 
             if (!useIp)
@@ -221,10 +243,17 @@ namespace umi3d.edk.collaboration
 
             httpPort = (ushort)FreeTcpPort(useRandomHttpPort ? 0 : httpPort);
             forgePort = (ushort)FreeTcpPort(useRandomForgePort ? 0 : forgePort);
+            httpPortForWorldController = (ushort)FreeTcpPort(useRandomPortForWorldController ? 0 : httpPortForWorldController);
+            //websocketPort = FreeTcpPort(useRandomWebsocketPort ? 0 : websocketPort);
 
-            UMI3DHttp.Destroy();
+            http?.Dispose();
+            _httpForWC?.Dispose();
+
             http = new UMI3DHttp(httpPort);
-            UMI3DHttp.Instance.AddRoot(new UMI3DEnvironmentApi());
+            _httpForWC = useWorldControllerSpecificHttpPort ? new UMI3DHttp(httpPortForWorldController) : null;
+
+            http.AddRoot(new UMI3DEnvironmentApi());
+            httpForWC.AddRoot(new UMI3DEnvironmentFromWorldControllerApi());
 
             WorldController.Setup();
 
@@ -256,24 +285,22 @@ namespace umi3d.edk.collaboration
             UMI3DCollaborationServer.Collaboration.ConnectUser(player, identity, action, UserCreatedCallback);
         }
 
-        protected void UserRegisteredCallback(UMI3DCollaborationAbstractUser user, bool reconnection)
+        protected void UserRegisteredCallback(UMI3DCollaborationUser user, bool reconnection)
         {
             user.SetStatus(StatusType.REGISTERED);
             if (!reconnection)
             {
-                if (user is UMI3DCollaborationUser collaborationUser)
-                    WorldController.NotifyUserRegister(collaborationUser);
+                WorldController.NotifyUserRegister(user);
                 UMI3DLogger.Log($"User Registered", scope);
                 OnUserRegistered.Invoke(user);
             }
         }
 
-        protected void UserCreatedCallback(UMI3DCollaborationAbstractUser user, bool reconnection)
+        protected void UserCreatedCallback(UMI3DCollaborationUser user, bool reconnection)
         {
             UMI3DLogger.Log($"User Created", scope);
             user.SetStatus(StatusType.CREATED);
-            if (user is UMI3DCollaborationUser cUser)
-                AddUserAudio(cUser);
+            AddUserAudio(user);
             if (!reconnection)
             {
                 OnUserCreated.Invoke(user);
@@ -301,11 +328,10 @@ namespace umi3d.edk.collaboration
         /// Create new peers connection for a new user
         /// </summary>
         /// <param name="user"></param>
-        public static async Task NotifyUserJoin(UMI3DCollaborationAbstractUser user)
+        public static async Task NotifyUserJoin(UMI3DCollaborationUser user)
         {
             user.hasJoined = true;
-            if (user is UMI3DCollaborationUser cUser)
-                Collaboration.UserJoin(cUser);
+            Collaboration.UserJoin(user);
             MainThreadManager.Run(async () =>
             {
                 UMI3DLogger.Log($"<color=magenta>User Join [{user.Id()}] [{user.login}]</color>", scope);
@@ -425,7 +451,7 @@ namespace umi3d.edk.collaboration
         {
             if (!Exists)
                 return false;
-            (UMI3DCollaborationAbstractUser user, bool oldToken) c = GetUserFor(request);
+            (UMI3DCollaborationUser user, bool oldToken) c = GetUserFor(request);
             if (c.user == null && !(c.oldToken && allowOldToken))
             {
                 return false;
@@ -443,7 +469,7 @@ namespace umi3d.edk.collaboration
             }
         }
 
-        public static (UMI3DCollaborationAbstractUser user, bool oldToken) GetUserFor(WebSocketSharp.Net.HttpListenerRequest request)
+        public static (UMI3DCollaborationUser user, bool oldToken) GetUserFor(WebSocketSharp.Net.HttpListenerRequest request)
         {
             string authorization = request.Headers[UMI3DNetworkingKeys.Authorization];
             if (authorization == null)
@@ -550,7 +576,7 @@ namespace umi3d.edk.collaboration
         protected override void _Dispatch(Transaction transaction)
         {
             base._Dispatch(transaction);
-            foreach (UMI3DCollaborationAbstractUser user in UMI3DCollaborationServer.Collaboration.Users)
+            foreach (UMI3DCollaborationUser user in UMI3DCollaborationServer.Collaboration.Users)
             {
                 switch (user.status)
                 {
@@ -579,25 +605,25 @@ namespace umi3d.edk.collaboration
             }
         }
 
-        private void SendTransaction(UMI3DCollaborationAbstractUser user, Transaction transaction)
+        private void SendTransaction(UMI3DCollaborationUser user, Transaction transaction)
         {
             (byte[], bool) c = UMI3DEnvironment.Instance.useDto ? transaction.ToBson(user) : transaction.ToBytes(user);
             if (c.Item2)
                 ForgeServer.SendData(user.networkPlayer, c.Item1, transaction.reliable);
         }
 
-        private readonly Dictionary<UMI3DCollaborationAbstractUser, Transaction> TransactionToBeSend = new Dictionary<UMI3DCollaborationAbstractUser, Transaction>();
+        private readonly Dictionary<UMI3DCollaborationUser, Transaction> TransactionToBeSend = new Dictionary<UMI3DCollaborationUser, Transaction>();
 
-        public PendingTransactionDto IsThereTransactionPending(UMI3DCollaborationAbstractUser user) => new PendingTransactionDto()
+        public PendingTransactionDto IsThereTransactionPending(UMI3DCollaborationUser user) => new PendingTransactionDto()
         {
             areTransactionPending = (TransactionToBeSend.ContainsKey(user) && TransactionToBeSend[user].Any(o => o.users.Contains(user)))
         };
 
         private void Update()
         {
-            foreach (KeyValuePair<UMI3DCollaborationAbstractUser, Transaction> kp in TransactionToBeSend.ToList())
+            foreach (KeyValuePair<UMI3DCollaborationUser, Transaction> kp in TransactionToBeSend.ToList())
             {
-                UMI3DCollaborationAbstractUser user = kp.Key;
+                UMI3DCollaborationUser user = kp.Key;
                 Transaction transaction = kp.Value;
                 if (user.status == StatusType.NONE)
                 {
