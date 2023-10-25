@@ -441,30 +441,30 @@ namespace umi3d.edk.collaboration
         [HttpPost(UMI3DNetworkingKeys.join, WebServiceMethodAttribute.Security.Private, WebServiceMethodAttribute.Type.Method)]
         public void JoinEnvironment(object sender, HttpRequestEventArgs e, Dictionary<string, string> uriparam)
         {
-            var user = GetUserFor(e.Request);
+            var user = GetUserFor(e.Request) as UMI3DCollaborationUser;
             UMI3DLogger.Log($"Join environment {user?.Id()}", scope);
             bool finished = false;
-
-            ReadDto(e.Request, (dto) =>
-            {
-                UnityMainThreadDispatcher.Instance().Enqueue(async () =>
+            if (user != null)
+                ReadDto(e.Request, (dto) =>
                 {
-                    try
+                    UnityMainThreadDispatcher.Instance().Enqueue(async () =>
                     {
-                        JoinDto join = dto as JoinDto;
-                        await user.JoinDtoReception(join);
+                        try
+                        {
+                            JoinDto join = dto as JoinDto;
+                            await user.JoinDtoReception(join);
 
-                        e.Response.WriteContent(UMI3DEnvironment.ToEnterDto(user).ToBson());
-                        await UMI3DCollaborationServer.NotifyUserJoin(user);
-                    }
-                    catch (Exception ex)
-                    {
-                        UMI3DLogger.LogException(ex, scope);
-                    }
+                            e.Response.WriteContent(UMI3DEnvironment.ToEnterDto(user).ToBson());
+                            await UMI3DCollaborationServer.NotifyUserJoin(user);
+                        }
+                        catch (Exception ex)
+                        {
+                            UMI3DLogger.LogException(ex, scope);
+                        }
 
-                    finished = true;
+                        finished = true;
+                    });
                 });
-            });
             while (!finished) System.Threading.Thread.Sleep(1);
 
             UMI3DLogger.Log($"End Join environment {user?.Id()}", scope);

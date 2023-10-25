@@ -174,10 +174,5 @@ namespace umi3d.edk.collaboration
             };
             return _user;
         }
-
-        public virtual Task JoinDtoReception(Vector3Dto userSize, PoseDto[] userPoses)
-        {
-            return Task.CompletedTask;
-        }
     }
 }
