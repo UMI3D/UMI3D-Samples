@@ -406,8 +406,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a001158263df49e41bca38dc87a278c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
+  parent: {fileID: 1183297984}
   _Spacialized: 1
+  _AttenuationMaxDistance: 15
+  _AttenuationMode: 0
+  _AttenuationCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &76787175
 Transform:
   m_ObjectHideFlags: 0
@@ -1187,6 +1195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 876163245}
   - component: {fileID: 876163246}
+  - component: {fileID: 876163247}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -1221,7 +1230,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c823cab7a30e6469df05b22a8f9bf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverUrl: http://172.16.170.107:50044
+  serverUrl: http://172.22.161.78:50044
+--- !u!114 &876163247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876163244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1b8f010a6494546a92b9e4cb66b65e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStatic: 0
+  active: 1
+  UMI3DAnchor: {fileID: 0}
+  immersiveOnly: 0
+  VolumeId: 0
+  nodeName: 
+  xBillboard: 0
+  yBillboard: 0
+  hasCollider: 0
+  colliderType: 3
+  convex: 0
+  colliderCenter: {x: 0, y: 0, z: 0}
+  colliderRadius: 1
+  colliderBoxSize: {x: 1, y: 1, z: 1}
+  colliderHeight: 1
+  colliderDirection: 1
+  isMeshCustom: 0
+  customMeshCollider:
+    variants: []
 --- !u!1 &969586226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1426,6 +1466,9 @@ MonoBehaviour:
   forgeMaxNbPlayer: 32
   useRandomHttpPort: 0
   httpPort: 50043
+  useWorldControllerSpecificHttpPort: 0
+  useRandomPortForWorldController: 0
+  httpPortForWorldController: 0
   resourcesUrl: 
   iconServerUrl: 
   sessionId: 

@@ -42,12 +42,13 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
 
         dto = new DistantEnvironmentDto();
 
-        if (!serverUrl.IsNullOrEmpty())
-            Restart();
+        //if (!serverUrl.IsNullOrEmpty())
+        //    Restart();
     }
 
     public override IEntity ToEntityDto(UMI3DUser user)
     {
+        UnityEngine.Debug.Log("hello");
         return dto;
     }
 
@@ -59,6 +60,7 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
 
     async Task _Start()
     {
+        Id();
         UnityEngine.Debug.Log("start");
         media = new MediaDto()
         {
@@ -69,6 +71,7 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
         if (await wcClient.Connect())
         {
             nvClient = await wcClient.ConnectToEnvironment();
+            UnityEngine.Debug.Log($"{nvClient != null} {dto != null}");
             dto.environmentDto = nvClient.environement;
         }
     }
