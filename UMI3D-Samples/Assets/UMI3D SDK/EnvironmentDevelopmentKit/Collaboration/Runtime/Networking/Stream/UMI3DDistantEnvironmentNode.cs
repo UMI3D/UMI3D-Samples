@@ -1,3 +1,4 @@
+using inetum.unityUtils;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,7 +42,7 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
         base.InitDefinition(id);
 
         dto = new DistantEnvironmentDto();
-
+        UnityEngine.Debug.Log($"ENV {dto.environmentDto != null}");
         //if (!serverUrl.IsNullOrEmpty())
         //    Restart();
     }
@@ -71,8 +72,15 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
         if (await wcClient.Connect())
         {
             nvClient = await wcClient.ConnectToEnvironment();
+
+            while (!nvClient.IsConnected() || nvClient.environement == null)
+                await Task.Yield();
+
             UnityEngine.Debug.Log($"{nvClient != null} {dto != null}");
             dto.environmentDto = nvClient.environement;
+            UnityEngine.Debug.Log($"ENV {dto.environmentDto != null}");
+            if (dto.environmentDto?.scenes != null)
+                dto.environmentDto.scenes.SelectMany(s => s.nodes).Debug();
         }
     }
 
