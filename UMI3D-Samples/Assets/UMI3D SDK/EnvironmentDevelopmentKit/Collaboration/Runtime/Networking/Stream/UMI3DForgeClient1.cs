@@ -389,7 +389,7 @@ namespace umi3d.cdk.collaboration
             }
             else
             {
-                var container = new ByteContainer(frame);
+                var container = new ByteContainer(0, frame);
                 uint TransactionId = UMI3DSerializer.Read<uint>(container);
                 switch (TransactionId)
                 {
@@ -444,7 +444,7 @@ namespace umi3d.cdk.collaboration
             }
             else
             {
-                var container = new ByteContainer(frame);
+                var container = new ByteContainer(0, frame);
                 try
                 {
                     System.Collections.Generic.List<UserTrackingFrameDto> frames = UMI3DSerializer.ReadList<UserTrackingFrameDto>(container);
