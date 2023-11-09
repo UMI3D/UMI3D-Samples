@@ -2181,6 +2181,24 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   tools: []
+--- !u!1 &542161462 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7292631992365927322, guid: 8d55352bcc906fb478df3f31e17be3cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 4391323535506847188}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &542161468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542161462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2d157dda8e8fc45be69214fc91a3f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &559609869
 GameObject:
   m_ObjectHideFlags: 0
@@ -9122,6 +9140,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 16b3c9b228b536f41ae7baf49d0f6029,
         type: 2}
+    - target: {fileID: 3226350298751235107, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: pose_so
+      value: 
+      objectReference: {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d,
+        type: 2}
     - target: {fileID: 4391323534800945835, guid: 8d55352bcc906fb478df3f31e17be3cd,
         type: 3}
       propertyPath: ScriptableHand
@@ -9350,6 +9374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2855740249372619023, guid: 8d55352bcc906fb478df3f31e17be3cd, type: 3}
+    - {fileID: 5584075879086715715, guid: 8d55352bcc906fb478df3f31e17be3cd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8d55352bcc906fb478df3f31e17be3cd, type: 3}
 --- !u!1001 &5141408806126444238
 PrefabInstance:
