@@ -5592,30 +5592,29 @@ MonoBehaviour:
       format: unity_standalone_urp
       extension: .bundle
       isInBundle: 1
-      pathIfInBundle: Assets/Samples/Embodiments/Models/EmoteAnimator.prefab
+      pathIfInBundle: Assets/EmoteAnimationResource/Prefabs/EmoteAnimator.prefab
       metrics:
         resolution: 0
-        size: 231.335
+        size: 321.836
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
     - isLocalFile: 1
       domain: 
-      path: private\com.inetum.emotes\android\animationemote.prefab.bundle
+      path: private\com.inetum.emotes\android\emoteanimator.prefab.bundle
       format: unity_android_urp
       extension: .bundle
       isInBundle: 1
-      pathIfInBundle: Assets/Avatar/Animation Emote.prefab
+      pathIfInBundle: Assets/EmoteAnimationResource/Prefabs/EmoteAnimator.prefab
       metrics:
         resolution: 0
-        size: 2168.892
+        size: 321.836
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
   animatorStateNames:
-  - Waving
-  - Yes
-  - No
-  - Dancing
-  - Dive Roll
+  - Emote 0
+  - Emote 1
+  - Emote 2
+  - Emote 3
   emotesNodeRoot: {fileID: 1921123120}
 --- !u!114 &1528412421
 MonoBehaviour:
@@ -5641,7 +5640,7 @@ MonoBehaviour:
       pathIfInBundle: Assets/Avatar/Animation.prefab
       metrics:
         resolution: 0
-        size: 2091.736
+        size: 2150.348
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: 1cf18b03bbea54f4f84e7b4e1bb2b9de, type: 2}
     - isLocalFile: 1

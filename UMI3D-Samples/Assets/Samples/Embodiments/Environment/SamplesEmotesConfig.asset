@@ -14,32 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allAvailableAtStartByDefault: 0
   IncludedEmotes:
-  - id: 0
-    label: Hello
+  - label: Yes
     availableAtStart: 1
     iconResource:
       variants:
       - isLocalFile: 1
         domain: 
-        path: private\com.inetum.emotes\default\Emote_Waving.png
-        format: png
-        extension: .png
-        isInBundle: 0
-        pathIfInBundle: 
-        metrics:
-          resolution: 0
-          size: 1.5
-        isInLibrary: 1
-        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
-    registered: 0
-  - id: 0
-    label: Yes
-    availableAtStart: 1
-    iconResource:
-      variants:
-      - isLocalFile: 1
-        domain: 
-        path: private\com.inetum.emotes\default\Emote_Yes.png
+        path: /private/com.inetum.emotes/default/Emote_Yes.png
         format: png
         extension: .png
         isInBundle: 0
@@ -49,15 +30,13 @@ MonoBehaviour:
           size: 1.457
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
-    registered: 0
-  - id: 0
-    label: No
+  - label: No
     availableAtStart: 1
     iconResource:
       variants:
       - isLocalFile: 1
         domain: 
-        path: private\com.inetum.emotes\default\EMOTE_NO.png
+        path: /private/com.inetum.emotes/default/EMOTE_NO.png
         format: png
         extension: .png
         isInBundle: 0
@@ -67,15 +46,29 @@ MonoBehaviour:
           size: 1.522
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
-    registered: 0
-  - id: 0
-    label: Dance
+  - label: Hi
+    availableAtStart: 1
+    iconResource:
+      variants:
+      - isLocalFile: 1
+        domain: 
+        path: /private/com.inetum.emotes/default/Emote_Waving.png
+        format: png
+        extension: .png
+        isInBundle: 0
+        pathIfInBundle: 
+        metrics:
+          resolution: 0
+          size: 1.5
+        isInLibrary: 1
+        libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
+  - label: Applaud
     availableAtStart: 0
     iconResource:
       variants:
       - isLocalFile: 1
         domain: 
-        path: private\com.inetum.emotes\default\EMOTE_DANCING.png
+        path: /private/com.inetum.emotes/default/EMOTE_DANCING.png
         format: png
         extension: .png
         isInBundle: 0
@@ -85,4 +78,3 @@ MonoBehaviour:
           size: 1.224
         isInLibrary: 1
         libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
-    registered: 0
