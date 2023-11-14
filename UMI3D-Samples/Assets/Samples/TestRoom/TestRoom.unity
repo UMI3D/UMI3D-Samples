@@ -3946,7 +3946,7 @@ MonoBehaviour:
   forgeNatServerPort: 0
   forgeMaxNbPlayer: 32
   useRandomHttpPort: 0
-  httpPort: 50043
+  httpPort: 50044
   useWorldControllerSpecificHttpPort: 0
   useRandomPortForWorldController: 0
   httpPortForWorldController: 0

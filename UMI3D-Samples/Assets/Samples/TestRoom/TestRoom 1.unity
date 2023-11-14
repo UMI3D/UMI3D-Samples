@@ -1759,10 +1759,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useDto: 0
-  environmentName: test
+  environmentName: test 2
   scenes: []
-  globalLibraries:
-  - {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
+  globalLibraries: []
   defaultStartPosition: {x: 0, y: 0, z: 0}
   defaultStartOrientation: {x: 0, y: 0, z: 0}
   preloadedScenes: []
