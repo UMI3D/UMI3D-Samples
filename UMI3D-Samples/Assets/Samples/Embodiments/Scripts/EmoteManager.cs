@@ -102,11 +102,11 @@ public class EmoteManager : MonoBehaviour
         skeletonNode.objectModel.SetValue(emoteBundleResource);
         skeletonNode.userId = user.Id();
         skeletonNode.priority = 100; // priority over 100 overrides other default skeleton animations and poses
-        skeletonNode.animationStates = animatorStateNames.Take(emoteConfig.IncludedEmotes.Count).ToList(); // Only take the animator states names up till what has been defined in the emoteConfig
+        var stateNames = animatorStateNames.Take(emoteConfig.IncludedEmotes.Count).ToList(); // Only take the animator states names up till what has been defined in the emoteConfig
 
         // Create animations
         List<Operation> ops = new();
-        ops.AddRange(skeletonNode.GenerateAnimations(arePlaying: false));
+        ops.AddRange(skeletonNode.GenerateAnimations(stateNames: stateNames, arePlaying: false));
         ops.Add(skeletonNode.GetLoadEntity());
 
         emoteAnimationNodes.Add(user, skeletonNode);
