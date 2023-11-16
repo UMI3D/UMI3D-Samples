@@ -6483,6 +6483,18 @@ MonoBehaviour:
   StopButton: {fileID: 481684586}
   IpButton: {fileID: 428789071}
   Ip: {fileID: 149866581}
+--- !u!114 &1723344603 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 600301425626959806, guid: 8d55352bcc906fb478df3f31e17be3cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 4391323535506847188}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6071f500297a64496afaea9a966c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1742868188
 GameObject:
   m_ObjectHideFlags: 0
@@ -9371,6 +9383,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.124
       objectReference: {fileID: 0}
+    - target: {fileID: 8444214068647798252, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: activationConditions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444214068647798252, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: activationConditions.Array.data[0].conditionType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444214068647798252, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: activationConditions.Array.data[0].magnitudeCondition.Bone
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444214068647798252, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: activationConditions.Array.data[1].magnitudeCondition.Bone
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444214068647798252, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: activationConditions.Array.data[0].magnitudeCondition.Distance
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444214068647798252, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: activationConditions.Array.data[1].magnitudeCondition.Distance
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444214068647798252, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: activationConditions.Array.data[0].magnitudeCondition.RelativeNode
+      value: 
+      objectReference: {fileID: 1723344603}
+    - target: {fileID: 8444214068647798252, guid: 8d55352bcc906fb478df3f31e17be3cd,
+        type: 3}
+      propertyPath: activationConditions.Array.data[1].magnitudeCondition.RelativeNode
+      value: 
+      objectReference: {fileID: 1723344603}
     m_RemovedComponents:
     - {fileID: 2855740249372619023, guid: 8d55352bcc906fb478df3f31e17be3cd, type: 3}
     - {fileID: 5584075879086715715, guid: 8d55352bcc906fb478df3f31e17be3cd, type: 3}

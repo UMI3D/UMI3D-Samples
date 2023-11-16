@@ -1,5 +1,7 @@
 ﻿using inetum.unityUtils;
 
+using System.Linq;
+
 using umi3d.common.userCapture.pose;
 using umi3d.edk;
 using umi3d.edk.interaction;
@@ -19,7 +21,7 @@ public class PoseOnTrigger : MonoBehaviour
         umi3dEvent = gameObject.GetOrAddComponent<UMI3DEvent>();
 
         poseCondition = new UMI3DEnvironmentPoseCondition();
-        poseAnimator.environmentPoseConditions.Add(poseCondition);
+        poseAnimator.ActivationsConditions = poseAnimator.ActivationsConditions.Append(poseCondition).ToList();
 
         poseAnimator.duration = new()
         {
