@@ -19,9 +19,12 @@ using WebSocketSharp;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using umi3d.common.userCapture.tracking;
+using BeardedManStudios.Forge.Networking.Frame;
 
 public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
 {
+
+    public bool SendTransaction;
 
     public string ResourceServerUrl { get; set; }
     protected DistantEnvironmentDto dto;
@@ -31,6 +34,8 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
     public MediaDto media { get; private set; } = null;
     UMI3DWorldControllerClient1 wcClient = null;
     UMI3DEnvironmentClient1 nvClient = null;
+
+    UMI3DAsyncProperty<object> lastTransactionAsync;
 
     public string ServerUrl
     {
@@ -48,14 +53,57 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
 
     }
 
+    private void Update()
+    {
+        if (SendTransaction)
+        {
+            SendTransaction = false;
+
+            var bin = new BinaryDto
+            {
+                data = new byte[1] {0},
+                groupId = 0,
+                environmentid = Id()
+            };
+
+            //if (bin.data == null || bin.data.Length <= 0)
+            //    return;
+
+            var op = lastTransactionAsync.SetValue(bin);
+            var t = op.ToTransaction(true);
+            t.Dispatch();
+        }
+    }
+
     protected override void InitDefinition(ulong id)
     {
         base.InitDefinition(id);
 
+        lastTransactionAsync = new UMI3DAsyncProperty<object>(Id(), UMI3DPropertyKeys.DistantEnvironment, null);
         dto = new DistantEnvironmentDto();
+        dto.id = id;
         UnityEngine.Debug.Log($"ENV {dto.environmentDto != null}");
         //if (!serverUrl.IsNullOrEmpty())
         //    Restart();
+    }
+
+
+
+    public void OnData(Binary data)
+    {
+        var bin = new BinaryDto
+        {
+            data = data.StreamData.byteArr,
+            groupId = data.GroupId,
+            environmentid = Id()
+        };
+
+        if (bin.data == null || bin.data.Length <= 0)
+            return;
+
+        var op = lastTransactionAsync.SetValue(bin);
+        var t = op.ToTransaction(true);
+        t.Dispatch();
     }
 
     public override IEntity ToEntityDto(UMI3DUser user)
@@ -80,7 +128,7 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
             name = "other server",
             url = ServerUrl
         };
-        wcClient = new UMI3DWorldControllerClient1(media);
+        wcClient = new UMI3DWorldControllerClient1(media,this);
         if (await wcClient.Connect())
         {
             nvClient = await wcClient.ConnectToEnvironment();
@@ -95,6 +143,8 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
             //    dto.environmentDto.scenes.SelectMany(s => s.nodes).Debug();
             ResourceServerUrl = nvClient.connectionDto.resourcesUrl;
             dto.resourcesUrl = ResourceServerUrl;
+            dto.useDto = nvClient.useDto;
+            dto.environmentID = Id();
         }
     }
 
@@ -188,6 +238,7 @@ public abstract class UMI3DAbstractDistantEnvironmentNode : MonoBehaviour, UMI3D
         if (objectId == 0 && UMI3DEnvironment.Exists)
         {
             objectId = UMI3DEnvironment.Register(this);
+            UnityEngine.Debug.Log(objectId);
             InitDefinition(objectId);
             inited = true;
         }

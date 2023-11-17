@@ -55,20 +55,20 @@ public class StreamManager : MonoBehaviour
     async void _Start()
     {
 
-        media = new MediaDto()
-        {
-            name = "other server",
-            url = ServerIp.text
-        };
-        wcClient = new UMI3DWorldControllerClient1(media);
-        if(await wcClient.Connect())
-        {
-            nvClient = await wcClient.ConnectToEnvironment();
-        }
+        //media = new MediaDto()
+        //{
+        //    name = "other server",
+        //    url = ServerIp.text
+        //};
+        //wcClient = new UMI3DWorldControllerClient1(media);
+        //if(await wcClient.Connect())
+        //{
+        //    nvClient = await wcClient.ConnectToEnvironment();
+        //}
 
-        //Get connection DTO
-        // create environmnetClient
-        //connect client
+        ////Get connection DTO
+        //// create environmnetClient
+        ////connect client
     }
 
     async void _Stop()
