@@ -106,7 +106,6 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
 
     public override IEntity ToEntityDto(UMI3DUser user)
     {
-        UnityEngine.Debug.Log("hello");
         return dto;
     }
 
@@ -120,7 +119,6 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
     async Task _Start()
     {
         Id();
-        UnityEngine.Debug.Log("start");
         media = new MediaDto()
         {
             name = "other server",
@@ -134,11 +132,8 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
             while (!nvClient.IsConnected() || nvClient.environement == null)
                 await Task.Yield();
 
-            UnityEngine.Debug.Log($"{nvClient != null} {dto != null}");
             dto.environmentDto = nvClient.environement;
             UnityEngine.Debug.Log($"ENV {dto.environmentDto != null}");
-            //if (dto.environmentDto?.scenes != null)
-            //    dto.environmentDto.scenes.SelectMany(s => s.nodes).Debug();
             ResourceServerUrl = nvClient.connectionDto.resourcesUrl;
             dto.resourcesUrl = ResourceServerUrl;
             dto.useDto = nvClient.useDto;
