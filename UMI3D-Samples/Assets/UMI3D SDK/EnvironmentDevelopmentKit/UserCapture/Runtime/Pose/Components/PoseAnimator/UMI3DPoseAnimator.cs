@@ -159,6 +159,7 @@ namespace umi3d.common.userCapture.pose
             set
             {
                 activationConditions.Clear();
+                unserializableActivationConditions.Clear();
 
                 if (value == null)
                     return;

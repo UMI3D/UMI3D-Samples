@@ -21,7 +21,7 @@ public class PoseOnHold : MonoBehaviour
         umi3dEvent = gameObject.GetOrAddComponent<UMI3DEvent>();
 
         poseCondition = new UMI3DEnvironmentPoseCondition();
-        poseAnimator.ActivationsConditions = poseAnimator.ActivationsConditions.Append(poseCondition).ToList();
+        poseAnimator.environmentPoseConditions.Add(poseCondition);
 
         umi3dEvent.onHold.AddListener((content) => RequestPoseApplication(content.user));
         umi3dEvent.onRelease.AddListener((content) => RequestPoseStop(content.user));

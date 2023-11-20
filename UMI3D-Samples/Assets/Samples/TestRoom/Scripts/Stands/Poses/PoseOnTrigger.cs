@@ -21,7 +21,7 @@ public class PoseOnTrigger : MonoBehaviour
         umi3dEvent = gameObject.GetOrAddComponent<UMI3DEvent>();
 
         poseCondition = new UMI3DEnvironmentPoseCondition();
-        poseAnimator.ActivationsConditions = poseAnimator.ActivationsConditions.Append(poseCondition).ToList();
+        poseAnimator.environmentPoseConditions.Add(poseCondition);
 
         poseAnimator.duration = new()
         {

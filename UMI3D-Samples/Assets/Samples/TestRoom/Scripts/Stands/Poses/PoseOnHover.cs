@@ -21,7 +21,7 @@ public class PoseOnHover : MonoBehaviour
         interactable = gameObject.GetOrAddComponent<UMI3DInteractable>();
 
         poseCondition = new UMI3DEnvironmentPoseCondition();
-        poseAnimator.ActivationsConditions = poseAnimator.ActivationsConditions.Append(poseCondition).ToList();
+        poseAnimator.environmentPoseConditions.Add(poseCondition);
 
         interactable.onHoverEnter.AddListener((content) => RequestPoseApplication(content.user));
         interactable.onHoverExit.AddListener((content) => RequestPoseStop(content.user));
