@@ -1599,7 +1599,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pose_so: {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d, type: 2}
-  poseConditions: []
   duration:
     duration: 0
     hasMin: 0
@@ -1608,18 +1607,28 @@ MonoBehaviour:
     max: 0
   interpolable: 0
   composable: 0
-  activationMode: 1
-  HasMagnitudeCondition: 1
-  Magnitude: 0.75
-  BoneOrigin: 24
   relativeNode: {fileID: 6610777238800377393}
-  HasDirectionCondition: 0
-  Direction: {x: 0, y: 0, z: 0}
-  HasScaleCondition: 0
-  TargetScale: {x: 0, y: 0, z: 0}
-  references:
-    version: 2
-    RefIds: []
+  activationMode: 1
+  activationConditions:
+  - conditionType: 0
+    magnitudeCondition:
+      Bone: 24
+      RelativeNode: {fileID: 6610777238800377393}
+      Distance: 0.75
+    directionCondition:
+      Direction: {x: 0, y: 0, z: 0}
+      Bone: 0
+      Threshold: 0
+      RelativeNode: {fileID: 0}
+    scaleCondition:
+      Scale: {x: 0, y: 0, z: 0}
+      Node: {fileID: 0}
+    userScaleCondition:
+      Scale: {x: 0, y: 0, z: 0}
+    boneRotationCondition:
+      Bone: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Threshold: 0
 --- !u!1001 &4391323536371306104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1825,7 +1834,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pose_so: {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d, type: 2}
-  poseConditions: []
   duration:
     duration: 0
     hasMin: 0
@@ -1834,18 +1842,28 @@ MonoBehaviour:
     max: 0
   interpolable: 0
   composable: 0
-  activationMode: 0
-  HasMagnitudeCondition: 1
-  Magnitude: 0.7
-  BoneOrigin: 24
   relativeNode: {fileID: 4391323536371306106}
-  HasDirectionCondition: 0
-  Direction: {x: 0, y: 0, z: 0}
-  HasScaleCondition: 0
-  TargetScale: {x: 0, y: 0, z: 0}
-  references:
-    version: 2
-    RefIds: []
+  activationMode: 0
+  activationConditions:
+  - conditionType: 0
+    magnitudeCondition:
+      Bone: 24
+      RelativeNode: {fileID: 4391323536371306106}
+      Distance: 0.75
+    directionCondition:
+      Direction: {x: 0, y: 0, z: 0}
+      Bone: 0
+      Threshold: 0
+      RelativeNode: {fileID: 0}
+    scaleCondition:
+      Scale: {x: 0, y: 0, z: 0}
+      Node: {fileID: 0}
+    userScaleCondition:
+      Scale: {x: 0, y: 0, z: 0}
+    boneRotationCondition:
+      Bone: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Threshold: 0
 --- !u!4 &8758280490754041186 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 6471bcee4c130a7449dcae4e4bb25f0b,
@@ -2192,7 +2210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pose_so: {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d, type: 2}
-  poseConditions: []
   duration:
     duration: 1
     hasMin: 1
@@ -2201,18 +2218,28 @@ MonoBehaviour:
     max: 1
   interpolable: 0
   composable: 0
-  activationMode: 1
-  HasMagnitudeCondition: 1
-  Magnitude: 0.75
-  BoneOrigin: 24
   relativeNode: {fileID: 1504819841234036392}
-  HasDirectionCondition: 0
-  Direction: {x: 0, y: 0, z: 0}
-  HasScaleCondition: 0
-  TargetScale: {x: 0, y: 0, z: 0}
-  references:
-    version: 2
-    RefIds: []
+  activationMode: 1
+  activationConditions:
+  - conditionType: 0
+    magnitudeCondition:
+      Bone: 24
+      RelativeNode: {fileID: 1504819841234036392}
+      Distance: 0.75
+    directionCondition:
+      Direction: {x: 0, y: 0, z: 0}
+      Bone: 0
+      Threshold: 0
+      RelativeNode: {fileID: 0}
+    scaleCondition:
+      Scale: {x: 0, y: 0, z: 0}
+      Node: {fileID: 0}
+    userScaleCondition:
+      Scale: {x: 0, y: 0, z: 0}
+    boneRotationCondition:
+      Bone: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Threshold: 0
 --- !u!114 &8447057788576984407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2482,7 +2509,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pose_so: {fileID: 11400000, guid: 068f27fd8ef4ffd479d9ab895310c67d, type: 2}
-  poseConditions: []
   duration:
     duration: 0
     hasMin: 0
@@ -2491,18 +2517,28 @@ MonoBehaviour:
     max: 0
   interpolable: 0
   composable: 0
-  activationMode: 1
-  HasMagnitudeCondition: 1
-  Magnitude: 0.75
-  BoneOrigin: 24
   relativeNode: {fileID: 600301425626959806}
-  HasDirectionCondition: 0
-  Direction: {x: 0, y: 0, z: 0}
-  HasScaleCondition: 0
-  TargetScale: {x: 0, y: 0, z: 0}
-  references:
-    version: 2
-    RefIds: []
+  activationMode: 1
+  activationConditions:
+  - conditionType: 0
+    magnitudeCondition:
+      Bone: 24
+      RelativeNode: {fileID: 600301425626959806}
+      Distance: 0.75
+    directionCondition:
+      Direction: {x: 0, y: 0, z: 0}
+      Bone: 0
+      Threshold: 0
+      RelativeNode: {fileID: 0}
+    scaleCondition:
+      Scale: {x: 0, y: 0, z: 0}
+      Node: {fileID: 0}
+    userScaleCondition:
+      Scale: {x: 0, y: 0, z: 0}
+    boneRotationCondition:
+      Bone: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Threshold: 0
 --- !u!4 &3803700719739964605 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 6471bcee4c130a7449dcae4e4bb25f0b,
