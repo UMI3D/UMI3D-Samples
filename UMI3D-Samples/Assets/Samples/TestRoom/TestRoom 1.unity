@@ -1230,8 +1230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c823cab7a30e6469df05b22a8f9bf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SendTransaction: 0
-  serverUrl: http://192.168.1.198:50044
+  serverUrl: http://172.22.161.78:50044
 --- !u!114 &876163247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1760,9 +1759,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useDto: 0
-  environmentName: test 2
+  environmentName: test
   scenes: []
-  globalLibraries: []
+  globalLibraries:
+  - {fileID: 11400000, guid: 43977a7a50b7c234a9a7845d4f06bc69, type: 2}
   defaultStartPosition: {x: 0, y: 0, z: 0}
   defaultStartOrientation: {x: 0, y: 0, z: 0}
   preloadedScenes: []

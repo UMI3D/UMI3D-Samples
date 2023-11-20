@@ -9208,6 +9208,11 @@ PrefabInstance:
       propertyPath: Listener
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 103469935608539467, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
+        type: 3}
+      propertyPath: AutoStartSendingTransaction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 103469935608539469, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_RootOrder
