@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.userCapture.pose
-{
-    /// <summary>
-    /// Condition true when all conditions in one of the lists are true.
-    /// </summary>
-    [System.Serializable]
-    public class OrConditionDto : AbstractPoseConditionDto
-    {
-        public AbstractPoseConditionDto ConditionA { get; set; }
+using umi3d.common.userCapture.pose;
 
-        public AbstractPoseConditionDto ConditionB { get; set; }
+namespace umi3d.edk.userCapture.pose
+{
+    public class NotPoseCondition : IPoseAnimatorActivationCondition
+    {
+        public IPoseAnimatorActivationCondition conditionToNegate;
+
+        public NotPoseCondition(IPoseAnimatorActivationCondition conditionToNegate)
+        {
+            this.conditionToNegate = conditionToNegate;
+        }
+
+        public AbstractPoseConditionDto ToDto()
+        {
+            return new NotConditionDto()
+            {
+                Condition = conditionToNegate.ToDto()
+            };
+        }
     }
 }
