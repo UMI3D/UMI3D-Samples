@@ -1,7 +1,8 @@
 using inetum.unityUtils;
 
-using System.Linq;
+using System.Collections.Generic;
 
+using umi3d.common.userCapture;
 using umi3d.common.userCapture.pose;
 using umi3d.edk;
 using umi3d.edk.interaction;
@@ -13,18 +14,50 @@ public class PoseOnHover : MonoBehaviour
 {
     private UMI3DPoseAnimator poseAnimator;
     private UMI3DInteractable interactable;
-    private UMI3DEnvironmentPoseCondition poseCondition;
+    private UMI3DEnvironmentPoseCondition hoverPoseCondition;
+
+    private UMI3DEnvironmentPoseCondition IsVRposeCondition;
 
     private void Start()
     {
         poseAnimator = gameObject.GetOrAddComponent<UMI3DPoseAnimator>();
         interactable = gameObject.GetOrAddComponent<UMI3DInteractable>();
 
-        poseCondition = new UMI3DEnvironmentPoseCondition();
-        poseAnimator.environmentPoseConditions.Add(poseCondition);
+        hoverPoseCondition = new UMI3DEnvironmentPoseCondition();
+
+        IPoseAnimatorActivationCondition magnitudeConditionPC = new MagnitudeCondition()
+        {
+            RelativeNode = GetComponent<UMI3DNode>(),
+            Distance = 1,
+            Bone = BoneType.Hips
+        };
+
+        IPoseAnimatorActivationCondition magnitudeConditionVR = new MagnitudeCondition()
+        {
+            RelativeNode = GetComponent<UMI3DNode>(),
+            Distance = 20,
+            Bone = BoneType.Hips
+        };
+
+        IsVRposeCondition = new UMI3DEnvironmentPoseCondition(false);
+
+        poseAnimator.ActivationsConditions = new List<IPoseAnimatorActivationCondition>()
+        {
+            hoverPoseCondition & ((IsVRposeCondition & magnitudeConditionVR) | (!IsVRposeCondition & magnitudeConditionPC))
+        };
 
         interactable.onHoverEnter.AddListener((content) => RequestPoseApplication(content.user));
         interactable.onHoverExit.AddListener((content) => RequestPoseStop(content.user));
+
+        UMI3DServer.Instance.OnUserActive.AddListener((user) =>
+        {
+            Transaction t = new(true);
+            if (user.HasHeadMountedDisplay)
+                t.AddIfNotNull(IsVRposeCondition.Validate(user));
+            if (!user.HasHeadMountedDisplay)
+                t.AddIfNotNull(IsVRposeCondition.Invalidate(user));
+            t.Dispatch();
+        });
     }
 
     private void RequestPoseApplication(UMI3DUser user)
@@ -32,7 +65,7 @@ public class PoseOnHover : MonoBehaviour
         TryActivatePoseAnimatorRequest activatePoseAnimatorRequest = new(poseAnimator.Id()) { users = new() { user } };
 
         Transaction t = new(true);
-        t.AddIfNotNull(poseCondition.Validate(user));
+        t.AddIfNotNull(hoverPoseCondition.Validate(user));
         t.AddIfNotNull(activatePoseAnimatorRequest);
         t.Dispatch();
     }
@@ -40,7 +73,7 @@ public class PoseOnHover : MonoBehaviour
     private void RequestPoseStop(UMI3DUser user)
     {
         Transaction t = new(true);
-        t.AddIfNotNull(poseCondition.Invalidate(user));
+        t.AddIfNotNull(hoverPoseCondition.Invalidate(user));
         t.Dispatch();
     }
 }
