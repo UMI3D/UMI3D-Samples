@@ -113,13 +113,12 @@ public class WalkingAnimationsManager : MonoBehaviour
         skeletonNode.objectModel.SetValue(animatedSubskeletonBundleResource);
         skeletonNode.userId = user.Id();
         skeletonNode.priority = -10;
-        skeletonNode.animationStates = new List<string>() { string.Empty };
+        skeletonNode.animationStates = new() { string.Empty };
         skeletonNode.animatorSelfTrackedParameters = new SkeletonAnimationParameter[] {
             new()
             {
                 parameterName = SkeletonAnimatorParameterKeys.SPEED_Z.ToString(),
                 parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_Z,
-                ranges = new()
             },
             new()
             {
@@ -127,26 +126,44 @@ public class WalkingAnimationsManager : MonoBehaviour
                 parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X,
                 ranges = new List<SkeletonAnimationParameter.Range>()
                 {
-                    new () { startBound = -1f,   endBound = 1f,      result = 0f},
+                    new () { startBound = -0.2f,   endBound = 0.2f,      result = 0f},
                 }
             },
             new()
             {
                 parameterName = SkeletonAnimatorParameterKeys.SPEED_X_Z.ToString(),
                 parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z,
-                ranges = new()
             },
             new()
             {
                 parameterName = SkeletonAnimatorParameterKeys.JUMP.ToString(),
                 parameterKey = (uint)SkeletonAnimatorParameterKeys.JUMP,
-                ranges = new()
+            },
+            new()
+            {
+                parameterName = SkeletonAnimatorParameterKeys.CROUCH.ToString(),
+                parameterKey = (uint)SkeletonAnimatorParameterKeys.CROUCH,
+            },
+            new()
+            {
+                parameterName = SkeletonAnimatorParameterKeys.SPEED_Y.ToString(),
+                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_Y,
+            },
+            new()
+            {
+                parameterName = SkeletonAnimatorParameterKeys.SPEED_ABS_Y.ToString(),
+                parameterKey = (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Y,
+            },
+            new()
+            {
+                parameterName = SkeletonAnimatorParameterKeys.GROUNDED.ToString(),
+                parameterKey = (uint)SkeletonAnimatorParameterKeys.GROUNDED,
             },
         };
 
         // Create Animator animations
         skeletonAnimationNodes.Add(user, skeletonNode);
-        skeletonNode.GenerateAnimations(areLooping: true);
+        skeletonNode.GenerateAnimations(skeletonNode.animationStates, arePlaying: true, areLooping: false);
 
         // don't use walking animation for own user in VR, but others receive the animations
         var targetUsers = !user.HasHeadMountedDisplay ? null : UMI3DCollaborationServer.Instance.Users().Except(new UMI3DUser[1] { user })?.ToHashSet();
