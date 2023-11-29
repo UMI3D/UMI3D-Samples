@@ -1230,7 +1230,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c823cab7a30e6469df05b22a8f9bf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverUrl: http://172.22.161.78:50044
+  SendTransaction: 0
+  serverUrl: http://192.168.1.92:50043
 --- !u!114 &876163247
 MonoBehaviour:
   m_ObjectHideFlags: 0
