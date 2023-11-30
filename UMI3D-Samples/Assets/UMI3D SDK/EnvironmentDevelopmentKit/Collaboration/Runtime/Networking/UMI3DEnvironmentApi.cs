@@ -511,8 +511,8 @@ namespace umi3d.edk.collaboration
                                 await collabUSer.JoinDtoReception(join);
 
                             e.Response.WriteContent(UMI3DEnvironment.ToEnterDto(user).ToBson());
-                            if (collabUSer != null)
-                                await UMI3DCollaborationServer.NotifyUserJoin(collabUSer);
+                            
+                            await UMI3DCollaborationServer.NotifyUserJoin(user);
                         }
                         catch (Exception ex)
                         {

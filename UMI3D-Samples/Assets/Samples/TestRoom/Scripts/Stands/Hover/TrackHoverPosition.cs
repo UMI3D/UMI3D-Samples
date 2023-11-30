@@ -16,6 +16,7 @@ limitations under the License.
 
 using inetum.unityUtils;
 using System.Collections.Generic;
+using System.Linq;
 using umi3d.common;
 using umi3d.edk;
 using UnityEngine;
@@ -38,6 +39,7 @@ public class TrackHoverPosition : MonoBehaviour
             var transaction = new Transaction();
             transaction.reliable = true;
             transaction += trackers[ToName(content.user, content.boneType)].GetLoadEntity();
+            transaction.FirstOrDefault()?.users.Debug(u => u.Id().ToString());
             transaction.Dispatch();
         }
     }
