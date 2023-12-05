@@ -20,7 +20,6 @@ using umi3d.common;
 using UnityEngine;
 using BeardedManStudios.Forge.Networking;
 using System.Linq;
-using MainThreadDispatcher;
 
 namespace umi3d.edk.collaboration
 {
@@ -58,8 +57,6 @@ namespace umi3d.edk.collaboration
 
         protected override void Send(UMI3DCollaborationAbstractUser to, List<Frame> frames, bool force)
         {
-            MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(()=>
-            UnityEngine.Debug.Log($"Send to {to.Id()}"));
             server.RelayBinaryDataTo((int)dataChannel, to.networkPlayer, GetMessage(frames), force);
         }
 
@@ -75,7 +72,6 @@ namespace umi3d.edk.collaboration
 
             List<Frame> frames = new List<Frame>();
 
-            UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"GetFramesToSend {userTo != null} "));
             if (userTo == null)
                 return (frames, false);
 
@@ -83,7 +79,6 @@ namespace umi3d.edk.collaboration
             RelayVolume relayVolume;
             if (userTo is UMI3DCollaborationAbstractUser cUser && cUser?.RelayRoom != null && RelayVolume.relaysVolumes.TryGetValue(cUser.RelayRoom.Id(), out relayVolume) && relayVolume.HasStrategyFor(DataChannelTypes.Tracking))
             {
-                UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"GetFramesToSend Force "));
                 var users = relayVolume.RelayTrackingRequest(null, null, userTo, Receivers.Others).Select(u => u as UMI3DCollaborationAbstractUser).ToList();
                 userFrameMap = framesPerSource.Where(p => users.Any(u => u?.networkPlayer == p.Key)).ToArray();
                 forceRelay = true;
@@ -93,7 +88,6 @@ namespace umi3d.edk.collaboration
                 userFrameMap = framesPerSource;
             }
 
-            UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"GetFramesToSend {userFrameMap?.Count()} "));
             foreach (var other in userFrameMap)
             {
                 if (userTo.networkPlayer == other.Key)
@@ -126,10 +120,6 @@ namespace umi3d.edk.collaboration
                             RememberRelay(userTo.networkPlayer, other.Key, time);
                         }
                     }
-                }
-                else
-                {
-                    UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"GetFramesToSend ignore"));
                 }
             }
 
@@ -223,10 +213,9 @@ namespace umi3d.edk.collaboration
         /// <returns></returns>
         protected bool ShouldRelay(int groupId, NetworkingPlayer from, NetworkingPlayer to, ulong timestep, BeardedManStudios.Forge.Networking.Receivers strategy)
         {
-            UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"GetFramesToSend  {from.NetworkId} {to.NetworkId} {to.IsHost} { from == to} {UMI3DCollaborationServer.Collaboration?.GetUserByNetworkId(to.NetworkId)?.status != StatusType.ACTIVE}"));
             if (to.IsHost || from == to || UMI3DCollaborationServer.Collaboration?.GetUserByNetworkId(to.NetworkId)?.status != StatusType.ACTIVE)
                 return false;
-            UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"GetFramesToSend  {Proximity.Contains(strategy)}"));
+            
             if (Proximity.Contains(strategy))
             {
                 ulong last = GetLastRelay(from, to, groupId);
