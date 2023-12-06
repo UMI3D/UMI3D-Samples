@@ -583,6 +583,7 @@ namespace umi3d.common
             {
                 return (0, i, j);
             };
+            UnityEngine.Debug.Log("ListToIndexesBytable");
             if (operations.Count() > 0)
             {
                 int size = operations.Count() * sizeof(int);

@@ -1,23 +1,12 @@
-using inetum.unityUtils;
-using PlasticGui.Configuration.CloudEdition.Welcome;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.cdk.collaboration;
 using umi3d.common;
-using umi3d.common.collaboration.dto.networking;
-using umi3d.common.collaboration.dto.signaling;
-using umi3d.common.interaction;
 using umi3d.edk;
 using umi3d.edk.collaboration;
 using UnityEngine;
-using UnityEngine.Networking;
 using WebSocketSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using umi3d.common.userCapture.tracking;
 using BeardedManStudios.Forge.Networking.Frame;
 
@@ -95,8 +84,9 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
             return;
 
         var op = lastTransactionAsync.Add(bin);
-        var t = op.ToTransaction(true);
+        var t = op.ToTransaction(data.IsReliable);
         t.Dispatch();
+        UnityEngine.Debug.Log($"Send binary {data.IsReliable}");
     }
 
     public void OnAvatarData(BeardedManStudios.Forge.Networking.NetworkingPlayer player, List<UserTrackingFrameDto> data)
@@ -108,8 +98,15 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
     public override IEntity ToEntityDto(UMI3DUser user)
     {
         UnityEngine.Debug.Log("hello");
-        dto.binaries = lastTransactionAsync.GetValue(user);
-        return dto;
+        var nDto = new DistantEnvironmentDto()
+        {
+            id = dto.id,
+            environmentDto = dto.environmentDto,
+            resourcesUrl = dto.resourcesUrl,
+            binaries = new() //lastTransactionAsync.GetValue();
+        };
+
+        return nDto;
     }
 
 
