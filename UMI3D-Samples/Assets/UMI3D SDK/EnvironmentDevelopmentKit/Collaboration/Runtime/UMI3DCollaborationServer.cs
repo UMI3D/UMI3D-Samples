@@ -599,6 +599,8 @@ namespace umi3d.edk.collaboration
                             TransactionToBeSend[user] = new Transaction();
                         }
 
+                        UnityEngine.Debug.Log("Add transaction");
+                        
                         TransactionToBeSend[user] += transaction;
                         continue;
                 }
@@ -640,7 +642,14 @@ namespace umi3d.edk.collaboration
                 }
                 if (user.status < StatusType.ACTIVE) continue;
                 transaction.Simplify();
-                SendTransaction(user, transaction);
+                try
+                {
+                    SendTransaction(user, transaction);
+                }
+                catch(Exception e)
+                {
+                    UnityEngine.Debug.LogException(e);
+                }
                 TransactionToBeSend.Remove(user);
             }
         }
