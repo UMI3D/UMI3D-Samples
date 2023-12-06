@@ -103,7 +103,7 @@ public class InterpolationBehavior : MonoBehaviour
 
             Transaction transaction = new Transaction();
             transaction.AddIfNotNull(setEntity);
-            transaction.reliable = true;
+            transaction.reliable = false;
             
             UMI3DServer.Dispatch(transaction);
 

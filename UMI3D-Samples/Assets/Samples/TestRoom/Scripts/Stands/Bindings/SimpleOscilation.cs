@@ -83,7 +83,7 @@ namespace Assembly_CSharp // TODO: Complete and lowercase the namespace
             {
                 if ((Time.time - lastTime) > 1 / updateFrequency)
                 {
-                    var t = new Transaction() { reliable = true };
+                    var t = new Transaction() { reliable = false };
                     t.AddIfNotNull(node.objectPosition.SetValue(transform.localPosition));
                     t.Dispatch();
                     lastTime = Time.time;

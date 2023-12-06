@@ -591,6 +591,9 @@ namespace umi3d.edk.collaboration
                     case StatusType.MISSING:
                     case StatusType.CREATED:
                     case StatusType.READY:
+                        if (!transaction.reliable)
+                            continue;
+
                         if (!TransactionToBeSend.ContainsKey(user))
                         {
                             TransactionToBeSend[user] = new Transaction();

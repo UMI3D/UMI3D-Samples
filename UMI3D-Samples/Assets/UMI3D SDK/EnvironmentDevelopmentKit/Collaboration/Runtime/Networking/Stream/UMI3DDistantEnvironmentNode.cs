@@ -107,9 +107,15 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
 
     public override IEntity ToEntityDto(UMI3DUser user)
     {
-        UnityEngine.Debug.Log("hello");
-        dto.binaries = lastTransactionAsync.GetValue(user);
-        return dto;
+        var nDto = new DistantEnvironmentDto()
+        {
+            id = dto.id,
+            environmentDto = dto.environmentDto,
+            resourcesUrl = dto.resourcesUrl,
+            binaries = lastTransactionAsync.GetValue(user).ToList()
+        };
+
+        return nDto;
     }
 
 
