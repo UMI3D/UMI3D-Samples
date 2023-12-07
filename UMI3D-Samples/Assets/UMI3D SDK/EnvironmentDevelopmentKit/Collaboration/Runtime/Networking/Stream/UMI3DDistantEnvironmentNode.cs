@@ -9,6 +9,8 @@ using UnityEngine;
 using WebSocketSharp;
 using umi3d.common.userCapture.tracking;
 using BeardedManStudios.Forge.Networking.Frame;
+using System.ComponentModel;
+using System.Threading;
 
 public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
 {
@@ -83,10 +85,69 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
         if (bin.data == null || bin.data.Length <= 0)
             return;
 
+        Log(data);
+
         var op = lastTransactionAsync.Add(bin);
         var t = op.ToTransaction(data.IsReliable);
         t.Dispatch();
-        UnityEngine.Debug.Log($"Send binary {data.IsReliable}");
+    }
+
+    async void Log(Binary data)
+    {
+        await Task.Yield();
+        ByteContainer container = new ByteContainer(0, 0, data.StreamData.byteArr);
+        uint TransactionId = UMI3DSerializer.Read<uint>(container);
+        UnityEngine.Debug.Log(PerformTransaction(container));
+    }
+
+    public string PerformTransaction(ByteContainer container)
+    {
+        string s = "Transaction" + System.Environment.NewLine;
+        int i = 0;
+        foreach (ByteContainer c in UMI3DSerializer.ReadIndexesList(container))
+        {
+            s += PerformOperation(c, i++);
+        }
+        return s;
+    }
+
+    public string PerformOperation(ByteContainer container, int i)
+    {
+        string s = $" - Operation {i}" + System.Environment.NewLine + "    -> ";
+        uint operationId = UMI3DSerializer.Read<uint>(container);
+        switch (operationId)
+        {
+            case UMI3DOperationKeys.LoadEntity:
+                s += ("Load entity");
+                break;
+            case UMI3DOperationKeys.DeleteEntity:
+                {
+                    ulong entityId = UMI3DSerializer.Read<ulong>(container);
+                    s += ($"Load entity {entityId}");
+                    break;
+                }
+            case UMI3DOperationKeys.MultiSetEntityProperty:
+                s += ("Multi SetEntityProperty");
+                break;
+            case UMI3DOperationKeys.StartInterpolationProperty:
+                s += ("StartInterpolationProperty");
+                break;
+            case UMI3DOperationKeys.StopInterpolationProperty:
+                s += ("StopInterpolationProperty");
+                break;
+
+            default:
+                if (UMI3DOperationKeys.SetEntityProperty <= operationId && operationId <= UMI3DOperationKeys.SetEntityMatrixProperty)
+                {
+                    ulong entityId = UMI3DSerializer.Read<ulong>(container);
+                    uint propertyKey = UMI3DSerializer.Read<uint>(container);
+                    s += ($"SetEntityProperty {operationId} {entityId} {propertyKey}");
+                }
+                else
+                    s += ($"Other");
+                break;
+        }
+        return s;
     }
 
     public void OnAvatarData(BeardedManStudios.Forge.Networking.NetworkingPlayer player, List<UserTrackingFrameDto> data)
