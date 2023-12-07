@@ -329,7 +329,7 @@ namespace umi3d.edk.collaboration
         public static async Task NotifyUserJoin(UMI3DCollaborationAbstractUser user)
         {
             user.hasJoined = true;
-            if(user is  UMI3DCollaborationUser)
+            //if(user is  UMI3DCollaborationUser)
             Collaboration.UserJoin(user);
             MainThreadManager.Run(async () =>
             {

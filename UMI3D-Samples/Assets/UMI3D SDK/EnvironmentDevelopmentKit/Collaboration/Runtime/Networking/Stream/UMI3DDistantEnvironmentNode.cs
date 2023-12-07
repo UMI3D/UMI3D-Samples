@@ -32,7 +32,7 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
     async void Loop()
     {
         if (run) return;
-        run = true;
+       // run = true;
 
         while (run)
         {
