@@ -599,8 +599,6 @@ namespace umi3d.edk.collaboration
                             TransactionToBeSend[user] = new Transaction();
                         }
 
-                        UnityEngine.Debug.Log("Add transaction");
-                        
                         TransactionToBeSend[user] += transaction;
                         continue;
                 }

@@ -85,7 +85,7 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
         if (bin.data == null || bin.data.Length <= 0)
             return;
 
-        Log(data);
+        //Log(data);
 
         var op = lastTransactionAsync.Add(bin);
         var t = op.ToTransaction(data.IsReliable);
