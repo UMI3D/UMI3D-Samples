@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 using BeardedManStudios.Forge.Networking;
-using inetum.unityUtils;
 using MainThreadDispatcher;
 using System;
 using System.Collections;
@@ -354,12 +353,9 @@ namespace umi3d.edk.collaboration
         private IEnumerator AddUserOnJoin(UMI3DCollaborationAbstractUser user)
         {
             yield return new WaitForFixedUpdate();
-            if(user is UMI3DCollaborationUser)
-                objectUserList.Add(user);
+            objectUserList.Add(user);
 
             SetEntityProperty op = objectUserList.GetSetEntityOperationForUsers(u => u.hasJoined);
-
-            UnityEngine.Debug.Log(op.users.ToString(u => u.Id().ToString()));
 
             var tr = new Transaction() { reliable = true };
             tr.AddIfNotNull(op);
