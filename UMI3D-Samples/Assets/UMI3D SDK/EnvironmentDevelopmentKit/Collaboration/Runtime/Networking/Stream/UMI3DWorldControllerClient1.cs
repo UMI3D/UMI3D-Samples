@@ -65,7 +65,7 @@ namespace umi3d.cdk.collaboration
             key = privateIdentity.key
         };
 
-        private readonly bool isConnecting, isConnected;
+        private bool isConnecting, isConnected;
         public bool IsConnected()
         {
             return isConnected;
@@ -113,11 +113,23 @@ namespace umi3d.cdk.collaboration
             catch (Exception ex)
             {
                 UnityEngine.Debug.LogException(ex);
+                isConnecting = false;
                 return false;
             }
         }
 
+
         private async Task<bool> Connect(ConnectionDto dto)
+        {
+            isConnecting = true;
+            var res = await _Connect(dto);
+            isConnecting = false;
+            return res;
+
+        }
+
+
+        private async Task<bool> _Connect(ConnectionDto dto)
         {
             if (!string.IsNullOrEmpty(media.url))
             {
@@ -127,6 +139,7 @@ namespace umi3d.cdk.collaboration
                 if (answerDto is PrivateIdentityDto identity)
                 {
                     Connected(identity);
+                    isConnecting = false;
                     return true;
                 }
                 else if (answerDto is ConnectionFormDto form)
@@ -141,7 +154,7 @@ namespace umi3d.cdk.collaboration
                         libraryPreloading = dto.libraryPreloading,
                         isServer = true,
                     };
-                    return await Connect(_answer);
+                    return await _Connect(_answer);
                 }
             }
             return false;
@@ -151,6 +164,7 @@ namespace umi3d.cdk.collaboration
         {
             globalToken = identity.globalToken;
             privateIdentity = identity;
+            isConnected = true;
         }
 
         private async Task<FormAnswerDto> GetFormAnswer(ConnectionFormDto form)
