@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace umi3d.common.userCapture.pose.editor
     /// <summary>
     /// Wrapper for skeleton being edited in the <see cref="PoseEditorWindow"/>.
     /// </summary>
-    public class PoseEditorSkeleton
+    public class HandClosureSkeleton
     {
         public GameObject root;
 
@@ -32,7 +33,10 @@ namespace umi3d.common.userCapture.pose.editor
         /// </summary>
         public List<PoseSetterBoneComponent> boneComponents = new();
 
-        public uint anchor = BoneType.Hips;
+        /// <summary>
+        /// Animator controlling the current had closure.
+        /// </summary>
+        public Animator handClosureAnimator;
     }
 }
 #endif
