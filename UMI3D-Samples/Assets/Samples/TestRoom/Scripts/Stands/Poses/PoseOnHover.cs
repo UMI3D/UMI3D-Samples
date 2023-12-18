@@ -43,7 +43,7 @@ public class PoseOnHover : MonoBehaviour
 
         poseAnimator.ActivationsConditions = new List<IPoseAnimatorActivationCondition>()
         {
-            hoverPoseCondition & ((IsVRposeCondition & magnitudeConditionVR) | (!IsVRposeCondition & magnitudeConditionPC))
+            hoverPoseCondition & ((IsVRposeCondition & magnitudeConditionVR) | (!(IsVRposeCondition as IPoseAnimatorActivationCondition) & magnitudeConditionPC))
         };
 
         interactable.onHoverEnter.AddListener((content) => RequestPoseApplication(content.user));

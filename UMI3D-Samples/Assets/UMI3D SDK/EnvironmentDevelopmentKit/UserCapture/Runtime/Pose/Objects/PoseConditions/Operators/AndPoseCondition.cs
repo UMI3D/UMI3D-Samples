@@ -22,7 +22,7 @@ using umi3d.common.userCapture.pose;
 namespace umi3d.edk.userCapture.pose
 {
     /// <summary>
-    ///  used for conditions operations
+    /// Pose condition true when both of the two contained conditions are true.
     /// </summary>
     public class AndPoseCondition : IPoseAnimatorActivationCondition
     {
@@ -40,8 +40,8 @@ namespace umi3d.edk.userCapture.pose
         {
             return new AndConditionDto()
             {
-                ConditionA = conditionA.ToDto(),
-                ConditionB = conditionB.ToDto()
+                ConditionA = conditionA?.ToDto(),
+                ConditionB = conditionB?.ToDto()
             };
         }
 
@@ -59,6 +59,10 @@ namespace umi3d.edk.userCapture.pose
             return new AndPoseCondition(first, conditions.Skip(1).Reverse().Aggregate(last, (x, y) => x & y));
         }
 
+        /// <summary>
+        /// Flatten a tree of nested <see cref="AndPoseCondition"/>.
+        /// </summary>
+        /// <returns></returns>
         public List<IPoseAnimatorActivationCondition> ToList()
         {
             List<IPoseAnimatorActivationCondition> result = new ();

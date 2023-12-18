@@ -16,8 +16,7 @@ limitations under the License.
 namespace umi3d.common.userCapture.pose
 {
     /// <summary>
-    /// <inheritdoc/><br/>
-    /// A condition is the conditions are not valid
+    /// Condition true when the nested condition is false.
     /// </summary>
     [System.Serializable]
     public class NotConditionDto : AbstractPoseConditionDto

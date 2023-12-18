@@ -80,10 +80,5 @@ namespace umi3d.edk.userCapture.pose
                 users = new() { user }
             };
         }
-
-        public static IPoseAnimatorActivationCondition operator !(UMI3DEnvironmentPoseCondition condition)
-        {
-            return new NotPoseCondition(condition);
-        }
     }
 }

@@ -18,6 +18,9 @@ using umi3d.common.userCapture.pose;
 
 namespace umi3d.edk.userCapture.pose
 {
+    /// <summary>
+    /// Pose condition true when the contained condition is false.
+    /// </summary>
     public class NotPoseCondition : IPoseAnimatorActivationCondition
     {
         public IPoseAnimatorActivationCondition conditionToNegate;
@@ -31,7 +34,7 @@ namespace umi3d.edk.userCapture.pose
         {
             return new NotConditionDto()
             {
-                Condition = conditionToNegate.ToDto()
+                Condition = conditionToNegate?.ToDto()
             };
         }
     }

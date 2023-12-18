@@ -16,6 +16,9 @@ limitations under the License.
 
 namespace umi3d.common.userCapture.pose
 {
+    /// <summary>
+    /// Condition true when both of the nested conditions are true.
+    /// </summary>
     public class AndConditionDto : AbstractPoseConditionDto
     {
         public AbstractPoseConditionDto ConditionA { get; set; }

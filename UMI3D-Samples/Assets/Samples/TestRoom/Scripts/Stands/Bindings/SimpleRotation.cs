@@ -71,9 +71,9 @@ public class SimpleRotation : MonoBehaviour
         {
             if ((Time.time - lastTime) > 1 / updateFrequency)
             {
-                var t = new Transaction() { reliable = true };
+                var t = new Transaction() { reliable = false };
                 t.AddIfNotNull(node.objectRotation.SetValue(transform.localRotation));
-                t.AddIfNotNull(new StartInterpolationProperty() { entityId=node.Id(), property=UMI3DPropertyKeys.Rotation });
+                //t.AddIfNotNull(new StartInterpolationProperty() { entityId=node.Id(), property=UMI3DPropertyKeys.Rotation });
                 t.Dispatch();
                 lastTime = Time.time;
             }

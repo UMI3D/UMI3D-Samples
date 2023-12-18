@@ -89,6 +89,11 @@ namespace umi3d.common
         public const uint LineStartWidth = 3012;
         public const uint LineEndWidth = 3013;
 
+        public const uint DistantEnvironmentReliable = 3014;
+        public const uint DistantEnvironmentUnreliable = 3015;
+        public const uint DistantEnvironmentResourceUrl = 3017;
+        public const uint DistantEnvironmentUseDto = 3018;
+
         public const uint IsTraversable = 3020;
         public const uint IsPartOfNavmesh = 3021;
 
@@ -295,7 +300,10 @@ namespace umi3d.common
         public const uint WebViewTextureSize = 17003;
         public const uint WebViewUrl = 17004;
         public const uint WebViewCanUrlBeForced = 17005;
-
+        public const uint WebViewUseWhileList = 17006;
+        public const uint WebViewWhileList = 17007;
+        public const uint WebViewUseBlackList = 17008;
+        public const uint WebViewBlackList = 17009;
         #endregion
 
     }

@@ -18,6 +18,9 @@ using umi3d.common.userCapture.pose;
 
 namespace umi3d.edk.userCapture.pose
 {
+    /// <summary>
+    /// Pose condition true when one of the two contained condition is true.
+    /// </summary>
     public class OrPoseCondition : IPoseAnimatorActivationCondition
     {
         public IPoseAnimatorActivationCondition conditionA;
@@ -34,8 +37,8 @@ namespace umi3d.edk.userCapture.pose
         {
             return new OrConditionDto()
             {
-                ConditionA = conditionA.ToDto(),
-                ConditionB = conditionB.ToDto()
+                ConditionA = conditionA?.ToDto(),
+                ConditionB = conditionB?.ToDto()
             };
         }
     }

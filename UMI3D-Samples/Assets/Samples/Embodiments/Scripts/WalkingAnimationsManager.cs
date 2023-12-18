@@ -46,42 +46,48 @@ public class WalkingAnimationsManager : MonoBehaviour
     {
         UMI3DServerService = UMI3DServer.Instance;
 
-        UMI3DServerService.OnUserActive.AddListener((user) => Handle(user as UMI3DCollaborationUser));
-        UMI3DServerService.OnUserLeave.AddListener((user) => Unhandle(user as UMI3DCollaborationUser));
-        UMI3DServerService.OnUserMissing.AddListener((user) => Unhandle(user as UMI3DCollaborationUser));
+        UMI3DServerService.OnUserActive.AddListener((user) => Handle(user));
+        UMI3DServerService.OnUserLeave.AddListener((user) => Unhandle(user));
+        UMI3DServerService.OnUserMissing.AddListener((user) => Unhandle(user));
     }
 
-    private void Handle(UMI3DCollaborationUser user)
+    private void Handle(UMI3DUser user)
     {
-        if (!shouldSendWalkingAnimator || skeletonAnimationNodes.ContainsKey(user))
+        if (!shouldSendWalkingAnimator || skeletonAnimationNodes.ContainsKey(user) || user is not UMI3DCollaborationUser cuser)
             return;
 
         Transaction t = new(true);
 
         t.AddIfNotNull(from nodeKVP in skeletonAnimationNodes
-                        where nodeKVP.Key.Id() != user.Id()
-                        let skeletonNode = nodeKVP.Value
-                        let animations = skeletonNode.GetLoadAnimations(user)
-                        from operation in animations
-                        select operation);
-        
-        t.AddIfNotNull(LoadWalkingAnimations(user));
+                       where nodeKVP.Key.Id() != user.Id()
+                       let skeletonNode = nodeKVP.Value
+                       let animations = skeletonNode.GetLoadAnimations(user)
+                       from operation in animations
+                       select operation);
+
+        t.AddIfNotNull(LoadWalkingAnimations(cuser));
         t.Dispatch();
     }
 
-    private void Unhandle(UMI3DCollaborationUser user)
+    private void Unhandle(UMI3DUser user)
     {
-        if (!shouldSendWalkingAnimator || !skeletonAnimationNodes.ContainsKey(user))
+        if (!shouldSendWalkingAnimator || !skeletonAnimationNodes.ContainsKey(user) || user is not UMI3DCollaborationUser cuser)
             return;
 
         Transaction t = new(true);
-        t.AddIfNotNull(Clean(user));
+        t.AddIfNotNull(Clean(cuser));
         t.Dispatch();
     }
 
-    public IEnumerable<Operation> Clean(UMI3DCollaborationUser user)
+    public IEnumerable<Operation> Clean(UMI3DUser user)
     {
+
+
         List<Operation> ops = new();
+
+        if (user is not UMI3DCollaborationUser cuser)
+            return ops;
+
 
         // walking animation
         ops.AddRange(skeletonAnimationNodes[user].GetDeleteAnimations());
@@ -103,7 +109,7 @@ public class WalkingAnimationsManager : MonoBehaviour
 
         UMI3DSkeletonAnimationNode skeletonNode = subskeletonNodeGo.AddComponent<UMI3DSkeletonAnimationNode>();
         skeletonNode.Register();
-        
+
         skeletonNode.objectModel.SetValue(animatedSubskeletonBundleResource);
         skeletonNode.userId = user.Id();
         skeletonNode.priority = -10;

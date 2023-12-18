@@ -86,14 +86,14 @@ public class AvatarManager : MonoBehaviour, IAvatarManager
     {
         bindingHelperService = BindingManager.Instance;
         UMI3DServerService = UMI3DServer.Instance;
-        UMI3DServerService.OnUserActive.AddListener((user) => Handle((UMI3DCollaborationUser)user));
-        UMI3DServerService.OnUserLeave.AddListener((user) => Unhandle((UMI3DCollaborationUser)user));
-        UMI3DServerService.OnUserMissing.AddListener((user) => Unhandle((UMI3DCollaborationUser)user));
+        UMI3DServerService.OnUserActive.AddListener((user) => Handle(user as UMI3DCollaborationUser));
+        UMI3DServerService.OnUserLeave.AddListener((user) => Unhandle(user as UMI3DCollaborationUser));
+        UMI3DServerService.OnUserMissing.AddListener((user) => Unhandle(user as UMI3DCollaborationUser));
     }
 
     private void Handle(UMI3DCollaborationUser user)
     {
-        if (handledAvatars.ContainsKey(user))
+        if (user == null || handledAvatars.ContainsKey(user))
             return;
 
         SendAvatar(user);
@@ -101,7 +101,7 @@ public class AvatarManager : MonoBehaviour, IAvatarManager
 
     private void Unhandle(UMI3DCollaborationUser user)
     {
-        if (!handledAvatars.ContainsKey(user))
+        if (user == null || !handledAvatars.ContainsKey(user))
             return;
 
         Transaction t = new() { reliable = true };

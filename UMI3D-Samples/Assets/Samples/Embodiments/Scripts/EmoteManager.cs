@@ -46,7 +46,7 @@ public class EmoteManager : MonoBehaviour
             return;
 
         Transaction t = new(true);
-        t.AddIfNotNull(LoadEmotes(user as UMI3DCollaborationUser));
+        t.AddIfNotNull(LoadEmotes(user));
         t.Dispatch();
     }
 
@@ -56,36 +56,45 @@ public class EmoteManager : MonoBehaviour
             return;
 
         Transaction t = new(true);
-        t.AddIfNotNull(CleanEmotes(user as UMI3DCollaborationUser));
+        t.AddIfNotNull(CleanEmotes(user));
         t.Dispatch();
     }
 
 
-    public IEnumerable<Operation> LoadEmotes(UMI3DCollaborationUser user)
+    public IEnumerable<Operation> LoadEmotes(UMI3DUser _user)
     {
-        // Associate animation with emotes
-        EmoteDispatcher.Instance.EmotesConfigs.Add(user.Id(), emoteConfig);
+        if (_user is UMI3DCollaborationUser user)
+        {
+            // Associate animation with emotes
+            EmoteDispatcher.Instance.EmotesConfigs.Add(user.Id(), emoteConfig);
 
-        List<Operation> ops = new();
-        ops.AddRange(CreateSkeletonAnimationNode(user));
-        ops.AddRange(SetupEmotes(user));
+            List<Operation> ops = new();
+            ops.AddRange(CreateSkeletonAnimationNode(user));
+            ops.AddRange(SetupEmotes(user));
 
-        return ops;
+            return ops;
+        }
+        return new List<Operation>();
     }
 
-    public IEnumerable<Operation> CleanEmotes(UMI3DUser user)
+    public IEnumerable<Operation> CleanEmotes(UMI3DUser _user)
     {
-        List<Operation> ops = new ();
+        if (_user is UMI3DCollaborationUser user)
+        {
+            List<Operation> ops = new();
 
-        ops.AddRange(emoteAnimationNodes[user].GetDeleteAnimations());
-        ops.Add(emoteAnimationNodes[user].GetDeleteEntity());
-        
-        UnityEngine.Object.Destroy(emoteAnimationNodes[user].gameObject);
+            ops.AddRange(emoteAnimationNodes[user].GetDeleteAnimations());
+            ops.Add(emoteAnimationNodes[user].GetDeleteEntity());
 
-        emoteAnimationNodes.Remove(user);
-        EmoteDispatcher.Instance.EmotesConfigs.Remove(user.Id());
+            UnityEngine.Object.Destroy(emoteAnimationNodes[user].gameObject);
 
-        return ops;
+            emoteAnimationNodes.Remove(user);
+            EmoteDispatcher.Instance.EmotesConfigs.Remove(user.Id());
+
+            return ops;
+        }
+
+        return new List<Operation>();
     }
 
 

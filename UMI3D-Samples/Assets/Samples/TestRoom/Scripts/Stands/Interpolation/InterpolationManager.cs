@@ -13,16 +13,28 @@ limitations under the License.
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class InterpolationManager : MonoBehaviour
 {
+    public bool AutoStartSendingTransaction;
+
     public bool updateTransform = false;
     public bool isInterpolating = false;
 
     public UnityEvent UpdateEvent;
     public UnityEvent InterpolationEvent;
+
+    private async void Start()
+    {
+        if (AutoStartSendingTransaction)
+        {
+            await Task.Delay(10000);
+            UpdateStatus();
+        }
+    }
 
     public void UpdateStatus()
     {
