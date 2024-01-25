@@ -49,7 +49,7 @@ public class BindingWindmills : MonoBehaviour
             NodeBinding binding = new(node.Id(), mainWindmill.Id())
             {
                 syncRotation = true,
-                offsetRotation = node.objectRotation.GetValue()
+                offsetRotation = Quaternion.Inverse(mainWindmill.objectRotation.GetValue()) * node.objectRotation.GetValue()
             };
 
             var op = bindingHelperServer.AddBinding(binding);
@@ -68,7 +68,7 @@ public class BindingWindmills : MonoBehaviour
 
         foreach (var node in boundNodes)
         {
-            var nodeBinding = bindingHelperServer.GetBindings(umi3dServerService.Users().First())[node.Id()] as NodeBinding;
+            var nodeBinding = bindingHelperServer.GetBindings()[node.Id()] as NodeBinding;
 
             var op = bindingHelperServer.RemoveAllBindings(node.Id());
             t.AddIfNotNull(op);
