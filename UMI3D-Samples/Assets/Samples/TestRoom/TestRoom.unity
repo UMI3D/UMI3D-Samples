@@ -1196,6 +1196,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 0
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -3297,6 +3298,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -3540,6 +3542,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -3747,6 +3750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ip: localhost
+  useLoopback: 0
   useIp: 0
   tokenLifeTime: 10
   Identifier: {fileID: 11400000, guid: 23cd79f55f3bb4544a19e17dbca7316f, type: 2}
@@ -3912,6 +3916,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -4002,6 +4007,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -4826,6 +4832,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -5372,6 +5379,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -5588,26 +5596,26 @@ MonoBehaviour:
     variants:
     - isLocalFile: 1
       domain: 
-      path: private\com.inetum.emotes\default\emoteanimator.prefab.bundle
+      path: private\com.inetum.emotes\default\emote.prefab.bundle
       format: unity_standalone_urp
       extension: .bundle
       isInBundle: 1
       pathIfInBundle: Assets/EmoteAnimationResource/Prefabs/EmoteAnimator.prefab
       metrics:
         resolution: 0
-        size: 321.836
+        size: 321.861
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
     - isLocalFile: 1
       domain: 
-      path: private\com.inetum.emotes\android\emoteanimator.prefab.bundle
+      path: private\com.inetum.emotes\android\emote.prefab.bundle
       format: unity_android_urp
       extension: .bundle
       isInBundle: 1
       pathIfInBundle: Assets/EmoteAnimationResource/Prefabs/EmoteAnimator.prefab
       metrics:
         resolution: 0
-        size: 321.836
+        size: 321.86
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: c5357c4349584bf4687f8284d998ff9f, type: 2}
   animatorStateNames:
@@ -5730,6 +5738,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -5832,6 +5841,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -6063,6 +6073,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 0
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -7566,6 +7577,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
@@ -8231,6 +8243,7 @@ MonoBehaviour:
   materialsOverrider: []
   castShadow: 1
   receiveShadow: 1
+  blendShapesValues: []
   lockColliders: 0
   model:
     variants:
