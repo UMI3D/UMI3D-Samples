@@ -18,12 +18,12 @@ using inetum.unityUtils;
 using System;
 using UnityEngine.Networking;
 
-namespace umi3d.cdk
+namespace umi3d.common
 {
     /// <summary>
     /// Class to be sent to try to send a request again.
     /// </summary>
-    public class RequestFailedArgument1
+    public class RequestFailedArgument
     {
         public DateTime date { get; private set; }
 
@@ -63,8 +63,8 @@ namespace umi3d.cdk
             return computedString;
         }
 
-        public Func<RequestFailedArgument1, bool> ShouldTryAgain { get; private set; }
-        public RequestFailedArgument1(UnityWebRequest request, int count, DateTime date, Func<RequestFailedArgument1, bool> ShouldTryAgain, string info = null)
+        public Func<RequestFailedArgument, bool> ShouldTryAgain { get; private set; }
+        public RequestFailedArgument(UnityWebRequest request, int count, DateTime date, Func<RequestFailedArgument, bool> ShouldTryAgain, string info = null)
         {
             this.request = request;
             this.count = count;
@@ -73,7 +73,7 @@ namespace umi3d.cdk
             this.computedString = ComputeString(info);
         }
 
-        public RequestFailedArgument1(long responseCode, int count, DateTime date, Func<RequestFailedArgument1, bool> ShouldTryAgain, string info = null)
+        public RequestFailedArgument(long responseCode, int count, DateTime date, Func<RequestFailedArgument, bool> ShouldTryAgain, string info = null)
         {
             this.request = null;
             this.responseCode = responseCode;

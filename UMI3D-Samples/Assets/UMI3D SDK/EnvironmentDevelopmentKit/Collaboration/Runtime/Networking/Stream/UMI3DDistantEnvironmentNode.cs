@@ -23,8 +23,8 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
     private string serverUrl;
 
     public MediaDto media { get; private set; } = null;
-    UMI3DWorldControllerClient1 wcClient = null;
-    UMI3DEnvironmentClient1 nvClient = null;
+    UMI3DWorldControllerClient wcClient = null;
+    UMI3DEnvironmentClient nvClient = null;
 
     UMI3DAsyncListProperty<BinaryDto> lastTransactionsAsync;
     UMI3DAsyncProperty<BinaryDto> lastTransactionAsync;
@@ -55,8 +55,12 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
 
             if (!nvClient.IsConnected() || nvClient.environement == null)
                 continue;
-
-            environmentDto.SetValue( nvClient.environement);
+            var manager = UMI3DCollaborationServer.MumbleManager;
+            if (nvClient.UserDto.answerDto.audioUseMumble && manager != null && manager.ip == nvClient.UserDto.answerDto.audioServerUrl)
+            {
+                manager.SwitchDefaultRoom(nvClient.UserDto.answerDto.audioChannel, UMI3DCollaborationServer.Collaboration.Users);
+            }
+            environmentDto.SetValue(nvClient.environement);
             lastTransactionAsync.SetValue(new());
         }
     }
@@ -206,7 +210,7 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
             name = "other server",
             url = ServerUrl
         };
-        wcClient = new UMI3DWorldControllerClient1(media, this);
+        wcClient = new UMI3DWorldControllerClient(media, this);
         Loop();
         return Task.CompletedTask;
     }
@@ -249,6 +253,11 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
     {
         if (user is UMI3DCollaborationUser cuser)
         {
+            while (run && nvClient == null)
+                await Task.Yield();
+            if (!run || user is null || cuser.status != StatusType.NONE)
+                return;
+
             var dto = cuser.identityDto;
             await nvClient.HttpClient.SendPostRegisterDistantUser(dto);
         }

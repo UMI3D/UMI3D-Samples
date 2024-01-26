@@ -41,7 +41,7 @@ public class BindingStickMultibinding : MonoBehaviour
             bindingLeft = new NodeBinding(StickMiddle.Id(), StickLeft.Id())
             {
                 syncPosition = true,
-                offsetPosition = StickMiddle.objectPosition.GetValue() - StickLeft.objectPosition.GetValue(),
+                offsetPosition = Quaternion.Inverse(StickLeft.objectRotation.GetValue()) * (StickMiddle.objectPosition.GetValue() - StickLeft.objectPosition.GetValue()),
             };
 
             t.AddIfNotNull(bindingHelperServer.AddBinding(bindingLeft));
@@ -73,7 +73,7 @@ public class BindingStickMultibinding : MonoBehaviour
             bindingRight = new NodeBinding(StickMiddle.Id(), StickRight.Id())
             {
                 syncPosition = true,
-                offsetPosition = StickMiddle.objectPosition.GetValue() - StickRight.objectPosition.GetValue()
+                offsetPosition = Quaternion.Inverse(StickRight.objectRotation.GetValue()) * (StickMiddle.objectPosition.GetValue() - StickRight.objectPosition.GetValue())
             };
 
             t.AddIfNotNull(bindingHelperServer.AddBinding(bindingRight));

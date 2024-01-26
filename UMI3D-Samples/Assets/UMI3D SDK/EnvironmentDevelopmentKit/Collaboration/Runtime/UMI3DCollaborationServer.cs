@@ -27,12 +27,12 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration;
-using umi3d.edk.userCapture;
-using umi3d.common.userCapture;
 using UnityEngine;
 using UnityEngine.Events;
 using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
+using System.Net.NetworkInformation;
+using WebSocketSharp;
 
 namespace umi3d.edk.collaboration
 {
@@ -48,6 +48,9 @@ namespace umi3d.edk.collaboration
         /// Is the server active?
         /// </summary>
         public bool isRunning { get; protected set; } = false;
+
+        [EditorReadOnly]
+        public bool useLoopback = false;
 
         [SerializeField, ReadOnly]
         private bool useIp = false;
@@ -234,7 +237,9 @@ namespace umi3d.edk.collaboration
             UMI3DSerializer.AddModule(collaborativeModule);
 
             if (!useIp)
-                ip = GetLocalIPAddress();
+                ip = GetLocalIPAddress(useLoopback);
+
+            UnityEngine.Debug.Log(ip);
 
             httpPort = (ushort)FreeTcpPort(useRandomHttpPort ? 0 : httpPort);
             forgePort = (ushort)FreeTcpPort(useRandomForgePort ? 0 : forgePort);
@@ -297,8 +302,7 @@ namespace umi3d.edk.collaboration
         {
             UMI3DLogger.Log($"User Created", scope);
             user.SetStatus(StatusType.CREATED);
-            if (user is UMI3DCollaborationUser collaborationUser)
-                AddUserAudio(collaborationUser);
+            AddUserAudio(user);
             if (!reconnection)
             {
                 OnUserCreated.Invoke(user);
@@ -311,14 +315,19 @@ namespace umi3d.edk.collaboration
             forgeServer.SendSignalingMessage(user.networkPlayer, user.ToStatusDto());
         }
 
-        private void AddUserAudio(UMI3DCollaborationUser user)
+        private void AddUserAudio(UMI3DCollaborationAbstractUser user)
         {
             if (mumbleManager == null)
                 return;
-            List<Operation> op = mumbleManager.AddUser(user);
+            if (user is UMI3DCollaborationUser collaborationUser)
+            {
+                List<Operation> op = mumbleManager.AddUser(collaborationUser);
             var t = new Transaction() { reliable = true };
             t.AddIfNotNull(op);
             t.Dispatch();
+        }
+            else if (user is UMI3DServerUser serv)
+                mumbleManager.AddUser(serv);
         }
 
 
@@ -361,26 +370,47 @@ namespace umi3d.edk.collaboration
             useIp = true;
         }
 
-        private static string GetLocalIPAddress()
+
+        private static string DebugGetLocalIPAddress(Func<NetworkInterface, bool> networkPredicate, Func<NetworkInterface, IPAddressInformation, (bool, int)> AddressPredicate)
         {
-            IPHostEntry host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
+            return NetworkInterface.GetAllNetworkInterfaces().SelectMany(n => n.GetIPProperties().UnicastAddresses.Select(a => (n, a))).Select(c => $"{c.n.Name} : {c.a.Address} [networkPredicate :{networkPredicate?.Invoke(c.n)}|AddressPredicate :{AddressPredicate?.Invoke(c.n,c.a)}]").Aggregate("",(a,b) => $"{a}{Environment.NewLine}{b}");
+        }
+
+        private static IPAddressInformation GetLocalIPAddress(Func<NetworkInterface, bool> networkPredicate, Func<NetworkInterface,IPAddressInformation, (bool,int)> AddressPredicate)
+        {
+            if(networkPredicate == null)
+                networkPredicate = (NetworkInterface n) => true;
+            if(AddressPredicate == null)
+                AddressPredicate = (NetworkInterface n, IPAddressInformation a) => (true,0);
+
+            (IPAddressInformation,bool,int) SelectAdress((NetworkInterface n, UnicastIPAddressInformation a) c)
             {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !ip.ToString().EndsWith(".1"))
-                {
-                    return ip.ToString();
-                }
+                var r = AddressPredicate(c.n, c.a);
+                return (c.a, r.Item1, r.Item2);
             }
-            //if offline. 
-            UMI3DLogger.LogWarning("No public IP found. This computer seems to be offline.", scope);
-            foreach (IPAddress ip in host.AddressList)
+
+            return NetworkInterface.GetAllNetworkInterfaces().Where(networkPredicate).SelectMany(n => n.GetIPProperties().UnicastAddresses.Select(a => (n, a))).Select(SelectAdress).Where(t => t.Item2).OrderBy(t => t.Item3).FirstOrDefault().Item1;
+        }
+
+        private static string GetLocalIPAddress(bool loopback)
+        {
+            bool NetworkPredicate(NetworkInterface network)
             {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                {
-                    return ip.ToString();
-                }
+                if(loopback)
+                    return network.NetworkInterfaceType == NetworkInterfaceType.Loopback;
+
+                return network.NetworkInterfaceType == NetworkInterfaceType.Ethernet || network.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || network.NetworkInterfaceType == NetworkInterfaceType.Loopback;
             }
-            throw new Exception("Local IP Address Not Found!");
+
+            static (bool,int) AdressPredicate(NetworkInterface network, IPAddressInformation ip)
+            {
+                return ((ip.Address.AddressFamily == AddressFamily.InterNetwork) && ip.Address.IsLocal(), network.NetworkInterfaceType == NetworkInterfaceType.Loopback ? 10 : 0);
+            }
+
+            var ip = GetLocalIPAddress(NetworkPredicate, AdressPredicate);
+            if(ip == null)
+                throw new Exception("Local IP Address Not Found!");
+            return ip.Address.ToString();
         }
 
         private void ApplicationQuit()
@@ -401,6 +431,12 @@ namespace umi3d.edk.collaboration
             }
             if (mumbleManager != null)
                 mumbleManager.Delete();
+
+            if (forgeServer != null)
+            {
+                GameObject.Destroy(forgeServer.gameObject);
+                forgeServer = null;
+            }
         }
 
         private async void Clear()
@@ -414,6 +450,12 @@ namespace umi3d.edk.collaboration
             }
             if (mumbleManager != null)
                 mumbleManager.Delete();
+
+            if (forgeServer != null)
+            {
+                GameObject.Destroy(forgeServer.gameObject);
+                forgeServer = null;
+            }
         }
 
         public static void Stop()

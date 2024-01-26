@@ -363,7 +363,7 @@ namespace umi3d.edk.collaboration
             }
             else
             {
-                var container = new ByteContainer(0,frame);
+                var container = new ByteContainer(UMI3DGlobalID.EnvironmentId, frame);
                 uint id = UMI3DSerializer.Read<uint>(container);
                 switch (id)
                 {
@@ -462,7 +462,7 @@ namespace umi3d.edk.collaboration
             }
             else
             {
-                var container = new ByteContainer(0, frame);
+                var container = new ByteContainer(UMI3DGlobalID.EnvironmentId, frame);
                 trackingFrame = UMI3DSerializer.Read<UserTrackingFrameDto>(container);
 
             }
@@ -470,7 +470,7 @@ namespace umi3d.edk.collaboration
             if (trackingFrame == null)
                 return;
 
-            trackingFrame.environmentId = 0;
+            trackingFrame.environmentId = UMI3DGlobalID.EnvironmentId;
 
             MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(
                 () => UMI3DTrackingManager.Instance.OnAvatarFrameReceived(trackingFrame, server.Time.Timestep));
