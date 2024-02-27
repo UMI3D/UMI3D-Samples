@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using umi3d.cdk.collaboration;
 using umi3d.common;
+using umi3d.edk.collaboration;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +15,8 @@ public class StreamManager : MonoBehaviour
     bool status = false;
 
     MediaDto media = null;
-    UMI3DWorldControllerClient1 wcClient = null;
-    UMI3DEnvironmentClient1 nvClient = null;
+    UMI3DWorldControllerClient wcClient = null;
+    UMI3DEnvironmentClient nvClient = null;
 
     private void Start()
     {

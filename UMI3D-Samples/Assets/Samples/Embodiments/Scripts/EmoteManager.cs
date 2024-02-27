@@ -30,10 +30,12 @@ public class EmoteManager : MonoBehaviour
     private readonly Dictionary<UMI3DUser, UMI3DSkeletonAnimationNode> emoteAnimationNodes = new();
 
     private IUMI3DServer UMI3DServerService;
+    private IEmoteDispatcher emoteDispatcher;
 
     private void Start()
     {
         UMI3DServerService = UMI3DServer.Instance;
+        emoteDispatcher = EmoteDispatcher.Instance;
 
         UMI3DServerService.OnUserActive.AddListener(Handle);
         UMI3DServerService.OnUserLeave.AddListener(Unhandle);
@@ -46,7 +48,7 @@ public class EmoteManager : MonoBehaviour
             return;
 
         Transaction t = new(true);
-        t.AddIfNotNull(LoadEmotes(user));
+        t.AddIfNotNull(LoadEmotes((UMI3DCollaborationUser)user));
         t.Dispatch();
     }
 
@@ -56,47 +58,58 @@ public class EmoteManager : MonoBehaviour
             return;
 
         Transaction t = new(true);
-        t.AddIfNotNull(CleanEmotes(user));
+        t.AddIfNotNull(CleanEmotes((UMI3DCollaborationUser)user));
         t.Dispatch();
     }
 
 
-    public IEnumerable<Operation> LoadEmotes(UMI3DUser _user)
+    public IEnumerable<Operation> LoadEmotes(UMI3DCollaborationUser user)
     {
-        if (_user is UMI3DCollaborationUser user)
+        // Associate animation with emotes
+        emoteDispatcher.EmotesConfigs.Add(user.Id(), emoteConfig);
+
+        List<Operation> ops = new();
+        if (emotesNodeRoot == null)
         {
-            // Associate animation with emotes
-            EmoteDispatcher.Instance.EmotesConfigs.Add(user.Id(), emoteConfig);
-
-            List<Operation> ops = new();
-            ops.AddRange(CreateSkeletonAnimationNode(user));
-            ops.AddRange(SetupEmotes(user));
-
-            return ops;
-        }
-        return new List<Operation>();
-    }
-
-    public IEnumerable<Operation> CleanEmotes(UMI3DUser _user)
-    {
-        if (_user is UMI3DCollaborationUser user)
-        {
-            List<Operation> ops = new();
-
-            ops.AddRange(emoteAnimationNodes[user].GetDeleteAnimations());
-            ops.Add(emoteAnimationNodes[user].GetDeleteEntity());
-
-            UnityEngine.Object.Destroy(emoteAnimationNodes[user].gameObject);
-
-            emoteAnimationNodes.Remove(user);
-            EmoteDispatcher.Instance.EmotesConfigs.Remove(user.Id());
-
-            return ops;
+            emotesNodeRoot = CreateEmoteAnimationsRootNode();
+            ops.Add(emotesNodeRoot.GetLoadEntity());
         }
 
-        return new List<Operation>();
+        ops.AddRange(CreateSkeletonAnimationNode(user));
+        ops.AddRange(SetupEmotes(user));
+
+        return ops;
     }
 
+    /// <summary>
+    /// Create the node under which all skeleton animations for emotes are put.
+    /// </summary>
+    /// <returns></returns>
+    private UMI3DNode CreateEmoteAnimationsRootNode()
+    {
+        UMI3DScene scene = UMI3DEnvironment.Instance.scenes.Find(x => x.name.Contains("Avatar"));
+        if (scene == null)
+            scene = UMI3DEnvironment.Instance.scenes[0];
+        UMI3DNode emoteRootNode = new GameObject("Emotes Subskeletons Animations").AddComponent<UMI3DNode>();
+        emoteRootNode.nodeName = emoteRootNode.name;
+        emoteRootNode.transform.SetParent(scene.transform);
+        return emoteRootNode;
+    }
+
+    public IEnumerable<Operation> CleanEmotes(UMI3DCollaborationUser user)
+    {
+        List<Operation> ops = new();
+
+        ops.AddRange(emoteAnimationNodes[user].GetDeleteAnimations());
+        ops.Add(emoteAnimationNodes[user].GetDeleteEntity());
+
+        UnityEngine.Object.Destroy(emoteAnimationNodes[user].gameObject);
+
+        emoteAnimationNodes.Remove(user);
+        emoteDispatcher.EmotesConfigs.Remove(user.Id());
+
+        return ops;
+    }
 
     private IEnumerable<Operation> CreateSkeletonAnimationNode(UMI3DCollaborationUser user)
     {

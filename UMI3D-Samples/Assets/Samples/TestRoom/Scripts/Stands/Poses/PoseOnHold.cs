@@ -22,7 +22,7 @@ public class PoseOnHold : MonoBehaviour
         umi3dEvent = gameObject.GetOrAddComponent<UMI3DEvent>();
 
         poseCondition = new UMI3DEnvironmentPoseCondition();
-        poseAnimator.ActivationsConditions = poseAnimator.ActivationsConditions.Append(poseCondition).ToList();
+        poseAnimator.ActivationConditions.Add(poseCondition);
 
         umi3dEvent.onHold.AddListener((content) => RequestPoseApplication(content.user));
         umi3dEvent.onRelease.AddListener((content) => RequestPoseStop(content.user));
@@ -30,7 +30,7 @@ public class PoseOnHold : MonoBehaviour
 
     private void RequestPoseApplication(UMI3DUser user)
     {
-        TryActivatePoseAnimatorRequest activatePoseAnimatorRequest = new(poseAnimator.Id()) { users = new() { user } };
+        CheckPoseAnimatorConditionsRequest activatePoseAnimatorRequest = new(poseAnimator.Id()) { users = new() { user } };
 
         Transaction t = new(true);
         t.AddIfNotNull(poseCondition.Validate(user));

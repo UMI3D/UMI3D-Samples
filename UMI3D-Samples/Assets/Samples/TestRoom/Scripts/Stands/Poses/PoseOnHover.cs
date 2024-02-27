@@ -41,10 +41,10 @@ public class PoseOnHover : MonoBehaviour
 
         IsVRposeCondition = new UMI3DEnvironmentPoseCondition(false);
 
-        poseAnimator.ActivationsConditions = new List<IPoseAnimatorActivationCondition>()
+        poseAnimator.ActivationConditions.SetValue(new List<IPoseAnimatorActivationCondition>()
         {
             hoverPoseCondition & ((IsVRposeCondition & magnitudeConditionVR) | (!(IsVRposeCondition as IPoseAnimatorActivationCondition) & magnitudeConditionPC))
-        };
+        });
 
         interactable.onHoverEnter.AddListener((content) => RequestPoseApplication(content.user));
         interactable.onHoverExit.AddListener((content) => RequestPoseStop(content.user));
@@ -62,7 +62,7 @@ public class PoseOnHover : MonoBehaviour
 
     private void RequestPoseApplication(UMI3DUser user)
     {
-        TryActivatePoseAnimatorRequest activatePoseAnimatorRequest = new(poseAnimator.Id()) { users = new() { user } };
+        CheckPoseAnimatorConditionsRequest activatePoseAnimatorRequest = new(poseAnimator.Id()) { users = new() { user } };
 
         Transaction t = new(true);
         t.AddIfNotNull(hoverPoseCondition.Validate(user));
