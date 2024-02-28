@@ -22,23 +22,25 @@ public class PoseOnTrigger : MonoBehaviour
         umi3dEvent = gameObject.GetOrAddComponent<UMI3DEvent>();
 
         poseCondition = new UMI3DEnvironmentPoseCondition();
-        poseAnimator.ActivationsConditions = poseAnimator.ActivationsConditions.Append(poseCondition).ToList();
+        poseAnimator.ActivationConditions.Add(poseCondition);
 
-        poseAnimator.duration = new()
+        poseAnimator.PoseApplicationDuration.SetValue(new()
         {
+            
             duration = 1,
             hasMax = true,
             max = 1,
             hasMin = true,
             min = 1,
-        };
+            
+        });
 
         umi3dEvent.onTrigger.AddListener((content) => RequestPoseApplication(content.user));
     }
 
     private void RequestPoseApplication(UMI3DUser user)
     {
-        TryActivatePoseAnimatorRequest activatePoseAnimatorRequest = new(poseAnimator.Id()) { users = new() { user } };
+        CheckPoseAnimatorConditionsRequest activatePoseAnimatorRequest = new(poseAnimator.Id()) { users = new() { user } };
 
         Transaction t = new(true);
         t.AddIfNotNull(poseCondition.Validate(user));
