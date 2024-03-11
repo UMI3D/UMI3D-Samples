@@ -5566,6 +5566,18 @@ MonoBehaviour:
       rigName: mixamorig:Spine
       positionOffset: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 27
+      rigName: mixamorig:LeftHandThumb1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 28
+      rigName: mixamorig:LeftHandThumb2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 29
+      rigName: mixamorig:LeftHandThumb3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
     - boneType: 30
       rigName: mixamorig:LeftHandIndex1
       positionOffset: {x: 0, y: 0, z: 0}
@@ -5576,6 +5588,102 @@ MonoBehaviour:
       rotationOffset: {x: 0, y: 0, z: 0}
     - boneType: 32
       rigName: mixamorig:LeftHandIndex3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 33
+      rigName: mixamorig:LeftHandMiddle1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 34
+      rigName: mixamorig:LeftHandMiddle2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 35
+      rigName: mixamorig:LeftHandMiddle3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 36
+      rigName: mixamorig:LeftHandRing1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 37
+      rigName: mixamorig:LeftHandRing2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 38
+      rigName: mixamorig:LeftHandRing3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 39
+      rigName: mixamorig:LeftHandPinky1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 40
+      rigName: mixamorig:LeftHandPinky2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 41
+      rigName: mixamorig:LeftHandPinky3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 42
+      rigName: mixamorig:RightHandThumb1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 43
+      rigName: mixamorig:RightHandThumb2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 44
+      rigName: mixamorig:RightHandThumb3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 45
+      rigName: mixamorig:RightHandIndex1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 46
+      rigName: mixamorig:RightHandIndex2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 47
+      rigName: mixamorig:RightHandIndex3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 48
+      rigName: mixamorig:RightHandMiddle1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 49
+      rigName: mixamorig:RightHandMiddle2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 50
+      rigName: mixamorig:RightHandMiddle3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 51
+      rigName: mixamorig:RightHandRing1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 52
+      rigName: mixamorig:RightHandRing2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 53
+      rigName: mixamorig:RightHandRing3
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 54
+      rigName: mixamorig:RightHandPinky1
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 55
+      rigName: mixamorig:RightHandPinky2
+      positionOffset: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+    - boneType: 56
+      rigName: mixamorig:RightHandPinky3
       positionOffset: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &1528412420
