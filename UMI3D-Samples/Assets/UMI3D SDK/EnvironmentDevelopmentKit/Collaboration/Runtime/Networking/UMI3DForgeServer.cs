@@ -23,6 +23,7 @@ using umi3d.common.collaboration;
 using umi3d.common.collaboration.dto.emotes;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
+using umi3d.common.lbe;
 using umi3d.common.userCapture;
 using umi3d.common.userCapture.tracking;
 using umi3d.edk.collaboration.emotes;
@@ -353,12 +354,20 @@ namespace umi3d.edk.collaboration
                             WebViewManager.Instance.OnUserChangedUrl(user, webViewRequest.webViewId, webViewRequest.url);
                         });
                         break;
+                    case UserGuardianDto userGuardianDto:
+                        MainThreadManager.Run(() =>
+                        {
+                            Debug.Log("Remi : Ok Get guardian 1");
+                            GuardianManager.Instance.GetGuardianUserManager(user, userGuardianDto);
+                        });
+                        break;
                     default:
                         MainThreadManager.Run(() =>
                         {
                             UMI3DBrowserRequestDispatcher.DispatchBrowserRequest(user, dto);
                         });
                         break;
+                    
                 }
             }
             else
@@ -425,9 +434,20 @@ namespace umi3d.edk.collaboration
                             WebViewManager.Instance.OnUserChangedUrl(user, webViewId, url);
                         });
                         break;
+                    case UMI3DOperationKeys.GuardianRequest:
+                        MainThreadManager.Run(() =>
+                        {
+                            Debug.Log("Remi : Ok Get guardian 1");
+                            ulong trackableId = UMI3DSerializer.Read<ulong>(container);
+                            Vector3Dto position = UMI3DSerializer.Read<Vector3Dto>(container);
+                            Vector4Dto rotation = UMI3DSerializer.Read<Vector4Dto>(container);
+                        });
+                        break;
                     default:
                         MainThreadManager.Run(() =>
                         {
+                            Debug.Log("<color=red>Remi : Ok Get guardian 1</color>");
+
                             UMI3DBrowserRequestDispatcher.DispatchBrowserRequest(user, id, container);
                         });
                         break;
