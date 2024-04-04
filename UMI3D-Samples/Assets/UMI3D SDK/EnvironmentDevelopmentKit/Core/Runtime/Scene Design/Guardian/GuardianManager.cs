@@ -21,43 +21,38 @@ namespace umi3d.edk
         private UserGuardianDto firstUserGuardianDto;
         private Dictionary<UMI3DUser, UserGuardianDto> userGuardianMap = new Dictionary<UMI3DUser, UserGuardianDto>();
 
+        public UserGuardianDto userGuardianDto;
+
         void Start()
         {
             UMI3DServerService = UMI3DServer.Instance;
-            UMI3DServerService.OnUserJoin.AddListener(OnUserJoin);
+            //UMI3DServerService.OnUserJoin.AddListener(OnUserJoin);
         }
 
         // Méthode appelée lorsque l'utilisateur rejoint
-        void OnUserJoin(UMI3DUser user)
+        public void OnUserJoin(UMI3DUser user, UserGuardianDto userGuardDto)
         {
-            // Vérifier si c'est le premier utilisateur
-            if (UMI3DServerService.Users().Count() == 1 && FirstUserManager == false)
+            if(userGuardianDto == null)
             {
-                FirstUserManager = true;
-
-                // Récupérer le guardian de l'utilisateur
-               // GetGuardianUserManager(user);
+                userGuardianDto = userGuardDto;
+                Debug.Log("Save Guardian in server");
             }
-
-            else if (UMI3DServerService.Users().Count() > 1 && FirstUserManager == true)
+            else
             {
-                // Set le guardian au nouveau client
-                //SetGuardienUserManager(user);
-            }
+                SetGuardienUserManager(user, userGuardianDto);
+            }         
         }
 
         public void GetGuardianUserManager(UMI3DUser user, UserGuardianDto userGuardianDto)
         {
             // Sauvegarder la liste des users du guardian ici
-
             Debug.Log("OK GET GUARDIAN"); 
-
         }
 
         public void SetGuardienUserManager(UMI3DUser user, UserGuardianDto userGuardianDto)
         {
             // Sauvegarder la liste des users du guardian ici
-
+            Debug.Log("Send guardian for new user");
 
         }    
     }
