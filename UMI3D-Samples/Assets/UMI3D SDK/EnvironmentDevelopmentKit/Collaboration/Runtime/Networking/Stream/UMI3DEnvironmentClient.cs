@@ -150,7 +150,7 @@ namespace umi3d.edk.collaboration
         public class UserInfo
         {
             public ConnectionFormDto formdto;
-            public UserConnectionAnswerDto answerDto;
+            public UserConnectionAnswerDto answerDto { get; protected set; }
 
             public string AudioPassword;
 
@@ -218,6 +218,7 @@ namespace umi3d.edk.collaboration
             lastTokenUpdate = default;
             HttpClient = new HttpClient(this);
 
+            needToGetFirstConnectionInfo = true;
         }
 
         /// <summary>
@@ -423,6 +424,7 @@ namespace umi3d.edk.collaboration
                         needToGetFirstConnectionInfo = false;
                         UserConnectionDto user = await HttpClient.SendGetIdentity();
                         UpdateIdentity(user);
+                        UserDto.Set(user);
                         break;
                     case StatusType.READY:
                         if (needToGetFirstConnectionInfo)
