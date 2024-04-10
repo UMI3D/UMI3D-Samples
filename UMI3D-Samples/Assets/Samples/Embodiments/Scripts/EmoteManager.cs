@@ -44,21 +44,21 @@ public class EmoteManager : MonoBehaviour
 
     private void Handle(UMI3DUser user)
     {
-        if (!shouldSendEmotes || emoteAnimationNodes.ContainsKey(user))
+        if (!shouldSendEmotes || emoteAnimationNodes.ContainsKey(user) || user is not UMI3DCollaborationUser cUser)
             return;
 
         Transaction t = new(true);
-        t.AddIfNotNull(LoadEmotes((UMI3DCollaborationUser)user));
+        t.AddIfNotNull(LoadEmotes(cUser));
         t.Dispatch();
     }
 
     private void Unhandle(UMI3DUser user)
     {
-        if (!shouldSendEmotes || !emoteAnimationNodes.ContainsKey(user))
+        if (!shouldSendEmotes || !emoteAnimationNodes.ContainsKey(user) || user is not UMI3DCollaborationUser cUser)
             return;
 
         Transaction t = new(true);
-        t.AddIfNotNull(CleanEmotes((UMI3DCollaborationUser)user));
+        t.AddIfNotNull(CleanEmotes(cUser));
         t.Dispatch();
     }
 
