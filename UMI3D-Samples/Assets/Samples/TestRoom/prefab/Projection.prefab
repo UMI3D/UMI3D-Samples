@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.53, z: 0.4}
   m_LocalScale: {x: 0.2, y: 0.19999999, z: 0.2}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3650218183089331910}
   m_Father: {fileID: 8634133687493381513}
@@ -51,6 +52,7 @@ MonoBehaviour:
   UMI3DAnchor: {fileID: 0}
   immersiveOnly: 0
   VolumeId: 0
+  nodeName: 
   xBillboard: 0
   yBillboard: 0
   hasCollider: 1
@@ -84,6 +86,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: c315d8382c42eaa4991dcd4bdde6ec23, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -102,7 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Display:
-    name: Global
+    name: Global tool projection
     description: 
     icon2D:
       variants: []
@@ -121,6 +124,7 @@ MonoBehaviour:
   NotifySubObject: 0
   Node: {fileID: 8634133687492553150}
   HasPriority: 0
+  InteractionDistance: -1
   onHoverEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -146,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97b38d5043969c46b75af5d8abce74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UILink: {fileID: 0}
   IsSubInteraction: 0
   Display:
     name: Click
@@ -154,8 +159,6 @@ MonoBehaviour:
       variants: []
     icon3D:
       variants: []
-  TriggerAnimation: {fileID: 0}
-  ReleaseAnimation: {fileID: 0}
   Hold: 0
   onHold:
     m_PersistentCalls:
@@ -167,6 +170,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8634133687493381512}
+        m_TargetAssemblyTypeName: 
         m_MethodName: ProjectNonReleasable
         m_Mode: 0
         m_Arguments:
@@ -177,6 +181,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  TriggerAnimation: {fileID: 0}
+  ReleaseAnimation: {fileID: 0}
 --- !u!1 &8634133687493381514
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,6 +211,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0.17364813, z: -0, w: -0.9848078}
   m_LocalPosition: {x: -6.5778475, y: 0, z: 2.3941426}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8634133687492553145}
   - {fileID: 4069119422376617281}
@@ -230,6 +237,7 @@ MonoBehaviour:
   UMI3DAnchor: {fileID: 0}
   immersiveOnly: 0
   VolumeId: 0
+  nodeName: 
   xBillboard: 0
   yBillboard: 0
   hasCollider: 0
@@ -285,6 +293,7 @@ Transform:
   m_LocalRotation: {x: 0.22388124, y: -0.07625028, z: -0.31325114, w: 0.9197483}
   m_LocalPosition: {x: 0.00000015646219, y: 1.53, z: -0.4}
   m_LocalScale: {x: 0.20000003, y: 0.2, z: 0.20000002}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3650218183166875698}
   m_Father: {fileID: 8634133687493381513}
@@ -307,6 +316,7 @@ MonoBehaviour:
   UMI3DAnchor: {fileID: 0}
   immersiveOnly: 0
   VolumeId: 0
+  nodeName: 
   xBillboard: 0
   yBillboard: 0
   hasCollider: 1
@@ -340,6 +350,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: c315d8382c42eaa4991dcd4bdde6ec23, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -358,7 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Display:
-    name: Local
+    name: Releasable tool projection
     description: 
     icon2D:
       variants: []
@@ -377,6 +388,7 @@ MonoBehaviour:
   NotifySubObject: 0
   Node: {fileID: 8634133687498158573}
   HasPriority: 0
+  InteractionDistance: -1
   onHoverEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -402,6 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97b38d5043969c46b75af5d8abce74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UILink: {fileID: 0}
   IsSubInteraction: 0
   Display:
     name: Click
@@ -410,8 +423,6 @@ MonoBehaviour:
       variants: []
     icon3D:
       variants: []
-  TriggerAnimation: {fileID: 0}
-  ReleaseAnimation: {fileID: 0}
   Hold: 0
   onHold:
     m_PersistentCalls:
@@ -423,6 +434,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8634133687493381512}
+        m_TargetAssemblyTypeName: 
         m_MethodName: Project
         m_Mode: 0
         m_Arguments:
@@ -433,6 +445,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  TriggerAnimation: {fileID: 0}
+  ReleaseAnimation: {fileID: 0}
 --- !u!1 &8634133687840067603
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,6 +479,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0.9510566, z: -0, w: -0.309017}
   m_LocalPosition: {x: 0.35, y: 1.32, z: 0}
   m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3650218185021882701}
   m_Father: {fileID: 8634133687493381513}
@@ -487,6 +502,7 @@ MonoBehaviour:
   UMI3DAnchor: {fileID: 0}
   immersiveOnly: 0
   VolumeId: 0
+  nodeName: 
   xBillboard: 0
   yBillboard: 0
   hasCollider: 1
@@ -520,6 +536,7 @@ MonoBehaviour:
       isInLibrary: 1
       libraryKey: {fileID: 11400000, guid: c315d8382c42eaa4991dcd4bdde6ec23, type: 2}
   idGenerator: '{{pid}}_[{{name}}]'
+  updateSkinnedMeshRendererWhenOffscreen: 0
   areSubobjectsTracked: 0
   areSubobjectsAlreadyMarked: 0
   isRightHanded: 1
@@ -560,6 +577,7 @@ MonoBehaviour:
   NotifySubObject: 0
   Node: {fileID: 8634133687840067605}
   HasPriority: 0
+  InteractionDistance: -1
   onHoverEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -585,6 +603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97b38d5043969c46b75af5d8abce74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UILink: {fileID: 0}
   IsSubInteraction: 0
   Display:
     name: event 1
@@ -593,8 +612,6 @@ MonoBehaviour:
       variants: []
     icon3D:
       variants: []
-  TriggerAnimation: {fileID: 0}
-  ReleaseAnimation: {fileID: 0}
   Hold: 0
   onHold:
     m_PersistentCalls:
@@ -605,6 +622,8 @@ MonoBehaviour:
   onTrigger:
     m_PersistentCalls:
       m_Calls: []
+  TriggerAnimation: {fileID: 0}
+  ReleaseAnimation: {fileID: 0}
 --- !u!114 &8634133687840067600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,6 +636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97b38d5043969c46b75af5d8abce74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UILink: {fileID: 0}
   IsSubInteraction: 0
   Display:
     name: event 2
@@ -625,8 +645,6 @@ MonoBehaviour:
       variants: []
     icon3D:
       variants: []
-  TriggerAnimation: {fileID: 0}
-  ReleaseAnimation: {fileID: 0}
   Hold: 1
   onHold:
     m_PersistentCalls:
@@ -637,6 +655,8 @@ MonoBehaviour:
   onTrigger:
     m_PersistentCalls:
       m_Calls: []
+  TriggerAnimation: {fileID: 0}
+  ReleaseAnimation: {fileID: 0}
 --- !u!114 &8634133687840067601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,6 +669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 567b33942ea52b94486e809a14d72454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UILink: {fileID: 0}
   IsSubInteraction: 0
   Display:
     name: String param
@@ -657,8 +678,8 @@ MonoBehaviour:
       variants: []
     icon3D:
       variants: []
-  TriggerAnimation: {fileID: 0}
-  ReleaseAnimation: {fileID: 0}
+  isPrivate: 0
+  isDisplayer: 0
   value: value
   onChange:
     m_PersistentCalls:
@@ -675,6 +696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97b38d5043969c46b75af5d8abce74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UILink: {fileID: 0}
   IsSubInteraction: 0
   Display:
     name: Release
@@ -683,8 +705,6 @@ MonoBehaviour:
       variants: []
     icon3D:
       variants: []
-  TriggerAnimation: {fileID: 0}
-  ReleaseAnimation: {fileID: 0}
   Hold: 0
   onHold:
     m_PersistentCalls:
@@ -696,6 +716,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8634133687493381512}
+        m_TargetAssemblyTypeName: 
         m_MethodName: Release
         m_Mode: 0
         m_Arguments:
@@ -706,6 +727,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  TriggerAnimation: {fileID: 0}
+  ReleaseAnimation: {fileID: 0}
 --- !u!1001 &8634133686149690844
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -713,6 +736,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8634133687492553145}
     m_Modifications:
+    - target: {fileID: -4216859302048453862, guid: c26a612177cebcc4ba4064d57ee09430,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c26a612177cebcc4ba4064d57ee09430,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -730,6 +758,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c26a612177cebcc4ba4064d57ee09430,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: c26a612177cebcc4ba4064d57ee09430,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -742,16 +775,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: c26a612177cebcc4ba4064d57ee09430,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: c26a612177cebcc4ba4064d57ee09430,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c26a612177cebcc4ba4064d57ee09430,
         type: 3}
@@ -788,6 +811,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8634133687493381513}
     m_Modifications:
+    - target: {fileID: 1439097542601985228, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
+        type: 3}
+      propertyPath: m_Text
+      value: Projection
+      objectReference: {fileID: 0}
+    - target: {fileID: 4878800671066197358, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5740664943267180875, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5740664943267180875, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -805,6 +843,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5740664943267180875, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5740664943267180875, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -817,16 +860,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5740664943267180875, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5740664943267180875, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5740664943267180875, guid: 9036f5e33cc1b344d8bc63d6a57a1669,
         type: 3}
@@ -870,6 +903,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4216859302048453862, guid: 8daf4675f35740b41b01435989a637bc,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 8daf4675f35740b41b01435989a637bc,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -885,6 +923,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8daf4675f35740b41b01435989a637bc,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 8daf4675f35740b41b01435989a637bc,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -896,16 +939,6 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 8daf4675f35740b41b01435989a637bc,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 8daf4675f35740b41b01435989a637bc,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 8daf4675f35740b41b01435989a637bc,
-        type: 3}
-      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8daf4675f35740b41b01435989a637bc,
@@ -945,6 +978,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4216859302048453862, guid: 6e16ac5914fe3164f9b758c78cee3ac3,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 6e16ac5914fe3164f9b758c78cee3ac3,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
@@ -960,6 +998,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6e16ac5914fe3164f9b758c78cee3ac3,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 6e16ac5914fe3164f9b758c78cee3ac3,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -972,16 +1015,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 6e16ac5914fe3164f9b758c78cee3ac3,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 6e16ac5914fe3164f9b758c78cee3ac3,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6e16ac5914fe3164f9b758c78cee3ac3,
         type: 3}

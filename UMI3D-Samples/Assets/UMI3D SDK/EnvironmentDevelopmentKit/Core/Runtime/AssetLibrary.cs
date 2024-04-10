@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using umi3d.common;
 using UnityEngine;
@@ -42,14 +44,13 @@ namespace umi3d.edk
         private ulong eId = 0;
 
         /// <summary>
-        /// Last time the library has been updated.
+        /// Version of the library.
         /// </summary>
-        /// Note that when updating a library, this date should be updated manually. A "Now" button is available in the inspector to that purpose.
+        /// Note that it should be updated when the content is updated.
         [SerializeField]
-        [Tooltip("Last time the library has been updated.\n" +
-                 "Note that when updating a library, this date should be updated manually. \n" +
-                 "Press the 'Now' button designed to that purpose.")]
-        public SerializableDateTime date;
+        [Tooltip("version of the library, it should be updated when the content is updated")]
+        public string version = "0.0";
+
         /// <summary>
         /// Directories where a stored all the variants of the library.
         /// </summary>
@@ -59,6 +60,9 @@ namespace umi3d.edk
                  "A library can have several variants to propose better suited sets of assets, aiming at improving the experience on some devices.")]
         public List<UMI3DLocalAssetDirectory> variants = new List<UMI3DLocalAssetDirectory>();
 
+
+        public string idVersion => id + ":" + version;
+
         /// <inheritdoc/>
         public AssetLibraryDto ToDto()
         {
@@ -66,28 +70,24 @@ namespace umi3d.edk
             {
                 libraryId = id,
                 id = Id(),
-                format = date.Format(),
-                culture = date.Culture(),
-                date = date.ToString(),
-                variants = new List<UMI3DLocalAssetDirectory>()
+                version = version, 
+                variants = new List<UMI3DLocalAssetFilesDto>()
             };
             foreach (UMI3DLocalAssetDirectory variant in variants)
             {
-                dto.variants.Add(new UMI3DLocalAssetDirectory(variant));
+                dto.variants.Add(variant.ToFileDto());
             }
-            dto.baseUrl = UMI3DServer.GetHttpUrl() + UMI3DNetworkingKeys.directory;
+            dto.baseUrl = UMI3DServer.GetResourcesUrl();
             return dto;
         }
 
         /// <inheritdoc/>
         public Bytable ToBytes(UMI3DUser user)
         {
-            return UMI3DNetworkingHelper.Write(id)
-                + UMI3DNetworkingHelper.Write(Id())
-                + UMI3DNetworkingHelper.Write(date.Format())
-                + UMI3DNetworkingHelper.Write(date.Culture())
-                + UMI3DNetworkingHelper.Write(date.ToString())
-                + UMI3DNetworkingHelper.WriteIBytableCollection(variants.Select(v => new UMI3DLocalAssetDirectory(v)));
+            return UMI3DSerializer.Write(id)
+                + UMI3DSerializer.Write(Id())
+                + UMI3DSerializer.Write(version)
+                + UMI3DSerializer.WriteCollection(variants.Select(v => v.ToFileDto()));
         }
 
         /// <inheritdoc/>
@@ -153,6 +153,76 @@ namespace umi3d.edk
             return ConnectionFilters.Remove(filter);
         }
         #endregion
+
+    }
+
+    /// <summary>
+    /// Serialized description of an asset directory, a local folder where variants of an assets are stored.
+    /// </summary>
+    [System.Serializable]
+    public class UMI3DLocalAssetDirectory
+    {
+        /// <summary>
+        /// Name of the directory.
+        /// </summary>
+        public string name = "new variant";
+
+        /// <summary>
+        /// Local path of the directory.
+        /// </summary>
+        public string path;
+        [SerializeField]
+        public AssetMetric metrics = new AssetMetric();
+        [ConstEnum(typeof(UMI3DAssetFormat), typeof(string))]
+        public List<string> formats = new List<string>();
+
+        public UMI3DLocalAssetDirectoryDto ToDirectoryDto()
+        {
+            return new UMI3DLocalAssetDirectoryDto() { 
+            name = name,
+            path = path,
+            metrics = metrics.ToDto(),
+            formats = formats,
+            };
+        }
+
+        public UMI3DLocalAssetFilesDto ToFileDto()
+        {
+            var directoryPath = inetum.unityUtils.Path.Combine(Application.dataPath, UMI3DServer.dataPath, path);
+            return new UMI3DLocalAssetFilesDto()
+            {
+                name = name,
+                files = new FileListDto()
+                {
+                    baseUrl = inetum.unityUtils.Path.Combine("file", path),
+                    files = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories).Select(f => f.Replace(directoryPath, "")).ToList(),
+                },
+                metrics = metrics.ToDto(),
+                formats = formats,
+            };
+        }
+
+        public class AssetMetric
+        {
+            /// <summary>
+            /// Arbitrary level of resolution from low to higher resolution.
+            /// </summary>
+            public int resolution = 1;
+
+            /// <summary>
+            /// File size in Mb.
+            /// </summary>
+            public float size = 0f;
+
+            public AssetMetricDto ToDto()
+            {
+                return new AssetMetricDto()
+                {
+                    resolution = resolution,
+                    size = size,
+                };
+            }
+        }
 
     }
 }

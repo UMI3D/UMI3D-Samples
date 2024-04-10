@@ -19,7 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
-using umi3d.common.collaboration;
+using umi3d.common.collaboration.dto.networking;
+using umi3d.common.collaboration.dto.signaling;
 using umi3d.edk.collaboration;
 using UnityEngine;
 
@@ -64,7 +65,7 @@ namespace umi3d.worldController
         }
 
         /// <inheritdoc/>
-        public override Task NotifyUserJoin(UMI3DCollaborationUser user)
+        public override Task NotifyUserJoin(UMI3DCollaborationAbstractContentUser user)
         {
             return Task.CompletedTask;
         }
@@ -72,9 +73,9 @@ namespace umi3d.worldController
         /// <inheritdoc/>
         public override async Task<PrivateIdentityDto> RenewCredential(PrivateIdentityDto identityDto)
         {
-            if (identityDto?.GlobalToken != null && userMap.ContainsKey(identityDto.GlobalToken))
+            if (identityDto?.globalToken != null && userMap.ContainsKey(identityDto.globalToken))
             {
-                User user = userMap[identityDto.GlobalToken];
+                User user = userMap[identityDto.globalToken];
                 if (user != null)
                 {
                     await IAM.RenewCredential(user);
@@ -129,7 +130,7 @@ namespace umi3d.worldController
 
                 await env.Register(user.RegisterIdentityDto());
             }
-            List<LibrariesDto> l = await IAM.GetLibraries(user);
+            List<AssetLibraryDto> l = await IAM.GetLibraries(user);
             PrivateIdentityDto privateId = user.PrivateIdentityDto();
             privateId.libraries = l;
             Debug.Log(privateId);
@@ -137,19 +138,19 @@ namespace umi3d.worldController
         }
 
         /// <inheritdoc/>
-        public override Task NotifyUserUnregister(UMI3DCollaborationUser user)
+        public override Task NotifyUserUnregister(UMI3DCollaborationAbstractContentUser user)
         {
             return Task.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public override Task NotifyUserLeave(UMI3DCollaborationUser user)
+        public override Task NotifyUserLeave(UMI3DCollaborationAbstractContentUser user)
         {
             return Task.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public override Task NotifyUserRegister(UMI3DCollaborationUser user)
+        public override Task NotifyUserRegister(UMI3DCollaborationAbstractContentUser user)
         {
             return Task.CompletedTask;
         }

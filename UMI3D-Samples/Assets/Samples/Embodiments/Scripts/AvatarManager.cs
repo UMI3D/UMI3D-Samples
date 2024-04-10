@@ -15,133 +15,201 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
-using System;
-using System.Collections;
+
 using System.Collections.Generic;
 using System.Linq;
-using umi3d.common;
-using umi3d.common.collaboration;
-using umi3d.common.interaction;
+
 using umi3d.common.userCapture;
 using umi3d.edk;
+using umi3d.edk.binding;
 using umi3d.edk.collaboration;
-using umi3d.edk.userCapture;
-using UnityEngine;
-using UnityEngine.XR;
-using static umi3d.edk.interaction.UMI3DForm;
+using umi3d.edk.userCapture.binding;
+using umi3d.edk.userCapture.tracking;
 
-public class AvatarManager : MonoBehaviour
+using UnityEngine;
+
+public class AvatarManager : MonoBehaviour, IAvatarManager
 {
-    [SerializeField, EditorReadOnly]
-    UMI3DResource Avatar;
-    
-    HashSet<UMI3DUser> Handled = new HashSet<UMI3DUser>();
+    #region Fields
+
+    [HideInInspector]
+    public IReadOnlyDictionary<UMI3DUser, UMI3DModel> HandledAvatars => handledAvatars;
+
+    private readonly Dictionary<UMI3DUser, UMI3DModel> handledAvatars = new();
+
+    public event System.Action<UMI3DCollaborationUser> UserHandled;
+
+    public event System.Action<UMI3DCollaborationUser> UserUnhandled;
+
+    #region Avatar Model
+
+    [Header("Avatar")]
+    [SerializeField, EditorReadOnly, Tooltip("Scene where to instantiate avatar.")]
+    private UMI3DScene AvatarScene;
+
+    [SerializeField, EditorReadOnly, Tooltip("Avatar model to load.")]
+    private UMI3DResource AvatarModel;
 
     [System.Serializable]
-    public class Bind
+    public class RigBindingData
     {
-        [ConstEnum(typeof(BoneType),typeof(uint))]
+        [ConstEnum(typeof(BoneType), typeof(uint))]
         public uint boneType;
+
         public string rigName;
         public Vector3 positionOffset;
         public Vector3 rotationOffset;
     }
 
+    // List all the required binding to make with their offsets
     [System.Serializable]
-    public class BindList
+    public class RigList
     {
-        public List<Bind> binds;
+        public List<RigBindingData> binds;
     }
 
-    [SerializeField, EditorReadOnly]
-    bool bindRig;
+    [Header("Rigging")]
+    [SerializeField, EditorReadOnly, Tooltip("If true, the rigs of the avatar are bound to the user's skeleton bones.")]
+    private bool shouldBindAvatarRigs;
 
-    [SerializeField, EditorReadOnly]
-    BindList binds;
+    [SerializeField, EditorReadOnly, Tooltip("List all the required binding to make with their offsets.")]
+    private RigList Rigs;
 
-    [SerializeField, EditorReadOnly]
-    Vector3 positionOffset;
+    #endregion Avatar Model
 
-    [SerializeField, EditorReadOnly]
-    Vector3 rotationOffset;
-    // Start is called before the first frame update
-    void Start()
+    #endregion Fields
+
+    private IBindingService bindingHelperService;
+    private IUMI3DServer UMI3DServerService;
+
+    private void Start()
     {
-        UMI3DEmbodimentManager.Instance.NewEmbodiment.AddListener(NewAvatar);
+        bindingHelperService = BindingManager.Instance;
+        UMI3DServerService = UMI3DServer.Instance;
+        UMI3DServerService.OnUserActive.AddListener((user) => Handle(user as UMI3DCollaborationUser));
+        UMI3DServerService.OnUserLeave.AddListener((user) => Unhandle(user as UMI3DCollaborationUser));
+        UMI3DServerService.OnUserMissing.AddListener((user) => Unhandle(user as UMI3DCollaborationUser));
     }
 
-    void NewAvatar(UMI3DAvatarNode node)
+    private void Handle(UMI3DCollaborationUser user)
     {
-        if (UMI3DCollaborationServer.Collaboration.GetUser(node.userId) != null && !Handled.Contains(UMI3DCollaborationServer.Collaboration.GetUser(node.userId)))
-        {
-            Handled.Add(UMI3DCollaborationServer.Collaboration.GetUser(node.userId));
-            StartCoroutine(_NewAvatar(UMI3DCollaborationServer.Collaboration.GetUser(node.userId)));
-        }
+        if (user == null || handledAvatars.ContainsKey(user))
+            return;
+
+        SendAvatar(user);
     }
 
-    IEnumerator _NewAvatar(UMI3DCollaborationUser user)
+    private void Unhandle(UMI3DCollaborationUser user)
     {
-        if (user == null) yield break;
-        var wait = new WaitForFixedUpdate();
+        if (user == null || !handledAvatars.ContainsKey(user))
+            return;
 
-        UMI3DAvatarNode avatarnode = user.Avatar;
+        Transaction t = new() { reliable = true };
+        if (shouldBindAvatarRigs)
+            t.AddIfNotNull(bindingHelperService.RemoveAllBindings(handledAvatars[user].Id()));
+        t.AddIfNotNull(handledAvatars[user].GetDeleteEntity());
+        t.Dispatch();
 
-        while (avatarnode == null)
-        {
-            yield return wait;
-            avatarnode = user.Avatar;
-        }
+        UnityEngine.Object.Destroy(handledAvatars[user].gameObject);
 
-        while (user.status.Equals(StatusType.READY))
-        {
-            yield return wait;
-        }
+        handledAvatars.Remove(user);
 
-        GameObject avatarModelnode = new GameObject("AvatarModel");
-        avatarModelnode.transform.SetParent(avatarnode.transform);
-        avatarModelnode.transform.localPosition = Vector3.zero;
-        avatarModelnode.transform.localRotation = Quaternion.identity;
-
-        UMI3DModel avatarModel = avatarModelnode.AddComponent<UMI3DModel>();
-
-        avatarModel.objectModel.SetValue(Avatar);
-        avatarModel.objectScale.SetValue(UMI3DEmbodimentManager.Instance.embodimentSize[avatarnode.userId]);
-
-        List<Operation> ops = new List<Operation>();
-
-        LoadEntity op = avatarModel.GetLoadEntity();
-        ops.Add(op);
-        BindingsTransactionManager.Instance.Dispatch(ops, true);
-
-        StartCoroutine(Binding(avatarModel, avatarnode, user));
+        UserUnhandled?.Invoke(user);
     }
 
-    IEnumerator Binding(UMI3DModel avatarModel, UMI3DAvatarNode avatarnode, UMI3DUser user)
+    private void SendAvatar(UMI3DCollaborationUser user)
     {
-        List<Operation> ops = new List<Operation>();
+        Transaction t = new() { reliable = true };
+        t.AddIfNotNull(LoadAvatarModel(user));
 
-        SetEntityProperty op;
-        if (bindRig)
+        if (shouldBindAvatarRigs)
+            t.AddIfNotNull(BindAvatar(user, handledAvatars[user]));
+
+        t.Dispatch();
+
+        UserHandled?.Invoke(user);
+    }
+
+    private Operation LoadAvatarModel(UMI3DCollaborationUser user)
+    {
+        GameObject avatarModelNode = new($"Avatar Model - user {user.Id()}");
+
+        avatarModelNode.transform.SetParent(AvatarScene.transform);
+        avatarModelNode.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
+        UMI3DModel avatarModel = avatarModelNode.AddComponent<UMI3DModel>();
+
+        avatarModel.objectModel.SetValue(AvatarModel);
+        avatarModel.objectScale.SetValue(user.userSize.GetValue(user).Struct());
+
+        handledAvatars.Add(user, avatarModel);
+
+        return avatarModel.GetLoadEntity();
+    }
+
+    private IEnumerable<Operation> BindAvatar(UMI3DTrackedUser user, UMI3DModel avatarModel)
+    {
+        List<Operation> ops = new();
+
+        // hide head for own user avatar (and legs in VR)
+        var bindingsForUser = Rigs.binds.Select(bind =>
         {
-            foreach (Bind bind in binds.binds)
+            if (bind.boneType == BoneType.Neck || (user.HasHeadMountedDisplay && bonesToHideInVR.Contains(bind.boneType)))
             {
-                UMI3DBinding binding = new UMI3DBinding()
+                return new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
                 {
-                    boneType = bind.boneType,
-                    rigName = bind.rigName,
-                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
-                    offsetPosition = bind.positionOffset,
-                    node = avatarModel,
-                    isBinded = true,
-                    syncPosition = bind.boneType.Equals(BoneType.CenterFeet) || bind.boneType.Equals(BoneType.Hips)
+                    syncScale = true,
+                    offsetScale = Vector3.zero,
                 };
-
-                op = UMI3DEmbodimentManager.Instance.AddBinding(avatarnode, binding);
-                ops.Add(op);
             }
-        }
-        BindingsTransactionManager.Instance.Dispatch(ops, true);
-        yield break;
+            else
+            {
+                return new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
+                {
+                    syncPosition = true,
+                    offsetPosition = bind.positionOffset,
+                    syncRotation = true,
+                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
+                };
+            }
+        }).Cast<AbstractSingleBinding>();
+
+        MultiBinding multiBindingForUser = new(avatarModel.Id())
+        {
+            partialFit = false,
+            priority = 100,
+            bindings = bindingsForUser.ToList()
+        };
+
+        // others receive normal full avatar
+        var bindingsForOthers = Rigs.binds.Select(bind =>
+                new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
+                {
+                    syncPosition = true,
+                    offsetPosition = bind.positionOffset,
+                    syncRotation = true,
+                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
+                }).Cast<AbstractSingleBinding>();
+
+        MultiBinding multiBindingForOthers = new(avatarModel.Id())
+        {
+            partialFit = false,
+            priority = 100,
+            bindings = bindingsForOthers.ToList()
+        };
+
+        ops.AddRange(bindingHelperService.AddBinding(multiBindingForOthers)); //set value as synchronized one
+        ops.AddRange(bindingHelperService.RemoveBinding(multiBindingForOthers, new UMI3DUser[1] { user }));
+        ops.AddRange(bindingHelperService.AddBinding(multiBindingForUser, new UMI3DUser[1] { user }));
+
+        return ops;
     }
 
+
+    private static HashSet<uint> bonesToHideInVR = new()
+    {
+        BoneType.Head,
+        BoneType.LeftHip,
+        BoneType.RightHip
+    };
 }

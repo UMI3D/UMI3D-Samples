@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -64,7 +65,7 @@ namespace MrtkShader
         /// <returns></returns>
         public static Texture2D CombineFromMrtkStandard(Texture2D metallicMap, Texture2D occlusionMap, Texture2D emissionMap, Texture2D smoothnessMap)
         {
-            return Combine(metallicMap, occlusionMap, emissionMap, smoothnessMap,Channel.Red,Channel.Green,Channel.Blue,Channel.Alpha);
+            return Combine(metallicMap, occlusionMap, emissionMap, smoothnessMap, Channel.Red, Channel.Green, Channel.Blue, Channel.Alpha);
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace MrtkShader
         public static Texture2D CombineFromGltfStandard(Texture2D metallicMap, Texture2D occlusionMap, Texture2D emissionMap, Texture2D roughnessMap)
         {
             Texture2D smoothnessMap = InverseMap(roughnessMap);
-                return Combine(metallicMap, occlusionMap, emissionMap, smoothnessMap,gltfMetallicMapChannel,gltfOcclusionMapChannel,emissionMapChannel,gltfSmoothnessMapChannel);
+            return Combine(metallicMap, occlusionMap, emissionMap, smoothnessMap, gltfMetallicMapChannel, gltfOcclusionMapChannel, emissionMapChannel, gltfSmoothnessMapChannel);
         }
 
         /// <summary>
@@ -100,7 +101,7 @@ namespace MrtkShader
         /// <param name="occlusionMap"></param>
         /// <param name="emissionMap"></param>
         /// <returns></returns>
-        public static Texture2D CombineFromGltfStandard(Texture2D metallicRoughnessMap,Texture2D occlusionMap, Texture2D emissionMap)
+        public static Texture2D CombineFromGltfStandard(Texture2D metallicRoughnessMap, Texture2D occlusionMap, Texture2D emissionMap)
         {
             Texture2D smoothnessMap = InverseMap(metallicRoughnessMap);
             return Combine(metallicRoughnessMap, occlusionMap, emissionMap, smoothnessMap, gltfMetallicMapChannel, gltfOcclusionMapChannel, emissionMapChannel, gltfSmoothnessMapChannel);
@@ -114,7 +115,7 @@ namespace MrtkShader
         {
             return Combine(metallicMap, occlusionMap, emissionMap, smoothnessMap, gltfMetallicMapChannel, gltfOcclusionMapChannel, emissionMapChannel, gltfSmoothnessMapChannel);
         }
-        
+
         /// <summary>
         /// probably never used because gltf standard uses Roughness map
         /// </summary>
@@ -128,15 +129,25 @@ namespace MrtkShader
         {
             if (map == null)
                 return null;
-            Texture2D res = new Texture2D(map.width, map.height);
-            Color[] colors = map.GetPixels();
-            for (int i = 0; i < colors.Length; i++)
+            try
             {
-                colors[i] = Color.white - colors[i];
+                Texture2D res = new Texture2D(map.width, map.height);
+                Color[] colors = map.GetPixels();
+                for (int i = 0; i < colors.Length; i++)
+                {
+                    colors[i] = Color.white - colors[i];
+                }
+
+                res.SetPixels(colors);
+                res.Apply();
+
+                return res;
             }
-            res.SetPixels(colors);
-            //Destroy(map);
-            return res;
+            catch (Exception e)
+            {
+                Debug.LogWarning("Impossible to inverse roughness map, should be not readable" + e);
+                return map;
+            }
         }
 
         /// <summary>
@@ -188,7 +199,7 @@ namespace MrtkShader
             RenderTexture.active = previous;
             RenderTexture.ReleaseTemporary(renderTexture);
 
-            return channelMap; 
+            return channelMap;
         }
 
         /// <summary>

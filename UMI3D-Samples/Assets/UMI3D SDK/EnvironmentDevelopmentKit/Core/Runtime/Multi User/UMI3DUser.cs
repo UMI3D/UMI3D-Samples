@@ -36,7 +36,7 @@ namespace umi3d.edk
         /// <summary>
         /// The public Getter for objectId.
         /// </summary>
-        public ulong Id()
+        public virtual ulong Id()
         {
             if (userId == 0 && UMI3DEnvironment.Exists)
                 userId = UMI3DEnvironment.Register(this);
@@ -48,10 +48,15 @@ namespace umi3d.edk
 
         #region session
         /// <summary>
-        /// Does the user have an immersive device?
+        /// True if the user's browser is using purely virtual immersion and not any form of Mixed Reality.
         /// </summary>
-        public bool hasImmersiveDevice { get; protected set; } = true;
+        public bool HasImmersiveDevice { get; protected set; } = true;
 
+        /// <summary>
+        /// Does the user have an immersive display on their device.
+        /// </summary>
+        public bool HasHeadMountedDisplay { get; protected set; } = true;
+        
         /// <summary>
         /// UMI3D status of the object. 
         /// </summary>

@@ -17,6 +17,7 @@ limitations under the License.
 using System;
 using umi3d.common;
 using umi3d.common.collaboration;
+using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
 using umi3d.edk.collaboration;
 using UnityEngine;
@@ -24,9 +25,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PinIdentifierWithForm", menuName = "UMI3D/Test/Pin Identifier")]
 public class PinIdentifierWithParameter : PinIdentifierApi
 {
-    public Func<UMI3DCollaborationUser, FormDto> GetParameter;
+    public Func<UMI3DCollaborationUser, ConnectionFormDto> GetParameter;
 
-    public override FormDto GetParameterDtosFor(UMI3DCollaborationUser user)
+    public override ConnectionFormDto GetParameterDtosFor(UMI3DCollaborationUser user)
     {
         return GetParameter != null ? GetParameter(user) : null;
     }
@@ -39,31 +40,32 @@ public class PinIdentifierWithParameter : PinIdentifierApi
         return state;
     }
 
-    void debugForm(FormDto form)
-    {
-        if(form != null && form.fields != null)
-        foreach (var dto in form.fields)
-            switch (dto)
-            {
-                case BooleanParameterDto booleanParameterDto:
-                    Debug.Log(booleanParameterDto.value);
-                    break;
-                case FloatRangeParameterDto floatRangeParameterDto:
-                    Debug.Log(floatRangeParameterDto.value);
-                    break;
-                case EnumParameterDto<string> enumParameterDto:
-                    Debug.Log(enumParameterDto.value);
-                    break;
-                case StringParameterDto stringParameterDto:
-                    Debug.Log(stringParameterDto.value);
-                    break;
-                case LocalInfoRequestParameterDto requestParameterDto:
-                    Debug.Log(requestParameterDto.value);
-                    break;
-                default:
-                    Debug.Log(dto);
-                    break;
-            }
-    }
+    //void debugForm(FormDto form)
+    //{
+
+    //    if(form != null && form.fields != null)
+    //    foreach (var dto in form.fields)
+    //        switch (dto)
+    //        {
+    //            case BooleanParameterDto booleanParameterDto:
+    //                Debug.Log(booleanParameterDto.value);
+    //                break;
+    //            case FloatRangeParameterDto floatRangeParameterDto:
+    //                Debug.Log(floatRangeParameterDto.value);
+    //                break;
+    //            case EnumParameterDto<string> enumParameterDto:
+    //                Debug.Log(enumParameterDto.value);
+    //                break;
+    //            case StringParameterDto stringParameterDto:
+    //                Debug.Log(stringParameterDto.value);
+    //                break;
+    //            case LocalInfoRequestParameterDto requestParameterDto:
+    //                Debug.Log(requestParameterDto.value);
+    //                break;
+    //            default:
+    //                Debug.Log(dto);
+    //                break;
+    //        }
+    //}
 
 }

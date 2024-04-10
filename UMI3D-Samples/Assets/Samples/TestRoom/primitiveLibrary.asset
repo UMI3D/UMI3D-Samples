@@ -13,17 +13,7 @@ MonoBehaviour:
   m_Name: primitiveLibrary
   m_EditorClassIdentifier: 
   id: com.gfi.primitive
-  date:
-    _dateTime: 18/09/2020 13:39:45
-    day: 18
-    month: 9
-    year: 2020
-    hours: 13
-    minutes: 39
-    seconds: 45
-    setNow: 0
-    culture: en-US
-    format: dd/MM/yyyy  HH:mm:ss
+  version: 0.1.1
   variants:
   - name: default
     path: private\com.gfi.primitive\default

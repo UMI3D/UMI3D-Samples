@@ -16,7 +16,7 @@ limitations under the License.
 
 using System.Threading.Tasks;
 using umi3d.common;
-using umi3d.common.collaboration;
+using umi3d.common.collaboration.dto.signaling;
 using umi3d.edk.collaboration;
 using UnityEngine;
 
@@ -79,12 +79,12 @@ namespace umi3d.worldController
 
         public async void OnMessage(ulong timeStep, int groupId, byte[] bytes)
         {
-            var b = new ByteContainer(timeStep, bytes);
-            uint id = UMI3DNetworkingHelper.Read<uint>(b);
+            var b = new ByteContainer(0,timeStep, bytes);
+            uint id = UMI3DSerializer.Read<uint>(b);
             switch (id)
             {
                 case UMI3DWorldControllerMessageKeys.RegisterUser:
-                    RegisterIdentityDto identityDto = UMI3DNetworkingHelper.Read<RegisterIdentityDto>(b);
+                    RegisterIdentityDto identityDto = UMI3DSerializer.Read<RegisterIdentityDto>(b);
                     await UMI3DCollaborationServer.Instance.Register(identityDto);
                     break;
                 default:
@@ -108,24 +108,24 @@ namespace umi3d.worldController
         }
 
 
-        public override Task NotifyUserJoin(UMI3DCollaborationUser user)
+        public override Task NotifyUserJoin(UMI3DCollaborationAbstractContentUser user)
         {
             forgeClient.Send(new WorldControllerUserJoinMessage(user.login).ToBytable().ToBytes());
             return Task.CompletedTask;
         }
 
-        public override Task NotifyUserUnregister(UMI3DCollaborationUser user)
+        public override Task NotifyUserUnregister(UMI3DCollaborationAbstractContentUser user)
         {
             forgeClient.Send(new WorldControllerUserLeaveMessage(user.login).ToBytable().ToBytes());
             return Task.CompletedTask;
         }
 
-        public override Task NotifyUserLeave(UMI3DCollaborationUser user)
+        public override Task NotifyUserLeave(UMI3DCollaborationAbstractContentUser user)
         {
             return Task.CompletedTask;
         }
 
-        public override Task NotifyUserRegister(UMI3DCollaborationUser user)
+        public override Task NotifyUserRegister(UMI3DCollaborationAbstractContentUser user)
         {
             return Task.CompletedTask;
         }

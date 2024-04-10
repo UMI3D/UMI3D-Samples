@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using umi3d.edk;
+using umi3d.edk.collaboration;
+using umi3d.edk.collaboration.emotes;
 using umi3d.edk.userCapture;
 using UnityEngine;
 
@@ -32,7 +34,7 @@ public class EmoteTest : MonoBehaviour
 
     void ChangeEmoteAvailabilityTest(bool value)
     {
-        UMI3DEmote emote = emoteConfig.IncludedEmotes.Find(x => x.stateName.Contains("Waving"));
+        UMI3DEmote emote = null; // emoteConfig.IncludedEmotes.Find(x => x.stateName.Contains("Waving"));
         SetEntityProperty op = emote.Available.SetValue(value);
         Transaction tr = new Transaction()
         {

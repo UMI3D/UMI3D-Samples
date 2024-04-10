@@ -28,7 +28,7 @@ namespace umi3d.edk
     /// Root node of any UMI3D enviroment.
     /// </summary>
     /// As there is only one envionment node, it could be called as a manager.
-    public class UMI3DEnvironment : SingleBehaviour<UMI3DEnvironment>
+    public class UMI3DEnvironment : SingleBehaviour<UMI3DEnvironment>, IUMI3DEnvironmentManager
     {
         private const DebugScope scope = DebugScope.EDK | DebugScope.Collaboration;
 
@@ -105,7 +105,7 @@ namespace umi3d.edk
         {
             var env = new GlTFEnvironmentDto
             {
-                id = UMI3DGlobalID.EnvironementId
+                id = UMI3DGlobalID.EnvironmentId
             };
             env.scenes.AddRange(scenes.Where(s => s.LoadOnConnection(user)).Select(s => s.ToGlTFNodeDto(user)));
             env.extensions.umi3d = CreateDto();
@@ -120,14 +120,16 @@ namespace umi3d.edk
         /// <param name="user"></param>
         protected virtual void WriteProperties(UMI3DEnvironmentDto dto, UMI3DUser user)
         {
-            dto.LibrariesId = globalLibraries.Select(l => l.id).ToList();
+            dto.LibrariesId = globalLibraries.Select(l => l.idVersion).ToList();
             dto.preloadedScenes = objectPreloadedScenes.GetValue(user).Select(r => new PreloadedSceneDto() { scene = r.ToDto() }).ToList();
             dto.ambientType = (AmbientType)objectAmbientType.GetValue(user);
-            dto.skyColor = objectSkyColor.GetValue(user);
-            dto.horizontalColor = objectHorizonColor.GetValue(user);
-            dto.groundColor = objectGroundColor.GetValue(user);
+            dto.skyColor = objectSkyColor.GetValue(user).Dto();
+            dto.horizontalColor = objectHorizonColor.GetValue(user).Dto();
+            dto.groundColor = objectGroundColor.GetValue(user).Dto();
             dto.ambientIntensity = objectAmbientIntensity.GetValue(user);
+            dto.skyboxType = skyboxType;
             dto.skybox = objectAmbientSkyboxImage.GetValue(user)?.ToDto();
+            dto.skyboxRotation = objectSkyboxRotation.GetValue(user);
             dto.defaultMaterial = defaultMaterial?.ToDto();
         }
 
@@ -145,7 +147,7 @@ namespace umi3d.edk
         /// </summary>
         public static EnterDto ToEnterDto(UMI3DUser user)
         {
-            return new EnterDto() { userPosition = objectStartPosition.GetValue(user), userRotation = objectStartOrientation.GetValue(user), usedDto = Instance.useDto };
+            return new EnterDto() { userPosition = objectStartPosition.GetValue(user).Dto(), userRotation = objectStartOrientation.GetValue(user).Dto(), usedDto = Instance.useDto };
         }
 
         /// <summary>
@@ -155,11 +157,17 @@ namespace umi3d.edk
         /// <returns></returns>
         public virtual LibrariesDto ToLibrariesDto(UMI3DUser user)
         {
-            List<AssetLibraryDto> libraries = globalLibraries?.Select(l => l.ToDto())?.ToList() ?? new List<AssetLibraryDto>();
-            IEnumerable<AssetLibraryDto> sceneLib = scenes?.SelectMany(s => s.libraries)?.GroupBy(l => l.id)?.Where(l => !libraries.Any(l2 => l2.libraryId == l.Key))?.Select(l => l.First().ToDto());
-            if (sceneLib != null)
-                libraries.AddRange(sceneLib);
-            return new LibrariesDto() { libraries = libraries };
+            try
+            {
+                List<AssetLibraryDto> libraries = globalLibraries?.Select(l => l.ToDto()).ToList() ?? new List<AssetLibraryDto>();
+                IEnumerable<AssetLibraryDto> sceneLib = scenes?.SelectMany(s => s.libraries)?.GroupBy(l => l.id)?.Where(l => !libraries.Any(l2 => l2.libraryId == l.Key))?.Select(l => l.First().ToDto());
+                if (sceneLib != null)
+                    libraries.AddRange(sceneLib);
+                return new LibrariesDto() { libraries = libraries };
+            } catch (Exception e) {
+                Debug.LogException(e);
+                return null;
+            }
         }
 
         /// <summary>
@@ -176,19 +184,19 @@ namespace umi3d.edk
 
         private void InitDefinition()
         {
-            ulong id = UMI3DGlobalID.EnvironementId;
+            ulong id = UMI3DGlobalID.EnvironmentId;
 
             objectStartPosition = new UMI3DAsyncProperty<Vector3>(id, 0, defaultStartPosition);
             objectStartOrientation = new UMI3DAsyncProperty<Quaternion>(id, 0, Quaternion.Euler(defaultStartOrientation));
 
             objectPreloadedScenes = new UMI3DAsyncListProperty<UMI3DResource>(id, UMI3DPropertyKeys.PreloadedScenes, preloadedScenes, (UMI3DResource r, UMI3DUser user) => new PreloadedSceneDto() { scene = r.ToDto() });
-            objectAmbientType = new UMI3DAsyncProperty<AmbientMode>(id, UMI3DPropertyKeys.AmbientType, mode, (mode, user) => (AmbientType)mode);
-            objectSkyColor = new UMI3DAsyncProperty<Color>(id, UMI3DPropertyKeys.AmbientSkyColor, skyColor, (c, u) => (SerializableColor)c);
-            objectHorizonColor = new UMI3DAsyncProperty<Color>(id, UMI3DPropertyKeys.AmbientHorizontalColor, horizontalColor, (c, u) => (SerializableColor)c);
-            objectGroundColor = new UMI3DAsyncProperty<Color>(id, UMI3DPropertyKeys.AmbientGroundColor, groundColor, (c, u) => (SerializableColor)c);
+            objectAmbientType = new UMI3DAsyncProperty<AmbientMode>(id, UMI3DPropertyKeys.AmbientType, mode, (mode, user) => (int)(AmbientType)mode);
+            objectSkyColor = new UMI3DAsyncProperty<Color>(id, UMI3DPropertyKeys.AmbientSkyColor, skyColor, (c, u) => c.Dto());
+            objectHorizonColor = new UMI3DAsyncProperty<Color>(id, UMI3DPropertyKeys.AmbientHorizontalColor, horizontalColor, (c, u) => c.Dto());
+            objectGroundColor = new UMI3DAsyncProperty<Color>(id, UMI3DPropertyKeys.AmbientGroundColor, groundColor, (c, u) => c.Dto());
             objectAmbientIntensity = new UMI3DAsyncProperty<float>(id, UMI3DPropertyKeys.AmbientIntensity, ambientIntensity);
             objectAmbientSkyboxImage = new UMI3DAsyncProperty<UMI3DResource>(id, UMI3DPropertyKeys.AmbientSkyboxImage, skyboxImage, (r, u) => r.ToDto());
-
+            objectSkyboxRotation = new UMI3DAsyncProperty<float>(id, UMI3DPropertyKeys.AmbientSkyboxRotation, skyboxRotation);
         }
 
         /// <summary>
@@ -202,7 +210,7 @@ namespace umi3d.edk
         public UMI3DAsyncListProperty<UMI3DResource> objectPreloadedScenes;
 
         /// <summary>
-        /// AsyncProperties of the ambient Type. See <see cref="RenderSettings.ambientMode"/>.
+        /// AsyncProperties of the ambient type. See <see cref="RenderSettings.ambientMode"/>.
         /// </summary>
         private AmbientMode mode => RenderSettings.ambientMode;
         /// <summary>
@@ -244,16 +252,37 @@ namespace umi3d.edk
         /// <summary>
         /// See <see cref="ambientIntensity"/>.
         /// </summary>
+        /// 
         public UMI3DAsyncProperty<float> objectAmbientIntensity;
+
+        #region Skybox
+
+        [Header("Skybox")]
+
+        [SerializeField, Tooltip("Image format of skybox image")]
+        public SkyboxType skyboxType;
+
         /// <summary>
         /// AsyncProperties of the Skybox Image
         /// </summary>
         [SerializeField, EditorReadOnly, Tooltip("Image of the sybox as a resource.")]
         private UMI3DResource skyboxImage = null;
+
         /// <summary>
         /// See <see cref="skyboxImage"/>.
         /// </summary>
         public UMI3DAsyncProperty<UMI3DResource> objectAmbientSkyboxImage;
+
+        [SerializeField, Tooltip("Rotation for skybox, only works with equirectangular format"), Range(0, 360)]
+        private float skyboxRotation = 0;
+
+        /// <summary>
+        /// AsyncProperties for <see cref="skyboxRotation"/>.
+        /// </summary>
+        public UMI3DAsyncProperty<float> objectSkyboxRotation;
+
+        #endregion
+
         /// <summary>
         /// Properties of the default Material, it is used to initialise loaded materials in clients. 
         /// </summary>
@@ -282,6 +311,51 @@ namespace umi3d.edk
             else
                 throw new System.NullReferenceException("UMI3DEnvironment doesn't exists !");
         }
+
+        /// <summary>
+        /// Access to all entities of a given type.
+        /// </summary>
+        public virtual IEnumerable<E> _GetEntities<E>() where E : class, UMI3DEntity
+        {
+            return entities.Values.Where(entities => entities is E).Select(e => e as E);
+        }
+
+        /// <summary>
+        /// Get the collection of all <see cref="UMI3DUser"/> instances in the environment.
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<UMI3DUser> GetUsers()
+        {
+            return _GetEntities<UMI3DUser>();
+        }
+
+        /// <summary>
+        /// Get the set of all <see cref="UMI3DUser"/> instances in the environment.
+        /// </summary>
+        /// <returns></returns>
+        public virtual HashSet<UMI3DUser> GetUserSet()
+        {
+            return new(_GetEntities<UMI3DUser>());
+        }
+
+        /// <summary>
+        /// Get the set of all <see cref="UMI3DUser"/> instances in the environment that have already joined.
+        /// </summary>
+        /// <returns></returns>
+        public virtual HashSet<UMI3DUser> GetJoinedUserSet()
+        {
+            return new(_GetEntities<UMI3DUser>().Where((u) => u.hasJoined));
+        }
+
+        /// <summary>
+        /// Get the collection of all <see cref="UMI3DUser"/> instances in the environment.
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<UMI3DUser> Users()
+        {
+            return UMI3DEnvironment.GetEntities<UMI3DUser>();
+        }
+
 
         /// <summary>
         /// Return all id that have been registered and remove.
@@ -315,14 +389,23 @@ namespace umi3d.edk
         /// Get entity by id.
         /// </summary>
         /// <param name="id">Entity to get id</param>
-        public static E GetEntity<E>(ulong id) where E : class, UMI3DEntity
+        public static E GetEntityInstance<E>(ulong id) where E : class, UMI3DEntity
         {
             if (Exists)
-                return Instance.entities[id] as E;
+                return Instance._GetEntityInstance<E>(id);
             else if (QuittingManager.ApplicationIsQuitting)
                 return null;
             else
                 throw new System.NullReferenceException("UMI3DEnvironment doesn't exists !");
+        }
+
+        /// <summary>
+        /// Get entity by id.
+        /// </summary>
+        /// <param name="id">Entity to get id</param>
+        public E _GetEntityInstance<E>(ulong id) where E : class, UMI3DEntity
+        {
+            return entities[id] as E;
         }
 
         /// <summary>
@@ -337,11 +420,8 @@ namespace umi3d.edk
                     return (null, false, true);
                 else
                 {
-                    UMI3DEntity e = Instance.entities[id];
-                    if (e is E entity)
-                        return (entity, true, true);
-                    else
-                        return (null, true, true);
+                    var e = Instance.entities[id] as E;
+                    return (e, true, true);
                 }
             }
             else if (QuittingManager.ApplicationIsQuitting)
@@ -378,6 +458,16 @@ namespace umi3d.edk
         /// Register an entity to the environment with an id, and return it's id. 
         /// </summary>
         /// <param name="entity">Entity to register</param>
+        /// <returns>Registered object's id</returns>
+        public virtual ulong RegisterEntity(UMI3DEntity entity)
+        {
+            return Register(entity);
+        }
+
+        /// <summary>
+        /// Register an entity to the environment with an id, and return it's id. 
+        /// </summary>
+        /// <param name="entity">Entity to register</param>
         /// <param name="id">id to use</param>
         /// <returns>Registered object's id (same as id field if the id wasn't already used).</returns>
         public static ulong Register(UMI3DEntity entity, ulong id)
@@ -397,6 +487,17 @@ namespace umi3d.edk
             {
                 throw new System.NullReferenceException("UMI3DEnvironment doesn't exists !");
             }
+        }
+
+        /// <summary>
+        /// Register an entity to the environment with an id, and return it's id. 
+        /// </summary>
+        /// <param name="entity">Entity to register</param>
+        /// <param name="id">id to use</param>
+        /// <returns>Registered object's id (same as id field if the id wasn't already used).</returns>
+        public virtual ulong RegisterEntity(UMI3DEntity entity, ulong id)
+        {
+            return Register(entity, id);
         }
 
         /// <summary>
@@ -420,6 +521,19 @@ namespace umi3d.edk
             if (id != 0 && Exists)
             {
                 Instance.entities?.Remove(id);
+            }
+        }
+
+        /// <summary>
+        /// Remove an entity from the scene by id. 
+        /// Supported Types: AbstractObject3D, GenericInteraction, Tool, Toolbox
+        /// </summary>
+        /// <param name="id">UMI3D id of the object to remove</param>
+        public void RemoveEntity(ulong id)
+        {
+            if (id != 0)
+            {
+                entities?.Remove(id);
             }
         }
 

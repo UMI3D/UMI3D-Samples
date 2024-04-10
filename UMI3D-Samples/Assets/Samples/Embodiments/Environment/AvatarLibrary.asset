@@ -13,29 +13,13 @@ MonoBehaviour:
   m_Name: AvatarLibrary
   m_EditorClassIdentifier: 
   id: com.gfi.avatar
-  date:
-    _dateTime: 05/09/2022 17:09:26
-    day: 5
-    month: 9
-    year: 2022
-    hours: 17
-    minutes: 9
-    seconds: 26
-    setNow: 0
-    culture: en-US
-    format: dd/MM/yyyy  HH:mm:ss
+  version: 0.2.0
   variants:
   - name: default
     path: private\com.gfi.avatar\default
-    metrics:
-      resolution: 0
-      size: 0
     formats:
-    - unity_standalone
+    - unity_standalone_urp
   - name: android_quest
     path: private/com.gfi.avatar/android
-    metrics:
-      resolution: 0
-      size: 0
     formats:
-    - unity_android
+    - unity_android_urp

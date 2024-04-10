@@ -22,7 +22,7 @@ namespace inetum.unityUtils
     /// <typeparam name="T">A Type that should have a public parameterless constructor</typeparam>
     public class Singleton<T> where T : Singleton<T>, new()
     {
-        private static T instance;
+        protected static T instance;
 
         /// <summary>
         /// State if the application is currently Quitting. 
@@ -37,7 +37,7 @@ namespace inetum.unityUtils
         public static bool Exists => !ApplicationIsQuitting && instance != null;
 
         /// <summary>
-        /// static rteference to the only instance of <typeparamref name="T"/>
+        /// static reference to the only instance of <typeparamref name="T"/>
         /// </summary>
         public static T Instance
         {

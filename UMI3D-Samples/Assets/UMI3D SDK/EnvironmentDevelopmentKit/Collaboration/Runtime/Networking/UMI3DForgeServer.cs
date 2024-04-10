@@ -20,20 +20,27 @@ using System.Collections.Generic;
 using umi3d.cdk.collaboration;
 using umi3d.common;
 using umi3d.common.collaboration;
+using umi3d.common.collaboration.dto.emotes;
+using umi3d.common.collaboration.dto.signaling;
+using umi3d.common.interaction;
 using umi3d.common.userCapture;
+using umi3d.common.userCapture.tracking;
+using umi3d.edk.collaboration.emotes;
+using umi3d.edk.collaboration.tracking;
 using umi3d.edk.interaction;
-using umi3d.edk.userCapture;
+using umi3d.edk.userCapture.tracking;
 using umi3d.edk.volume;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace umi3d.edk.collaboration
 {
+
     /// <summary>
     /// Environment Forge server, handling most of the transactions to the browsers.
     /// </summary>
     /// The Forge server handles UDP messaging.
-    public class UMI3DForgeServer : UMI3DForgeSocketBase
+    public class UMI3DForgeServer : UMI3DForgeSocketBase, IForgeServer
     {
         private const DebugScope scope = DebugScope.EDK | DebugScope.Collaboration | DebugScope.Networking;
 
@@ -59,10 +66,10 @@ namespace umi3d.edk.collaboration
         /// </summary>
         public ushort connectionPort;
 
-        UMI3DTrackingRelay trackingRelay;
+        public UMI3DTrackingRelay trackingRelay { get; private set; }
 
         object timeLock = new object();
-        public ulong time {
+        public ulong Time {
             get
             {
                 lock (timeLock)
@@ -89,7 +96,7 @@ namespace umi3d.edk.collaboration
         /// <param name="natServerPort"></param>
         /// <param name="maxNbPlayer"></param>
         /// <returns></returns>
-        public static UMI3DForgeServer Create(string ip = "127.0.0.1", ushort connectionPort = 50043, ushort port = 15937, string masterServerHost = "", ushort masterServerPort = 15940, string natServerHost = "", ushort natServerPort = 15941, int maxNbPlayer = 64)
+        public static UMI3DForgeServer Create(string ip = "127.0.0.1", ushort connectionPort = 50043, ushort port = 15937, string masterServerHost = "", ushort masterServerPort = 15940, string natServerHost = "", ushort natServerPort = 15941, int maxNbPlayer = 64, UMI3DTrackingRelay relay = null )
         {
             UMI3DForgeServer server = new GameObject("UMI3DForgeServer").AddComponent<UMI3DForgeServer>();
             server.ip = ip;
@@ -100,7 +107,7 @@ namespace umi3d.edk.collaboration
             server.natServerPort = natServerPort;
             server.maxNbPlayer = maxNbPlayer;
             server.connectionPort = connectionPort;
-            server.trackingRelay = new UMI3DTrackingRelay(server);
+            server.trackingRelay = relay ?? new UMI3DTrackingRelay(server);
 
             return server;
         }
@@ -193,7 +200,7 @@ namespace umi3d.edk.collaboration
                 UMI3DLogger.Log($"Player [{player.NetworkId}] timeout", scope);
             });
             playerCount = server.Players.Count;
-            UMI3DCollaborationUser user = UMI3DCollaborationServer.Collaboration.GetUserByNetworkId(player.NetworkId);
+            UMI3DCollaborationAbstractContentUser user = UMI3DCollaborationServer.Collaboration.GetUserByNetworkId(player.NetworkId);
             if (user != null)
             {
                 MainThreadManager.Run(() =>
@@ -248,7 +255,7 @@ namespace umi3d.edk.collaboration
                 UMI3DLogger.Log($"Player [{player.NetworkId}] disconected", scope);
             });
             playerCount = server.Players.Count;
-            UMI3DCollaborationUser user = UMI3DCollaborationServer.Collaboration?.GetUserByNetworkId(player.NetworkId);
+            UMI3DCollaborationAbstractContentUser user = UMI3DCollaborationServer.Collaboration?.GetUserByNetworkId(player.NetworkId);
             if (user != null)
             {
                 MainThreadManager.Run(() =>
@@ -262,8 +269,8 @@ namespace umi3d.edk.collaboration
         /// <inheritdoc/>
         protected override void OnSignalingFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
         {
-            var dto = UMI3DDto.FromBson(frame.StreamData.byteArr);
-            UMI3DCollaborationUser user = UMI3DCollaborationServer.Collaboration.GetUserByNetworkId(player.NetworkId);
+            var dto = UMI3DDtoSerializer.FromBson(frame.StreamData.byteArr);
+            UMI3DCollaborationAbstractContentUser user = UMI3DCollaborationServer.Collaboration.GetUserByNetworkId(player.NetworkId);
             if (dto is StatusDto sts)
             {
                 MainThreadManager.Run(() =>
@@ -287,28 +294,36 @@ namespace umi3d.edk.collaboration
         /// <inheritdoc/>
         protected override void OnDataFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
         {
-            UMI3DCollaborationUser user = UMI3DCollaborationServer.Collaboration.GetUserByNetworkId(player.NetworkId);
+            UMI3DCollaborationAbstractContentUser user = UMI3DCollaborationServer.Collaboration.GetUserByNetworkId(player.NetworkId);
             if (user == null)
                 return;
 
             if (UMI3DEnvironment.Instance.useDto)
             {
-                var dto = UMI3DDto.FromBson(frame.StreamData.byteArr);
+                var dto = UMI3DDtoSerializer.FromBson(frame.StreamData.byteArr);
 
                 switch (dto)
                 {
 
-                    case common.userCapture.UserCameraPropertiesDto cam:
+                    case UserCameraPropertiesDto cam:
                         MainThreadManager.Run(() =>
                         {
-                            UMI3DEmbodimentManager.Instance.UserCameraReception(cam, user);
+                            ///TODO
+                            ///
+
+                            //UMI3DTrackingManager.Instance.
+                            //UMI3DEmbodimentManager.Instance.UserCameraReception(cam, user);
                         });
                         break;
 
-                    case common.VehicleConfirmation vConfirmation:
+                    case common.FrameConfirmationDto vConfirmation:
                         MainThreadManager.Run(() =>
                         {
-                            UMI3DEmbodimentManager.Instance.ConfirmEmbarkment(vConfirmation, user);
+                            ///TODO
+                            ///
+
+                            //UMI3DTrackingManager.Instance.
+                            //UMI3DEmbodimentManager.Instance.ConfirmEmbarkment(vConfirmation, user);
                         });
                         break;
 
@@ -319,13 +334,25 @@ namespace umi3d.edk.collaboration
                         });
                         break;
 
-                    case common.ConferenceBrowserRequest conferencedto:
+                    case common.ConferenceBrowserRequestDto conferencedto:
                         MainThreadManager.Run(() =>
                         {
                             UMI3DCollaborationServer.Collaboration.CollaborationRequest(user, conferencedto);
                         });
                         break;
 
+                    case EmoteRequestDto emoteRequest:
+                        MainThreadManager.Run(() =>
+                        {
+                            EmoteDispatcher.Instance.DispatchEmoteTrigger(user, emoteRequest.emoteId, emoteRequest.shouldTrigger);
+                        });
+                        break;
+                    case WebViewUrlChangedRequestDto webViewRequest:
+                        MainThreadManager.Run(() =>
+                        {
+                            WebViewManager.Instance.OnUserChangedUrl(user, webViewRequest.webViewId, webViewRequest.url);
+                        });
+                        break;
                     default:
                         MainThreadManager.Run(() =>
                         {
@@ -336,21 +363,29 @@ namespace umi3d.edk.collaboration
             }
             else
             {
-                var container = new ByteContainer(frame);
-                uint id = UMI3DNetworkingHelper.Read<uint>(container);
+                var container = new ByteContainer(UMI3DGlobalID.EnvironmentId, frame);
+                uint id = UMI3DSerializer.Read<uint>(container);
                 switch (id)
                 {
                     case UMI3DOperationKeys.UserCameraProperties:
                         MainThreadManager.Run(() =>
                         {
-                            UMI3DEmbodimentManager.Instance.UserCameraReception(id, container, user);
+                            ///TODO
+                            ///
+
+                            //UMI3DTrackingManager.Instance.
+                            //UMI3DEmbodimentManager.Instance.UserCameraReception(id, container, user);
                         });
                         break;
 
-                    case UMI3DOperationKeys.VehicleConfirmation:
+                    case UMI3DOperationKeys.FrameConfirmation:
                         MainThreadManager.Run(() =>
                         {
-                            UMI3DEmbodimentManager.Instance.ConfirmEmbarkment(id, container, user);
+                            ///TODO
+                            ///
+
+                            //UMI3DTrackingManager.Instance.
+                            //UMI3DEmbodimentManager.Instance.ConfirmEmbarkment(id, container, user);
                         });
                         break;
 
@@ -375,12 +410,21 @@ namespace umi3d.edk.collaboration
                     case UMI3DOperationKeys.EmoteRequest:
                         MainThreadManager.Run(() =>
                         {
-                            var emoteToTriggerId = UMI3DNetworkingHelper.Read<ulong>(container);
-                            var trigger = UMI3DNetworkingHelper.Read<bool>(container);
-                            UMI3DEmbodimentManager.Instance.DispatchChangeEmoteReception(emoteToTriggerId, user, trigger);
+                            ulong emoteToTriggerId = UMI3DSerializer.Read<ulong>(container);
+                            bool trigger = UMI3DSerializer.Read<bool>(container);
+
+                            EmoteDispatcher.Instance.DispatchEmoteTrigger(user, emoteToTriggerId, trigger);
                         });
                         break;
+                    case UMI3DOperationKeys.WebViewUrlRequest:
+                        MainThreadManager.Run(() =>
+                        {
+                            ulong webViewId = UMI3DSerializer.Read<ulong>(container);
+                            string url = UMI3DSerializer.Read<string>(container);
 
+                            WebViewManager.Instance.OnUserChangedUrl(user, webViewId, url);
+                        });
+                        break;
                     default:
                         MainThreadManager.Run(() =>
                         {
@@ -395,21 +439,13 @@ namespace umi3d.edk.collaboration
 
         #region avatar
 
-        protected class AvatarFrameEvent : UnityEvent<UserTrackingFrameDto, ulong> { };
-
-        protected static AvatarFrameEvent avatarFrameEvent = new AvatarFrameEvent();
-
-        public static void RequestAvatarListener(UnityAction<common.userCapture.UserTrackingFrameDto, ulong> action, string reason)
-        {
-            // do something with reason
-
-            avatarFrameEvent.AddListener(action);
-        }
-
         /// <inheritdoc/>
         protected override void OnAvatarFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
         {
-            UMI3DCollaborationUser user = UMI3DCollaborationServer.Collaboration.GetUserByNetworkId(player.NetworkId);
+            if (!UMI3DCollaborationServer.Exists)
+                return;
+
+            UMI3DCollaborationAbstractContentUser user = UMI3DCollaborationServer.Collaboration.GetUserByNetworkId(player.NetworkId);
             if (user == null) return;
 
 
@@ -417,7 +453,7 @@ namespace umi3d.edk.collaboration
 
             if (UMI3DEnvironment.Instance.useDto)
             {
-                var dto = UMI3DDto.FromBson(frame.StreamData.byteArr);
+                var dto = UMI3DDtoSerializer.FromBson(frame.StreamData.byteArr);
 
                 if (dto is UserTrackingFrameDto readFrame)
                 {
@@ -426,30 +462,20 @@ namespace umi3d.edk.collaboration
             }
             else
             {
-                trackingFrame = new UserTrackingFrameDto();
+                var container = new ByteContainer(UMI3DGlobalID.EnvironmentId, frame);
+                trackingFrame = UMI3DSerializer.Read<UserTrackingFrameDto>(container);
 
-                var container = new ByteContainer(frame);
-                uint id = UMI3DNetworkingHelper.Read<uint>(container);
-                if (id == UMI3DOperationKeys.UserTrackingFrame)
-                {
-                    trackingFrame.userId = UMI3DNetworkingHelper.Read<ulong>(container);
-                    trackingFrame.parentId = UMI3DNetworkingHelper.Read<ulong>(container);
-                    trackingFrame.skeletonHighOffset = UMI3DNetworkingHelper.Read<float>(container);
-                    trackingFrame.position = UMI3DNetworkingHelper.Read<SerializableVector3>(container);
-                    trackingFrame.rotation = UMI3DNetworkingHelper.Read<SerializableVector4>(container);
-                    trackingFrame.refreshFrequency = UMI3DNetworkingHelper.Read<float>(container);
-                    trackingFrame.bones = UMI3DNetworkingHelper.ReadList<common.userCapture.BoneDto>(container);
-                }
             }
 
             if (trackingFrame == null)
                 return;
 
-            avatarFrameEvent.Invoke(trackingFrame, server.Time.Timestep);
-            MainThreadManager.Run(() =>
-            {
-                UMI3DEmbodimentManager.Instance.UserTrackingReception(trackingFrame, user.Id(), server.Time.Timestep);
-            });
+            trackingFrame.environmentId = UMI3DGlobalID.EnvironmentId;
+
+            MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(
+                () => UMI3DTrackingManager.Instance.OnAvatarFrameReceived(trackingFrame, server.Time.Timestep));
+
+            user.CurrentTrackingFrame = trackingFrame;
 
             trackingRelay.SetFrame(player, trackingFrame);
         }
@@ -548,7 +574,6 @@ namespace umi3d.edk.collaboration
         /// </summary>
         private void Start()
         {
-            inetum.unityUtils.QuittingManager.OnApplicationIsQuitting.AddListener(ApplicationQuit);
             // If not using TCP
             // Should it be done before Host() ???
             NetWorker.PingForFirewall(port);
@@ -567,11 +592,7 @@ namespace umi3d.edk.collaboration
                 VoipInterceptionList.Remove(user);
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void ApplicationQuit()
+        private void OnDestroy()
         {
             Stop();
         }
