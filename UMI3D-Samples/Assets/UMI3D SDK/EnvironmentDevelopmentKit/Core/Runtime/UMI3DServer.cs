@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.common;
@@ -231,6 +232,7 @@ namespace umi3d.edk
         {
             return Time.time;
         }
+
 
         #region session
         public UMI3DUserEvent OnUserJoin { get; protected set; } = new UMI3DUserEvent();

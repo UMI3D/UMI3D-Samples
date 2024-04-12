@@ -12,10 +12,10 @@ namespace umi3d.common.lbe
     {
         public List<ARAnchorDto> anchorAR { get; set; }
 
-        public UserGuardianDto()
+       /* public UserGuardianDto()
         {
             anchorAR = new List<ARAnchorDto>();
-        }
+        }*/
 
     }
 }

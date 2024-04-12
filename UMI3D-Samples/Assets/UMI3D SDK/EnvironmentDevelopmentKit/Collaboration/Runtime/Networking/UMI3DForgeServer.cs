@@ -24,6 +24,8 @@ using umi3d.common.collaboration.dto.emotes;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
 using umi3d.common.lbe;
+using umi3d.common.lbe.description;
+
 using umi3d.common.userCapture;
 using umi3d.common.userCapture.tracking;
 using umi3d.edk.collaboration.emotes;
@@ -358,7 +360,14 @@ namespace umi3d.edk.collaboration
                         MainThreadManager.Run(() =>
                         {
                             Debug.Log("Remi : Ok Get guardian 1");
-                            GuardianManager.Instance.GetGuardianUserManager(user, userGuardianDto);
+                            GuardianManagerServer.Instance.OnUserJoin(user, userGuardianDto);
+                        });
+                        break;
+                    case ARAnchorDto aRAnchorDto:
+                        MainThreadManager.Run(() =>
+                        {
+                            Debug.Log("Remi : Ok Get guardian 1");
+                            GuardianManagerServer.Instance.GetARAnchor(user, aRAnchorDto.trackableId, aRAnchorDto.position, aRAnchorDto.rotation);
                         });
                         break;
                     default:
@@ -434,15 +443,37 @@ namespace umi3d.edk.collaboration
                             WebViewManager.Instance.OnUserChangedUrl(user, webViewId, url);
                         });
                         break;
-                    case UMI3DOperationKeys.GuardianRequest:
+                    case UMI3DOperationKeys.GuardianBrowserRequest:
                         MainThreadManager.Run(() =>
                         {
                             Debug.Log("Remi : Ok Get guardian 1");
+                           
+                            List<ARAnchorDto> anchorARList = UMI3DSerializer.ReadList<ARAnchorDto>(container);
+
+                            var userguardian = new UserGuardianDto
+                            {
+                                anchorAR = anchorARList
+                            };
+
+                            GuardianManagerServer.Instance.OnUserJoin(user, userguardian);
+
+                        });
+                        break;
+                    case UMI3DOperationKeys.ARAnchorBrowserRequest:
+                        MainThreadManager.Run(() =>
+                        {
+                            Debug.Log("Remi : Ok Get guardian 1");
+
                             ulong trackableId = UMI3DSerializer.Read<ulong>(container);
                             Vector3Dto position = UMI3DSerializer.Read<Vector3Dto>(container);
                             Vector4Dto rotation = UMI3DSerializer.Read<Vector4Dto>(container);
+
+                            GuardianManagerServer.Instance.GetARAnchor(user, trackableId, position, rotation);
+
                         });
                         break;
+
+
                     default:
                         MainThreadManager.Run(() =>
                         {

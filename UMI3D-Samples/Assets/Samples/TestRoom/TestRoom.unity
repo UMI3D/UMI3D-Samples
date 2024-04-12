@@ -4720,7 +4720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9958806fc2c1a1048b389b7c85dc71a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDto: 0
+  useDto: 1
   environmentName: test
   scenes: []
   globalLibraries:
@@ -8831,6 +8831,11 @@ PrefabInstance:
       propertyPath: Listener
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 103469935178789607, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 103469935608539467, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: AutoStartSendingTransaction
@@ -8906,6 +8911,11 @@ PrefabInstance:
       propertyPath: Listener
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 103469936073842027, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 103469936290098972, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -8915,6 +8925,11 @@ PrefabInstance:
         type: 3}
       propertyPath: Listener
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 103469936817692320, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4817552009550151438, guid: cd7d8c1b1f5904d4e917cb98322ae4c0,
         type: 3}
