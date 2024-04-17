@@ -11,12 +11,6 @@ namespace umi3d.common.lbe
     public class UserGuardianDto : AbstractBrowserRequestDto
     {
         public List<ARAnchorDto> anchorAR { get; set; }
-
-       /* public UserGuardianDto()
-        {
-            anchorAR = new List<ARAnchorDto>();
-        }*/
-
     }
 }
 
