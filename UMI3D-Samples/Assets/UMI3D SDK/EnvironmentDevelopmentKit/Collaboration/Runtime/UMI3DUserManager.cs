@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using BeardedManStudios.Forge.Networking;
+using inetum.unityUtils;
 using MainThreadDispatcher;
 using System;
 using System.Collections;
@@ -380,6 +381,11 @@ namespace umi3d.edk.collaboration
             Transaction transaction = new Transaction() { reliable = true };
 
             var operation = objectUserList.GetSetEntityOperationForUsers(u => u.hasJoined);
+
+            if(operation?.value is SetEntityProperty set)
+                UnityEngine.Debug.Log($"GetSetEntityOperationForUsers UserList {objectUserList?.GetValue()?.Select(u => u?.Id() ?? 0).ToString<ulong>()}");
+            else
+                UnityEngine.Debug.Log($"GetSetEntityOperationForUsers UserList NULL");
 
             transaction.AddIfNotNull(operation);
             transaction.Dispatch();

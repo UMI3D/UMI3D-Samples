@@ -510,6 +510,13 @@ namespace umi3d.edk.collaboration
             await HttpClient.SendPostUpdateIdentity(UserDto.answerDto, null);
         }
 
+        public async Task RefreshEnvironmentDto()
+        {
+            UMI3DLogger.Log($"Enter scene", scope | DebugScope.Connection);
+            environement = await HttpClient.SendGetEnvironment();
+
+        }
+
         /// <summary>
         /// Send a BrowserRequestDto on a RTC
         /// </summary>

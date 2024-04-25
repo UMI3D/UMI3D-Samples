@@ -1231,7 +1231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SendTransaction: 0
-  serverUrl: http://172.16.170.93:50044
+  serverUrl: 
   token: 
   metaData: 
 --- !u!114 &876163247
@@ -1458,8 +1458,8 @@ MonoBehaviour:
   tokenLifeTime: 10
   Identifier: {fileID: 11400000, guid: 23cd79f55f3bb4544a19e17dbca7316f, type: 2}
   WorldController: {fileID: 11400000, guid: 84a2fe2dd60104f4aa9ec8b69935580d, type: 2}
-  mumbleIp: 
-  mumbleHttpIp: 
+  mumbleIp: 20.199.14.29:64738
+  mumbleHttpIp: http://20.199.14.29
   guid: 
   useRandomForgePort: 0
   forgePort: 0
