@@ -73,6 +73,7 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
             environmentDto.SetValue(nvClient.environement);
             UnityEngine.Debug.Log("Reset environment dto");
             lastUnreliableTransactionAsync.SetValue(new());
+            lastReliableTransactionsAsync.SetValue(new());
         }
         tokenSource.Dispose();
     }
