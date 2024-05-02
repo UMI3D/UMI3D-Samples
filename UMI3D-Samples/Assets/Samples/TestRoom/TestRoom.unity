@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _logScope: -1
-  _logLevel: -1
+  _logLevel: 14
   logPath: 
   log: 0
   infoPath: 
@@ -3766,7 +3766,7 @@ MonoBehaviour:
   forgeNatServerPort: 0
   forgeMaxNbPlayer: 32
   useRandomHttpPort: 0
-  httpPort: 50044
+  httpPort: 50043
   useWorldControllerSpecificHttpPort: 0
   useRandomPortForWorldController: 0
   httpPortForWorldController: 0
@@ -9238,6 +9238,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WebView
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039910377287117076, guid: 5bda81ba4e7f23942b7a59556f18b89d,
+        type: 3}
+      propertyPath: size.x
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039910377287117076, guid: 5bda81ba4e7f23942b7a59556f18b89d,
+        type: 3}
+      propertyPath: size.y
+      value: 0.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039910377287117076, guid: 5bda81ba4e7f23942b7a59556f18b89d,
+        type: 3}
+      propertyPath: useBlackList
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039910377287117076, guid: 5bda81ba4e7f23942b7a59556f18b89d,
+        type: 3}
+      propertyPath: useWhiteList
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039910377287117076, guid: 5bda81ba4e7f23942b7a59556f18b89d,
+        type: 3}
+      propertyPath: blackList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039910377287117076, guid: 5bda81ba4e7f23942b7a59556f18b89d,
+        type: 3}
+      propertyPath: whiteList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039910377287117076, guid: 5bda81ba4e7f23942b7a59556f18b89d,
+        type: 3}
+      propertyPath: blackList.Array.data[0]
+      value: fr.wikipedia.org
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039910377287117076, guid: 5bda81ba4e7f23942b7a59556f18b89d,
+        type: 3}
+      propertyPath: whiteList.Array.data[0]
+      value: fr.wikipedia.org
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bda81ba4e7f23942b7a59556f18b89d, type: 3}

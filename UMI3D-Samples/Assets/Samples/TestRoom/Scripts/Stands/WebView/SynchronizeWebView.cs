@@ -12,9 +12,7 @@ limitations under the License.
 */
 
 using umi3d.edk;
-using umi3d.edk.interaction;
 using UnityEngine;
-using static umi3d.edk.interaction.AbstractInteraction;
 
 /// <summary>
 /// Synchronized webView url from <see cref="currentMasterUser"/>
@@ -24,57 +22,20 @@ public class SynchronizeWebView : MonoBehaviour
     [SerializeField]
     private UMI3DWebView webView;
 
-    [SerializeField]
-    private UMI3DEvent ev;
-
-    private UMI3DUser currentMasterUser;
-
     private void OnEnable()
     {
-        WebViewManager.Instance.onUserChangedUrlEvent.AddListener(OnUserUrlChanged);
-
-        if (UMI3DServer.Exists)
-        {
-            UMI3DServer.Instance.OnUserLeave.AddListener(OnUserLeave);
-        }
-
-        ev.onTrigger.AddListener(OnTrigger);
+        UMI3DServer.Instance.OnUserActive.AddListener(OnUserActive);
     }
 
     private void OnDisable()
     {
-        WebViewManager.Instance.onUserChangedUrlEvent.RemoveListener(OnUserUrlChanged);
-
-        if (UMI3DServer.Exists)
-        {
-            UMI3DServer.Instance.OnUserLeave.RemoveListener(OnUserLeave);
-        }
-
-        ev.onTrigger.RemoveListener(OnTrigger);
+        UMI3DServer.Instance.OnUserActive.RemoveListener(OnUserActive);
     }
 
-    private void OnUserUrlChanged(UMI3DUser user, ulong webViewId,  string url)
+    private void OnUserActive(UMI3DUser user)
     {
-        if ((user == currentMasterUser) && (webViewId == webView?.Id()))
-        {
-            Transaction transaction = new Transaction { reliable = false };
-
-            var op = webView.objectUrl.SetValue(url);
-            op.users.Remove(currentMasterUser);
-            transaction.AddIfNotNull(op);
-
-            transaction.Dispatch();
-        }
-    }
-
-    private void OnUserLeave(UMI3DUser user)
-    {
-        if (user == currentMasterUser)
-            currentMasterUser = null;
-    }
-
-    private void OnTrigger(InteractionEventContent content)
-    {
-        currentMasterUser = content.user;
+        Transaction t = new () { reliable = true };
+        t.AddIfNotNull(webView.objectIsAdmin.SetValue(user, true));
+        t.Dispatch();
     }
 }
