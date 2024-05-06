@@ -43,6 +43,7 @@ namespace umi3d.edk
             return userId;
         }
 
+        public bool HasAlreadyGotTheEnvironmentDtoOnce = false;
 
         #endregion
 

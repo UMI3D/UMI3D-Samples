@@ -351,6 +351,8 @@ namespace umi3d.edk.collaboration
         private IEnumerator AddUserOnJoin(UMI3DCollaborationAbstractContentUser user)
         {
             yield return new WaitForFixedUpdate();
+
+            if (user is UMI3DCollaborationUser)
             objectUserList.Add(user);
 
             SetEntityProperty op = objectUserList.GetSetEntityOperationForUsers(u => u.hasJoined);

@@ -460,6 +460,7 @@ namespace umi3d.edk.collaboration
             }
             else
             {
+                bool HasAlreadyGotTheEnvironmentDtoOnce = user.HasAlreadyGotTheEnvironmentDtoOnce;
                 while (!user.IsReadyToGetResources)
                     System.Threading.Thread.Sleep(1);
                 GlTFEnvironmentDto result = null;
@@ -473,8 +474,11 @@ namespace umi3d.edk.collaboration
 
                 while (!finished) System.Threading.Thread.Sleep(1);
 
+
                 e.Response.WriteContent(result?.ToBson() ?? new byte[0]);
-                NotifyRefresh(user);
+                if(HasAlreadyGotTheEnvironmentDtoOnce)
+                    NotifyRefresh(user);
+                user.HasAlreadyGotTheEnvironmentDtoOnce = true;
             }
             UMI3DLogger.Log($"End Get Environment {user?.Id()}", scope);
         }
