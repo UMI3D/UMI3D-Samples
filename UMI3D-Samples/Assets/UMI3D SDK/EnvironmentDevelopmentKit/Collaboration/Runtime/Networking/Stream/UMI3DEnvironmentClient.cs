@@ -474,7 +474,7 @@ namespace umi3d.edk.collaboration
             UMI3DLogger.Log($"Join", scope | DebugScope.Connection);
             isJoinning = true;
 
-           // PoseManager.Instance.InitLocalPoses();
+            // PoseManager.Instance.InitLocalPoses();
             var joinDto = new JoinDto()
             {
                 clientLocalPoses = new(),

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0103591f3ec20b94fb686de3e9b0d4b5, type: 3}
+  m_Name: Umi3D_External_Material
+  m_EditorClassIdentifier: 
+  alphaMode: 2
+  matId: 0
+  resource:
+    variants:
+    - isLocalFile: 1
+      domain: 
+      path: public\urp_unlit_mat.mat.bundle
+      format: unity_standalone_urp
+      extension: .bundle
+      isInBundle: 1
+      pathIfInBundle: Assets/materials/URP_unlit_mat.mat
+      metrics:
+        resolution: 0
+        size: 14.19
+      isInLibrary: 0
+      libraryKey: {fileID: 0}
