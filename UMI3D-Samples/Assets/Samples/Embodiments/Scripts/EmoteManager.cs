@@ -44,7 +44,7 @@ public class EmoteManager : MonoBehaviour
 
     private void Handle(UMI3DUser user)
     {
-        if (!shouldSendEmotes || emoteAnimationNodes.ContainsKey(user))
+        if (!shouldSendEmotes || emoteAnimationNodes.ContainsKey(user) || user is not UMI3DCollaborationUser)
             return;
 
         Transaction t = new(true);
@@ -54,7 +54,7 @@ public class EmoteManager : MonoBehaviour
 
     private void Unhandle(UMI3DUser user)
     {
-        if (!shouldSendEmotes || !emoteAnimationNodes.ContainsKey(user))
+        if (!shouldSendEmotes || !emoteAnimationNodes.ContainsKey(user) || user is not UMI3DCollaborationUser)
             return;
 
         Transaction t = new(true);
