@@ -15,6 +15,7 @@ using umi3d.edk;
 using umi3d.edk.interaction;
 using UnityEngine;
 using static umi3d.edk.interaction.AbstractInteraction;
+using static umi3d.edk.WebViewManager;
 
 /// <summary>
 /// Synchronized webView url from <see cref="currentMasterUser"/>
@@ -53,13 +54,13 @@ public class SynchronizeWebView : MonoBehaviour
         ev.onTrigger.RemoveListener(OnTrigger);
     }
 
-    private void OnUserUrlChanged(UMI3DUser user, ulong webViewId,  string url)
+    private void OnUserUrlChanged(WebViewEventArgs args)
     {
-        if ((user == currentMasterUser) && (webViewId == webView?.Id()))
+        if ((args.user == currentMasterUser) && (args.webViewId == webView?.Id()))
         {
             Transaction transaction = new Transaction { reliable = false };
 
-            var op = webView.objectUrl.SetValue(url);
+            var op = webView.objectUrl.SetValue(args.url);
             op.users.Remove(currentMasterUser);
             transaction.AddIfNotNull(op);
 
