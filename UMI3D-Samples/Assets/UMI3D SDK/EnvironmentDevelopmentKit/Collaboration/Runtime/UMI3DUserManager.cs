@@ -130,14 +130,14 @@ namespace umi3d.edk.collaboration
                 foreach (UMI3DCollaborationAbstractContentUser u in users.Values)
                     if (u.token == token)
                         return (u, true, false);
-                
+
                 if (oldTokenOfUpdatedUser.Contains(token))
                     return (null, true, false);
 
                 var du = resourcesOnlyUsers.FirstOrDefault(u => u.token == token);
                 if (du is not null)
                     return (null, false, true);
-                
+
             }
             return (null, false, false);
         }
@@ -152,7 +152,7 @@ namespace umi3d.edk.collaboration
             foreach (UMI3DCollaborationAbstractContentUser user in lostUsers.Values)
                 if (user.token == token)
                     return (user, true, true, false);
-            
+
             return (null, false, false, false);
 
         }
@@ -353,7 +353,7 @@ namespace umi3d.edk.collaboration
             yield return new WaitForFixedUpdate();
 
             if (user is UMI3DCollaborationUser)
-            objectUserList.Add(user);
+                objectUserList.Add(user);
 
             SetEntityProperty op = objectUserList.GetSetEntityOperationForUsers(u => u.hasJoined);
 
