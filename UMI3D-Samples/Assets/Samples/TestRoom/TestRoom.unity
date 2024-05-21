@@ -1899,7 +1899,7 @@ VideoPlayer:
   - {fileID: 0}
   m_DirectAudioVolumes:
   - 1
-  m_Url: file://C:/Users/frup73078/source/repos/UMI3D/UMI3D-Samples-2/UMI3D-Samples/data/public/countdown.mp4
+  m_Url: data/public/countdown.mp4
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
