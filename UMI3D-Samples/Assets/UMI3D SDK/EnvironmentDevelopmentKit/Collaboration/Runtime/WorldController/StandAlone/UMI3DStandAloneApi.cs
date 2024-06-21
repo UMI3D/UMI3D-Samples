@@ -97,11 +97,14 @@ namespace umi3d.worldController
 
             while (!finished)
                 System.Threading.Thread.Sleep(1);
-
             if (result != null)
             {
+                if (result is umi3d.common.interaction.form.ConnectionFormDto)
+                {
+                    Debug.Log("NEW FORM");
+                }
                 HttpListenerResponse res = e.Response;
-                res.WriteContent(System.Text.Encoding.UTF8.GetBytes(result.ToJson(Newtonsoft.Json.TypeNameHandling.None)));
+                res.WriteContent(System.Text.Encoding.UTF8.GetBytes(result.ToJson(Newtonsoft.Json.TypeNameHandling.Auto)));
             }
         }
 

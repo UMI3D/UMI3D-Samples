@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 
 namespace umi3d.worldController
 {
@@ -31,9 +32,9 @@ namespace umi3d.worldController
 
         private readonly List<string> tokens = new List<string>();
 
-        public virtual async Task<ConnectionFormDto> GenerateForm(User user)
+        public virtual async Task<common.interaction.ConnectionFormDto> GenerateForm(User user)
         {
-            var form = new ConnectionFormDto()
+            var form = new common.interaction.ConnectionFormDto()
             {
                 globalToken = user.globalToken,
                 name = "Connection",
@@ -69,6 +70,41 @@ namespace umi3d.worldController
             return await Task.FromResult(form);
         }
 
+        public virtual async Task<umi3d.common.interaction.form.ConnectionFormDto> GenerateDivForm(User user)
+        {
+            var form = new umi3d.common.interaction.form.ConnectionFormDto() {
+                globalToken = user.globalToken,
+                name = "Connection",
+                description = null,
+                FirstChildren = new ()
+            };
+
+            form.FirstChildren.Add(
+                new LabelDto() {
+                    id = 1,
+                    text = "Test Connection"
+                });
+            form.FirstChildren.Add(
+                new TextDto() {
+                    id = 1,
+                    label = "Login",
+                    PlaceHolder = "exemple@inetum.com",
+                    Value = "",
+                    TextType = TextType.Text
+                });
+            form.FirstChildren.Add(
+                new TextDto() {
+                    id = 1,
+                    label = "Password",
+                    PlaceHolder = "*****",
+                    Value = "",
+                    TextType = TextType.Password
+                });
+
+
+            return await Task.FromResult(form);
+        }
+
         public virtual async Task<IEnvironment> GetEnvironment(User user)
         {
             return await Task.FromResult(environment);
@@ -79,7 +115,15 @@ namespace umi3d.worldController
             return await Task.FromResult<List<AssetLibraryDto>>(null);
         }
 
-        public virtual async Task<bool> isFormValid(User user, FormAnswerDto formAnswer)
+        public virtual async Task<bool> isFormValid(User user, common.interaction.FormAnswerDto formAnswer)
+        {
+            UnityEngine.Debug.Log(formAnswer.ToJson(Newtonsoft.Json.TypeNameHandling.None));
+
+            SetToken(user);
+            return await Task.FromResult(true);
+        }
+
+        public virtual async Task<bool> isDivFormValid(User user, common.interaction.form.FormAnswerDto formAnswer)
         {
             UnityEngine.Debug.Log(formAnswer.ToJson(Newtonsoft.Json.TypeNameHandling.None));
 

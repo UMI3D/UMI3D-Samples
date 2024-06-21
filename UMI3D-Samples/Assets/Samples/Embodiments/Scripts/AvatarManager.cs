@@ -162,6 +162,13 @@ public class AvatarManager : MonoBehaviour, IAvatarManager
                     offsetScale = Vector3.zero,
                 };
             }
+            else if (bind.boneType >= 27 && bind.boneType <= 56 && user.HasHeadMountedDisplay)
+            {
+                return new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType) {
+                    syncRotation = true,
+                    offsetRotation = Quaternion.Euler(bind.rotationOffset),
+                };
+            }
             else
             {
                 return new RigBoneBinding(avatarModel.Id(), bind.rigName, user.Id(), bind.boneType)
@@ -172,13 +179,26 @@ public class AvatarManager : MonoBehaviour, IAvatarManager
                     offsetRotation = Quaternion.Euler(bind.rotationOffset),
                 };
             }
-        }).Cast<AbstractSingleBinding>();
+        }).Cast<AbstractSingleBinding>().ToList();
+        if (user.HasHeadMountedDisplay)
+        {
+            bindingsForUser.Add(new RigBoneBinding(avatarModel.Id(), "mixamorig:LeftHand", user.Id(), BoneType.LeftHand) {
+                syncScale = true,
+                offsetScale = Vector3.one,
+                bindToController = true
+            });
+            bindingsForUser.Add(new RigBoneBinding(avatarModel.Id(), "mixamorig:RightHand", user.Id(), BoneType.RightHand) {
+                syncScale = true,
+                offsetScale = Vector3.one,
+                bindToController = true
+            });
+        }
 
         MultiBinding multiBindingForUser = new(avatarModel.Id())
         {
             partialFit = false,
             priority = 100,
-            bindings = bindingsForUser.ToList()
+            bindings = bindingsForUser
         };
 
         // others receive normal full avatar
@@ -189,13 +209,26 @@ public class AvatarManager : MonoBehaviour, IAvatarManager
                     offsetPosition = bind.positionOffset,
                     syncRotation = true,
                     offsetRotation = Quaternion.Euler(bind.rotationOffset),
-                }).Cast<AbstractSingleBinding>();
+                }).Cast<AbstractSingleBinding>().ToList();
+        if (user.HasHeadMountedDisplay)
+        {
+            bindingsForOthers.Add(new RigBoneBinding(avatarModel.Id(), "mixamorig:LeftHand", user.Id(), BoneType.LeftHand) {
+                syncScale = true,
+                offsetScale = Vector3.one,
+                bindToController = true
+            });
+            bindingsForOthers.Add(new RigBoneBinding(avatarModel.Id(), "mixamorig:RightHand", user.Id(), BoneType.RightHand) {
+                syncScale = true,
+                offsetScale = Vector3.one,
+                bindToController = true
+            });
+        }
 
         MultiBinding multiBindingForOthers = new(avatarModel.Id())
         {
             partialFit = false,
             priority = 100,
-            bindings = bindingsForOthers.ToList()
+            bindings = bindingsForOthers
         };
 
         ops.AddRange(bindingHelperService.AddBinding(multiBindingForOthers)); //set value as synchronized one

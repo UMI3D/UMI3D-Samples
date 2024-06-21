@@ -58,9 +58,9 @@ namespace umi3d.worldController
         {
             User user = GetUser(connectionDto);
 
-            UMI3DDto dto = (connectionDto is FormConnectionAnswerDto formAnswer && formAnswer?.formAnswerDto != null)
-                ? await IAM.isFormValid(user, formAnswer.formAnswerDto) ? await GetIdentityDto(user) : (UMI3DDto)await IAM.GenerateForm(user)
-                : await IAM.IsUserValid(user) ? await GetIdentityDto(user) : (UMI3DDto)await IAM.GenerateForm(user);
+            UMI3DDto dto = (connectionDto is FormConnectionAnswerDto formAnswer && formAnswer?.divFormAnswerDto != null)
+                ? await IAM.isDivFormValid(user, formAnswer.divFormAnswerDto) ? await GetIdentityDto(user) : (UMI3DDto)await IAM.GenerateDivForm(user)
+                : await IAM.IsUserValid(user) ? await GetIdentityDto(user) : (UMI3DDto)await IAM.GenerateDivForm(user);
             return dto;
         }
 
