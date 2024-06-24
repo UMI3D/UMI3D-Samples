@@ -80,7 +80,7 @@ namespace umi3d.worldController
                 return;
             }
 
-            if (dto is FormConnectionAnswerDto _dto && _dto.formAnswerDto == null)
+            if (dto is FormConnectionAnswerDto _dto && _dto.formAnswerDto == null && _dto.divFormAnswerDto == null)
             {
                 dto = new ConnectionDto()
                 {
@@ -99,10 +99,6 @@ namespace umi3d.worldController
                 System.Threading.Thread.Sleep(1);
             if (result != null)
             {
-                if (result is umi3d.common.interaction.form.ConnectionFormDto)
-                {
-                    Debug.Log("NEW FORM");
-                }
                 HttpListenerResponse res = e.Response;
                 res.WriteContent(System.Text.Encoding.UTF8.GetBytes(result.ToJson(Newtonsoft.Json.TypeNameHandling.Auto)));
             }

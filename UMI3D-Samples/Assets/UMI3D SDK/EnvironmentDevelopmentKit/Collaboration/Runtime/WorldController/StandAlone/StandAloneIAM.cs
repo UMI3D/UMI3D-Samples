@@ -86,7 +86,7 @@ namespace umi3d.worldController
                 });
             form.FirstChildren.Add(
                 new TextDto() {
-                    id = 1,
+                    id = 2,
                     label = "Login",
                     PlaceHolder = "exemple@inetum.com",
                     Value = "",
@@ -94,13 +94,18 @@ namespace umi3d.worldController
                 });
             form.FirstChildren.Add(
                 new TextDto() {
-                    id = 1,
+                    id = 3,
                     label = "Password",
                     PlaceHolder = "*****",
                     Value = "",
                     TextType = TextType.Password
                 });
-
+            form.FirstChildren.Add(
+                new ButtonDto() {
+                    id = 4,
+                    Text = "OK",
+                    buttonType = ButtonType.Submit
+                });
 
             return await Task.FromResult(form);
         }
@@ -125,9 +130,11 @@ namespace umi3d.worldController
 
         public virtual async Task<bool> isDivFormValid(User user, common.interaction.form.FormAnswerDto formAnswer)
         {
-            UnityEngine.Debug.Log(formAnswer.ToJson(Newtonsoft.Json.TypeNameHandling.None));
+            UnityEngine.Debug.Log(formAnswer.ToJson(Newtonsoft.Json.TypeNameHandling.Auto));
 
             SetToken(user);
+            if (formAnswer.isCancelation || formAnswer.isBack)
+                return await Task.FromResult(false);
             return await Task.FromResult(true);
         }
 
