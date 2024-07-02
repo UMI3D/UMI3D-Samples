@@ -385,204 +385,38 @@ namespace umi3d.worldController
 
         public virtual async Task<umi3d.common.interaction.form.ConnectionFormDto> GenerateDivFormLogin(User user)
         {
-            ulong nextId = 0;
-            var form = new umi3d.common.interaction.form.ConnectionFormDto() {
-                globalToken = user.globalToken,
-                id = nextId++,
-                name = "Login",
-                FirstChildren = new List<DivDto>() {
-                    new PageDto() {
-                        name = "Login",
-                        id = nextId++,
-                        FirstChildren = new List<DivDto>() {
-                            new InputDto<string>() {
-                                Name = "Username",
-                                TextType = TextType.Text,
-                                PlaceHolder = "John Doe",
-                                id = nextId++,
-                                styles = new List<StyleDto>() {
-                                    new StyleDto() {
-                                        variants = new List<VariantStyleDto> () {
-                                            new UGUIStyleVariantDto() {
-                                                StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                                    new PositionStyleDto() {
-                                                        posX = 0,
-                                                        posY = 78,
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            new InputDto<string>() {
-                                Name = "Password",
-                                TextType = TextType.Password,
-                                PlaceHolder = "***************",
-                                id = nextId++,
-                                styles = new List<StyleDto>() {
-                                    new StyleDto() {
-                                        variants = new List<VariantStyleDto> () {
-                                            new UGUIStyleVariantDto() {
-                                                StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                                    new PositionStyleDto() {
-                                                        posX = 0,
-                                                        posY = -35,
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                        }
-                    },
-                    new PageDto() {
-                        name = "Pin",
-                        id = nextId++,
-                        FirstChildren = new List<DivDto>() {
-                            new InputDto<string>() {
-                                Name = "Pin",
-                                TextType = TextType.Number,
-                                PlaceHolder = "123456",
-                                id = nextId++,
-                                styles = new List<StyleDto>() {
-                                    new StyleDto() {
-                                        variants = new List<VariantStyleDto> () {
-                                            new UGUIStyleVariantDto() {
-                                                StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                                    new PositionStyleDto() {
-                                                        posX = 0,
-                                                        posY = 28,
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                        }
-                    },
-                    new ButtonDto() {
-                        Name = "OK",
-                        Text = "OK",
-                        buttonType = ButtonType.Submit,
-                        resource = new ResourceDto() {
-                            variants = new List<FileDto>() {
-                                new FileDto() {
-                                    url = UMI3DServer.publicRepository + "/button ok.png",
-                                    format = "png",
-                                    metrics = new() {
-                                        resolution = 8,
-                                        size = 0.6f,
-                                    }
-                                }
-                            }
-                        },
-                        id = nextId++,
-                        styles = new List<StyleDto>() {
-                            new StyleDto() {
-                                variants = new List<VariantStyleDto> () {
-                                    new UGUIStyleVariantDto() {
-                                        StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                            new PositionStyleDto() {
-                                                posX = 0,
-                                                posY = -151,
-                                            },
-                                            new SizeStyleDto() {
-                                                width = 95,
-                                                height = 64
-                                            },
-                                            new ColorStyleDto() {
-                                                color = new ColorDto() {
-                                                    R = 0.447f,
-                                                    G = 0.447f,
-                                                    B = 0.447f,
-                                                    A = 1,
-                                                }
-                                            },
-                                            new TextStyleDto() {
-                                                fontSize = 24,
-                                                color = new ColorStyleDto() {
-                                                    color = new ColorDto() {
-                                                        R = 1,
-                                                        G = 1,
-                                                        B = 1,
-                                                        A = 1,
-                                                    }
-                                                },
-                                                fontAlignments = new List<E_FontAlignment>() {
-                                                    E_FontAlignment.Center
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    new ButtonDto() {
-                        Name = "< BACK",
-                        Text = "< BACK",
-                        buttonType = ButtonType.Back,
-                        resource = new ResourceDto() {
-                            variants = new List<FileDto>() {
-                                new FileDto() {
-                                    url = UMI3DServer.publicRepository + "/button ok.png",
-                                    format = "png",
-                                    metrics = new() {
-                                        resolution = 8,
-                                        size = 0.6f,
-                                    }
-                                }
-                            }
-                        },
-                        id = nextId++,
-                        styles = new List<StyleDto>() {
-                            new StyleDto() {
-                                variants = new List<VariantStyleDto> () {
-                                    new UGUIStyleVariantDto() {
-                                        StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                            new PositionStyleDto() {
-                                                posX = -408,
-                                                posY = 220,
-                                            },
-                                            new SizeStyleDto() {
-                                                width = 100,
-                                                height = 32
-                                            },
-                                            new ColorStyleDto() {
-                                                color = new ColorDto() {
-                                                    R = 0.447f,
-                                                    G = 0.447f,
-                                                    B = 0.447f,
-                                                    A = 1,
-                                                }
-                                            },
-                                            new TextStyleDto() {
-                                                fontSize = 18,
-                                                color = new ColorStyleDto() {
-                                                    color = new ColorDto() {
-                                                        R = 1,
-                                                        G = 1,
-                                                        B = 1,
-                                                        A = 1,
-                                                    }
-                                                },
-                                                fontAlignments = new List<E_FontAlignment>() {
-                                                    E_FontAlignment.Center
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
+            var root = new ConnectionFormBuilder("login");
 
-            return await Task.FromResult(form);
+            var loginPage = root.AddPage("Login");
+            {
+                loginPage.AddInput<string>("Username")
+                    .Placeholder("John Doe").Type(TextType.Text)
+                    .Position(0, 78);
+                loginPage.AddInput<string>("Password")
+                    .Placeholder("***************").Type(TextType.Password)
+                    .Position(0, -35);
+            }
+
+            var pinPage = root.AddPage("Pin");
+            {
+                pinPage.AddInput<string>("Pin")
+                    .Placeholder("123456").Type(TextType.Number)
+                    .Position(0, 28);
+            }
+
+            root.AddButton("OK")
+                .Type(ButtonType.Submit)
+                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f })
+                .Position(0, -151).Size(95, 65).Color(0.447f, 0.447f, 0.447f, 1)
+                .TextSize(24);
+
+            root.AddButton("< BACK")
+                .Type(ButtonType.Cancel)
+                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f })
+                .Position(-408, 220).Size(100, 32).Color(0.447f, 0.447f, 0.447f, 1)
+                .TextSize(18);
+
+            return await Task.FromResult(root.Get());
         }
 
         public virtual async Task<IEnvironment> GetEnvironment(User user)
