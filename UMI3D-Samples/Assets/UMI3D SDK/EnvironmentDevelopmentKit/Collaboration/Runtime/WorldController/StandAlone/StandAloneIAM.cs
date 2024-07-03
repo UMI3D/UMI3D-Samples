@@ -78,7 +78,7 @@ namespace umi3d.worldController
             var root = new ConnectionFormBuilder("environment");
 
             var lastPage = root.AddPage("Last")
-                .Position(0, -500);
+                .Position(0, -25);
             {
                 for (var i = 0; i < 3; i++)
                 {
