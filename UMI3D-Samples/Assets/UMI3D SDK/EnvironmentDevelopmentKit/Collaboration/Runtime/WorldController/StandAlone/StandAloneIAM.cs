@@ -75,312 +75,42 @@ namespace umi3d.worldController
 
         public virtual async Task<umi3d.common.interaction.form.ConnectionFormDto> GenerateDivForm(User user)
         {
-            ulong nextId = 1;
-            var form = new umi3d.common.interaction.form.ConnectionFormDto() {
-                globalToken = user.globalToken,
-                id = nextId++,
-                name = "Environment", // TODO: Change correct form name
-                FirstChildren = new List<DivDto>() {
-                    new PageDto() {
-                        name = "Last",
-                        id = nextId++,
-                        FirstChildren = new List<DivDto>()
-                    },
-                    new GroupDto() {
-                        label = "ConnectionToken",
-                        id = nextId++,
-                        styles = new List<StyleDto>() {
-                            new StyleDto() {
-                                variants = new List<VariantStyleDto>() {
-                                    new UGUIStyleVariantDto() {
-                                        StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                            new PositionStyleDto() {
-                                                posX = -275,
-                                                posY = 178f
-                                            },
-                                            new SizeStyleDto() {
-                                                width = 190,
-                                                height = 61
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        FirstChildren = new List<DivDto>() {
-                            new ImageDto() {
-                                id = 150632,
-                                tooltip = "ICON",
-                                resource = new ResourceDto() {
-                                    variants = new List<FileDto>() {
-                                        new FileDto() {
-                                            url = UMI3DServer.publicRepository + "/button ok.png", // TODO: Path of user icon
-                                            format = "png", // TODO: Format of user icon
-                                            metrics = new (){
-                                                resolution = 0,
-                                                size = 0.063f
-                                            }
-                                        }
-                                    }
-                                },
-                                styles = new List<StyleDto>() {
-                                    new StyleDto() {
-                                        variants = new List<VariantStyleDto>() {
-                                            new UGUIStyleVariantDto() {
-                                                StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                                    new PositionStyleDto() {
-                                                        posX = -68,
-                                                        posY = 6.5f
-                                                    },
-                                                    new SizeStyleDto() {
-                                                        width = 35,
-                                                        height = 35
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                            },
-                            new LabelDto() {
-                                text = "Connected as",
-                                id = nextId++,
-                                styles = new List<StyleDto>() {
-                                    new StyleDto() {
-                                        variants = new List<VariantStyleDto>() {
-                                            new UGUIStyleVariantDto() {
-                                                StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                                    new PositionStyleDto() {
-                                                        posX = -3,
-                                                        posY = 13
-                                                    },
-                                                    new SizeStyleDto() {
-                                                        width = 88.1f,
-                                                        height = 17.8f
-                                                    },
-                                                    new TextStyleDto() {
-                                                        fontSize = 12,
-                                                        color = new ColorStyleDto() {
-                                                            color = new ColorDto() {
-                                                                R = 1,
-                                                                G = 1,
-                                                                B = 1,
-                                                                A = 1
-                                                            }
-                                                        },
-                                                        fontAlignments = new List<E_FontAlignment>() {
-                                                            E_FontAlignment.Left
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                            },
-                            new LabelDto() {
-                                text = "User Name", // TODO: User name
-                                id = nextId++,
-                                styles = new List<StyleDto>() {
-                                    new StyleDto() {
-                                        variants = new List<VariantStyleDto>() {
-                                            new UGUIStyleVariantDto() {
-                                                StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                                    new PositionStyleDto() {
-                                                        posX = 62,
-                                                        posY = 13
-                                                    },
-                                                    new SizeStyleDto() {
-                                                        width = 64.7f,
-                                                        height = 17.8f
-                                                    },
-                                                    new TextStyleDto() {
-                                                        fontSize = 12,
-                                                        color = new ColorStyleDto() {
-                                                            color = new ColorDto() {
-                                                                R = 1,
-                                                                G = 1,
-                                                                B = 1,
-                                                                A = 1
-                                                            }
-                                                        },
-                                                        fontAlignments = new List<E_FontAlignment>() {
-                                                            E_FontAlignment.Left
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                            },
-                            new LabelDto() {
-                                text = "Portal Name", // TODO: Portal Name
-                                id = nextId++,
-                                styles = new List<StyleDto>() {
-                                    new StyleDto() {
-                                        variants = new List<VariantStyleDto>() {
-                                            new UGUIStyleVariantDto() {
-                                                StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                                    new PositionStyleDto() {
-                                                        posX = 23.7f,
-                                                        posY = -3
-                                                    },
-                                                    new SizeStyleDto() {
-                                                        width = 142.6f,
-                                                        height = 16
-                                                    },
-                                                    new TextStyleDto() {
-                                                        fontSize = 12,
-                                                        color = new ColorStyleDto() {
-                                                            color = new ColorDto() {
-                                                                R = 0,
-                                                                G = 0.8f,
-                                                                B = 1,
-                                                                A = 1
-                                                            }
-                                                        },
-                                                        fontAlignments = new List<E_FontAlignment>() {
-                                                            E_FontAlignment.Left
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                            },
-                            new ButtonDto() {
-                                Text = "Log out",
-                                buttonType = ButtonType.Cancel,
-                                id = nextId++,
-                                styles = new List<StyleDto>() {
-                                    new StyleDto() {
-                                        variants = new List<VariantStyleDto>() {
-                                            new UGUIStyleVariantDto() {
-                                                StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                                    new PositionStyleDto() {
-                                                        posX = 23.7f,
-                                                        posY = -20.6f
-                                                    },
-                                                    new SizeStyleDto() {
-                                                        width = 142.6f,
-                                                        height = 16
-                                                    },
-                                                    new TextStyleDto() {
-                                                        fontSize = 10,
-                                                        color = new ColorStyleDto() {
-                                                            color = new ColorDto() {
-                                                                R = 0.8f,
-                                                                G = 0.8f,
-                                                                B = 0.8f,
-                                                                A = 1
-                                                            }
-                                                        },
-                                                        fontAlignments = new List<E_FontAlignment>() {
-                                                            E_FontAlignment.Left
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                            }
-                        }
-                    },
-                    new ButtonDto() {
-                        Name = "< BACK",
-                        Text = "< BACK",
-                        buttonType = ButtonType.Back,
-                        resource = new ResourceDto() {
-                            variants = new List<FileDto>() {
-                                new FileDto() {
-                                    url = UMI3DServer.publicRepository + "/button ok.png",
-                                    format = "png",
-                                    metrics = new() {
-                                        resolution = 8,
-                                        size = 0.6f,
-                                    }
-                                }
-                            }
-                        },
-                        id = nextId++,
-                        styles = new List<StyleDto>() {
-                            new StyleDto() {
-                                variants = new List<VariantStyleDto> () {
-                                    new UGUIStyleVariantDto() {
-                                        StyleVariantItems = new List<UGUIStyleItemDto>() {
-                                            new PositionStyleDto() {
-                                                posX = -408,
-                                                posY = 220,
-                                            },
-                                            new SizeStyleDto() {
-                                                width = 100,
-                                                height = 32
-                                            },
-                                            new ColorStyleDto() {
-                                                color = new ColorDto() {
-                                                    R = 0.447f,
-                                                    G = 0.447f,
-                                                    B = 0.447f,
-                                                    A = 1,
-                                                }
-                                            },
-                                            new TextStyleDto() {
-                                                fontSize = 18,
-                                                color = new ColorStyleDto() {
-                                                    color = new ColorDto() {
-                                                        R = 1,
-                                                        G = 1,
-                                                        B = 1,
-                                                        A = 1,
-                                                    }
-                                                },
-                                                fontAlignments = new List<E_FontAlignment>() {
-                                                    E_FontAlignment.Center
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
+            var root = new ConnectionFormBuilder("environment");
 
-            for (int i = 0; i < 2; i++) // TODO: Correct environement
+            var lastPage = root.AddPage("Last")
+                .Position(0, -500);
             {
-                form.FirstChildren[0].FirstChildren.Add(GenerateVignette(ref nextId, "Name", UMI3DServer.publicRepository + "/button ok.png", "png"));
+                for (var i = 0; i < 3; i++)
+                {
+                    var vignette = lastPage.AddImage(UMI3DServer.publicRepository + "/button ok.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f });
+                    vignette.AddLabel("Name"); // TODO : Correct vignette name
+                }
             }
 
-            return await Task.FromResult(form);
-        }
+            var connectionGroup = root.AddGroup()
+                .Position(-275, 178).Size(190, 61);
+            {
+                connectionGroup.AddImage(UMI3DServer.publicRepository + "/button ok.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f }) // TODO Correct User icon
+                    .Position(-68, -4).Size(35, 35);
+                connectionGroup.AddLabel("Connected as")
+                    .Position(5, 13).Size(100, 19)
+                    .TextSize(16).TextColor(1, 1, 1, 1);
+                connectionGroup.AddLabel("User Name") // TODO Correct User name
+                    .Position(207, 13).Size(300, 19)
+                    .TextSize(16).TextColor(1, 1, 1, 1).AddTextStyle(E_FontStyle.Bold);
+                connectionGroup.AddLabel("Portal Name") // TODO Correct Portal name
+                    .Position(26.7f, -3).Size(142.6f, 16)
+                    .TextSize(16).TextColor(0, 0.8f, 1, 1);
+                connectionGroup.AddButton("Log out").Type(ButtonType.Cancel)
+                    .Position(26.7f, -18).Size(142.6f, 16)
+                    .TextSize(12).TextColor(0.8f, 0.8f, 0.8f, 1).AddTextAlignement(E_FontAlignment.Left);
+            }
+            root.AddButton("< BACK").Type(ButtonType.Back)
+                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
+                .Position(-408, 220).Size(100, 32).Color(0.447f, 0.447f, 0.447f, 1)
+                .TextSize(18);
 
-        private common.interaction.form.ImageDto GenerateVignette(ref ulong nextId, string name, string imagePath, string format = "png")
-        {
-            return new ImageDto() {
-                id = nextId++,
-                resource = new ResourceDto() {
-                    variants = new List<FileDto>() {
-                        new FileDto() {
-                            url = imagePath,
-                            format = format,
-                            metrics = new AssetMetricDto() {
-                                resolution = 0,
-                                size = 0.063f
-                            }
-                        }
-                    }
-                },
-                FirstChildren = new List<DivDto>() {
-                    new LabelDto() {
-                        text = name,
-                        id = nextId++
-                    }
-                }
-            };
+            return await Task.FromResult(root.Get());
         }
 
         public virtual async Task<umi3d.common.interaction.form.ConnectionFormDto> GenerateDivFormLogin(User user)
@@ -404,15 +134,13 @@ namespace umi3d.worldController
                     .Position(0, 28);
             }
 
-            root.AddButton("OK")
-                .Type(ButtonType.Submit)
-                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f })
+            root.AddButton("OK").Type(ButtonType.Submit)
+                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
                 .Position(0, -151).Size(95, 65).Color(0.447f, 0.447f, 0.447f, 1)
                 .TextSize(24);
 
-            root.AddButton("< BACK")
-                .Type(ButtonType.Cancel)
-                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f })
+            root.AddButton("< BACK").Type(ButtonType.Cancel)
+                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
                 .Position(-408, 220).Size(100, 32).Color(0.447f, 0.447f, 0.447f, 1)
                 .TextSize(18);
 

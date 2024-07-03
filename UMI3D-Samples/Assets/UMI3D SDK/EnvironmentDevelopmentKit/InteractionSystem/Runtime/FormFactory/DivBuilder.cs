@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections.Generic;
 using umi3d.common.interaction.form.ugui;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace umi3d.common.interaction.form
 {
@@ -80,20 +81,24 @@ namespace umi3d.common.interaction.form
             return this;
         }
 
-        public DivBuilder<T> TextStyle(List<E_FontStyle> styles)
+        public DivBuilder<T> AddTextStyle(E_FontStyle style)
         {
             CheckStyleCreated();
             CheckTextStyleCreated();
-            textStyle.fontStyles = styles;
+            if (textStyle.fontStyles == null)
+                textStyle.fontStyles = new List<E_FontStyle>();
+            textStyle.fontStyles.Add(style);
 
             return this;
         }
 
-        public DivBuilder<T> TextAlignement(List<E_FontAlignment> alignements)
+        public DivBuilder<T> AddTextAlignement(E_FontAlignment alignement)
         {
             CheckStyleCreated();
             CheckTextStyleCreated();
-            textStyle.fontAlignments = alignements;
+            if (textStyle.fontAlignments == null)
+                textStyle.fontAlignments = new List<E_FontAlignment>();
+            textStyle.fontAlignments.Add(alignement);
 
             return this;
         }
