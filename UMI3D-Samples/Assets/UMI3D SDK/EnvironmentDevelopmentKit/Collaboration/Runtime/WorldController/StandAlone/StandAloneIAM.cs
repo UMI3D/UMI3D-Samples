@@ -77,20 +77,19 @@ namespace umi3d.worldController
         {
             var root = new ConnectionFormBuilder("environment");
 
-            var lastPage = root.AddPage("Last")
-                .Position(0, -25);
+            var lastPage = root.AddPage("Last");
             {
                 for (var i = 0; i < 3; i++)
                 {
-                    var vignette = lastPage.AddImage(UMI3DServer.publicRepository + "/button ok.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f });
+                    var vignette = lastPage.AddImage(UMI3DServer.publicRepository + "/ButtonOk.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f });
                     vignette.AddLabel("Name"); // TODO : Correct vignette name
                 }
             }
 
             var connectionGroup = root.AddGroup()
-                .Position(-275, 178).Size(190, 61);
+                .Position(-275, 160).Size(190, 61);
             {
-                connectionGroup.AddImage(UMI3DServer.publicRepository + "/button ok.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f }) // TODO Correct User icon
+                connectionGroup.AddImage(UMI3DServer.publicRepository + "/ButtonOk.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f }) // TODO Correct User icon
                     .Position(-68, -4).Size(35, 35);
                 connectionGroup.AddLabel("Connected as")
                     .Position(5, 13).Size(100, 19)
@@ -106,9 +105,9 @@ namespace umi3d.worldController
                     .TextSize(12).TextColor(0.8f, 0.8f, 0.8f, 1).AddTextAlignement(E_FontAlignment.Left);
             }
             root.AddButton("< BACK").Type(ButtonType.Back)
-                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
-                .Position(-408, 220).Size(100, 32).Color(0.447f, 0.447f, 0.447f, 1)
-                .TextSize(18);
+                .Image(UMI3DServer.publicRepository + "/ButtonBack.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
+                .Position(-460, 220).Size(90, 32)
+                .TextSize(18).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
 
             return await Task.FromResult(root.Get());
         }
@@ -121,28 +120,28 @@ namespace umi3d.worldController
             {
                 loginPage.AddInput<string>("Username")
                     .Placeholder("John Doe").Type(TextType.Text)
-                    .Position(0, 78);
+                    .Position(0, 98);
                 loginPage.AddInput<string>("Password")
                     .Placeholder("***************").Type(TextType.Password)
-                    .Position(0, -35);
+                    .Position(0, -15);
             }
 
             var pinPage = root.AddPage("Pin");
             {
                 pinPage.AddInput<string>("Pin")
                     .Placeholder("123456").Type(TextType.Number)
-                    .Position(0, 28);
+                    .Position(0, 55);
             }
 
             root.AddButton("OK").Type(ButtonType.Submit)
-                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
-                .Position(0, -151).Size(95, 65).Color(0.447f, 0.447f, 0.447f, 1)
-                .TextSize(24);
+                .Image(UMI3DServer.publicRepository + "/ButtonOk.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
+                .Position(0, -160).Size(95, 54)
+                .TextSize(24).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
 
             root.AddButton("< BACK").Type(ButtonType.Cancel)
-                .Image(UMI3DServer.publicRepository + "/button ok.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
-                .Position(-408, 220).Size(100, 32).Color(0.447f, 0.447f, 0.447f, 1)
-                .TextSize(18);
+                .Image(UMI3DServer.publicRepository + "/ButtonBack.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
+                .Position(-460, 220).Size(90, 32)
+                .TextSize(18).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
 
             return await Task.FromResult(root.Get());
         }
