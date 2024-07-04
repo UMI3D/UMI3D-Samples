@@ -75,6 +75,8 @@ namespace umi3d.worldController
 
         public virtual async Task<umi3d.common.interaction.form.ConnectionFormDto> GenerateDivForm(User user)
         {
+            return await GenerateDivFormLogin(user);
+
             var root = new ConnectionFormBuilder("environment");
 
             var lastPage = root.AddPage("Last");
@@ -106,7 +108,7 @@ namespace umi3d.worldController
             }
             root.AddButton("< BACK").Type(ButtonType.Back)
                 .Image(UMI3DServer.publicRepository + "/ButtonBack.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
-                .Position(-460, 220).Size(90, 32)
+                .Position(-460, 220).Size(90, 32).Color(0.447f, 0.447f, 0.447f, 1)
                 .TextSize(18).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
 
             return await Task.FromResult(root.Get());
@@ -135,12 +137,12 @@ namespace umi3d.worldController
 
             root.AddButton("OK").Type(ButtonType.Submit)
                 .Image(UMI3DServer.publicRepository + "/ButtonOk.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
-                .Position(0, -160).Size(95, 54)
+                .Position(0, -160).Size(95, 54).Color(0.447f, 0.447f, 0.447f, 1)
                 .TextSize(24).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
 
             root.AddButton("< BACK").Type(ButtonType.Cancel)
                 .Image(UMI3DServer.publicRepository + "/ButtonBack.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
-                .Position(-460, 220).Size(90, 32)
+                .Position(-460, 220).Size(90, 32).Color(0.447f, 0.447f, 0.447f, 1)
                 .TextSize(18).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
 
             return await Task.FromResult(root.Get());
