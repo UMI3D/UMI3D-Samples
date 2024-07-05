@@ -72,41 +72,43 @@ namespace umi3d.worldController
 
             return await Task.FromResult(form);
         }
-
         public virtual async Task<umi3d.common.interaction.form.ConnectionFormDto> GenerateDivForm(User user)
         {
             return await GenerateDivFormLogin(user);
+        }
 
-            var root = new ConnectionFormBuilder("environment");
+        public virtual async Task<umi3d.common.interaction.form.ConnectionFormDto> GenerateDivFormVignettes(User user)
+        {
+            var root = new ConnectionFormBuilder("form-environment", "environment");
 
-            var lastPage = root.AddPage("Last");
+            var lastPage = root.AddPage("page-last", "Last");
             {
-                for (var i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    var vignette = lastPage.AddImage(UMI3DServer.publicRepository + "/ButtonOk.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f });
-                    vignette.AddLabel("Name"); // TODO : Correct vignette name
+                    var vignette = lastPage.AddImage("vignette-image-" + i, UMI3DServer.publicRepository + "/ButtonOk.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f });
+                    vignette.AddLabel("vignette-label-" + i, "Name"); // TODO : Correct vignette name
                 }
             }
 
-            var connectionGroup = root.AddGroup()
+            var connectionGroup = root.AddGroup("group-connectionInfo")
                 .Position(-275, 160).Size(190, 61);
             {
-                connectionGroup.AddImage(UMI3DServer.publicRepository + "/ButtonOk.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f }) // TODO Correct User icon
+                connectionGroup.AddImage("image-user", UMI3DServer.publicRepository + "/ButtonOk.png", "png", new AssetMetricDto() { resolution = 0, size = 0.063f }) // TODO Correct User icon
                     .Position(-68, -4).Size(35, 35);
-                connectionGroup.AddLabel("Connected as")
+                connectionGroup.AddLabel("label-connected", "Connected as")
                     .Position(5, 13).Size(100, 19)
                     .TextSize(16).TextColor(1, 1, 1, 1);
-                connectionGroup.AddLabel("User Name") // TODO Correct User name
+                connectionGroup.AddLabel("label-user", "User Name") // TODO Correct User name
                     .Position(207, 13).Size(300, 19)
                     .TextSize(16).TextColor(1, 1, 1, 1).AddTextStyle(E_FontStyle.Bold);
-                connectionGroup.AddLabel("Portal Name") // TODO Correct Portal name
+                connectionGroup.AddLabel("label-portal", "Portal Name") // TODO Correct Portal name
                     .Position(26.7f, -3).Size(142.6f, 16)
                     .TextSize(16).TextColor(0, 0.8f, 1, 1);
-                connectionGroup.AddButton("Log out").Type(ButtonType.Cancel)
+                connectionGroup.AddButton("button-cancel", "Log out").Type(ButtonType.Cancel)
                     .Position(26.7f, -18).Size(142.6f, 16)
                     .TextSize(12).TextColor(0.8f, 0.8f, 0.8f, 1).AddTextAlignement(E_FontAlignment.Left);
             }
-            root.AddButton("< BACK").Type(ButtonType.Back)
+            root.AddButton("button-back", "< BACK").Type(ButtonType.Back)
                 .Image(UMI3DServer.publicRepository + "/ButtonBack.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
                 .Position(-460, 220).Size(90, 32).Color(0.447f, 0.447f, 0.447f, 1)
                 .TextSize(18).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
@@ -116,31 +118,31 @@ namespace umi3d.worldController
 
         public virtual async Task<umi3d.common.interaction.form.ConnectionFormDto> GenerateDivFormLogin(User user)
         {
-            var root = new ConnectionFormBuilder("login");
+            var root = new ConnectionFormBuilder("form-login", "login");
 
-            var loginPage = root.AddPage("Login");
+            var loginPage = root.AddPage("page-login", "Login");
             {
-                loginPage.AddInput<string>("Username")
+                loginPage.AddInput<string>("input-username", "Username")
                     .Placeholder("John Doe").Type(TextType.Text)
                     .Position(0, 98);
-                loginPage.AddInput<string>("Password")
+                loginPage.AddInput<string>("input-password", "Password")
                     .Placeholder("***************").Type(TextType.Password)
                     .Position(0, -15);
             }
 
-            var pinPage = root.AddPage("Pin");
+            var pinPage = root.AddPage("page-pin", "Pin");
             {
-                pinPage.AddInput<string>("Pin")
+                pinPage.AddInput<string>("input-pin", "Pin")
                     .Placeholder("123456").Type(TextType.Number)
                     .Position(0, 55);
             }
 
-            root.AddButton("OK").Type(ButtonType.Submit)
+            root.AddButton("button-submit", "OK").Type(ButtonType.Submit)
                 .Image(UMI3DServer.publicRepository + "/ButtonOk.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
                 .Position(0, -160).Size(95, 54).Color(0.447f, 0.447f, 0.447f, 1)
                 .TextSize(24).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
 
-            root.AddButton("< BACK").Type(ButtonType.Cancel)
+            root.AddButton("button-back", "< BACK").Type(ButtonType.Cancel)
                 .Image(UMI3DServer.publicRepository + "/ButtonBack.png", "png", new() { resolution = 8, size = 0.6f }) // TODO Image button
                 .Position(-460, 220).Size(90, 32).Color(0.447f, 0.447f, 0.447f, 1)
                 .TextSize(18).AddTextStyle(E_FontStyle.Bold).AddTextStyle(E_FontStyle.Uppercase);
