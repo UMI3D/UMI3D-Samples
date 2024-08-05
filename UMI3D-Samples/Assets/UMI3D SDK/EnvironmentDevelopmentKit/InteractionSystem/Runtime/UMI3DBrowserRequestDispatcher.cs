@@ -21,7 +21,7 @@ using umi3d.common.interaction;
 namespace umi3d.edk.interaction
 {
     /// <summary>
-    /// Dispactcher managing incoming <see cref="AbstractBrowserRequestDto"/> from clients.
+    /// Dispatcher managing incoming <see cref="AbstractBrowserRequestDto"/> from clients.
     /// </summary>
     public static class UMI3DBrowserRequestDispatcher
     {
@@ -109,8 +109,8 @@ namespace umi3d.edk.interaction
                     UMI3DEnvironment.GetEntityInstance<UMI3DInteractable>(toolId)?.Hovered(user, toolId, interactionId, hoverredId, bonetype, bonePosition, boneRotation, container);
                     break;
                 default:
-                    if (UMI3DOperationKeys.InteractionRequest <= operationKey && operationKey <= UMI3DOperationKeys.UserTrackingFrame)
-                    {
+                    if ((UMI3DOperationKeys.InteractionRequest <= operationKey && operationKey <= UMI3DOperationKeys.UserTrackingFrame) || operationKey == UMI3DOperationKeys.UploadFileRequest)
+                        {
                         interactionId = UMI3DSerializer.Read<ulong>(container);
                         hoverredId = UMI3DSerializer.Read<ulong>(container);
                         bonetype = UMI3DSerializer.Read<uint>(container);
