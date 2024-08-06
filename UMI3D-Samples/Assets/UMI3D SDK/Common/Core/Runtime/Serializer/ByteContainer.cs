@@ -46,6 +46,10 @@ namespace umi3d.common
 
         public UMI3DVersion.Version version;
 
+        public void UpdateEnvironmentId(ulong environmentId)
+        {
+            this.environmentId = environmentId;
+        }
 
         private ByteContainer(ulong environmentId, UMI3DVersion.Version version)
         {

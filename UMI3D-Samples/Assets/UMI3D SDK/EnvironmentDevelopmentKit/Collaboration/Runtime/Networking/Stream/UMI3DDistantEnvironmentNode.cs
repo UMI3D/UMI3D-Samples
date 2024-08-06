@@ -303,6 +303,12 @@ public class UMI3DDistantEnvironmentNode : UMI3DAbstractDistantEnvironmentNode
             await nvClient.HttpClient.SendPostRegisterDistantUser(dto);
         }
     }
+
+    public void DispatchBrowserRequest(UMI3DUser user, uint operationKey, ByteContainer container)
+    {
+        UnityEngine.Debug.Log($"DispatchBrowserRequest {user.Id()} {container.environmentId} {operationKey}");
+        nvClient.SendBrowserRequest(container.bytes, true);
+    }
 }
 
 public abstract class UMI3DAbstractDistantEnvironmentNode : MonoBehaviour, UMI3DLoadableEntity

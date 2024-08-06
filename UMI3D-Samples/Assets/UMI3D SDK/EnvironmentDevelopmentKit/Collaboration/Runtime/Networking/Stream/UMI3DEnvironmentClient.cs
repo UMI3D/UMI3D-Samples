@@ -530,6 +530,16 @@ namespace umi3d.edk.collaboration
         }
 
         /// <summary>
+        /// Send a BrowserRequestDto on a RTC
+        /// </summary>
+        /// <param name="dto">Dto to send</param>
+        /// <param name="reliable">is the data channel used reliable</param>
+        public void SendBrowserRequest(byte[] bytes, bool reliable)
+        {
+            ForgeClient.SendBrowserRequest(bytes, reliable);
+        }
+
+        /// <summary>
         /// Send Tracking BrowserRequest
         /// </summary>
         /// <param name="dto">Dto to send</param>

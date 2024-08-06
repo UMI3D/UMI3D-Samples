@@ -330,6 +330,11 @@ namespace umi3d.edk.collaboration
             }
         }
 
+        public void SendBrowserRequest(byte[] bytes, bool reliable)
+        {
+            SendBinaryData((int)DataChannelTypes.Data, bytes, reliable);
+        }
+
         public void SendVOIP(int length, byte[] sample)
         {
             if (client == null || client.Me == null) return;

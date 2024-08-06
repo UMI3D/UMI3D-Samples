@@ -71,6 +71,7 @@ namespace umi3d.edk.interaction
         /// <param name="container">Received byte container</param>
         public static void DispatchBrowserRequest(UMI3DUser user, uint operationKey, ByteContainer container)
         {
+
             ulong toolId = UMI3DSerializer.Read<ulong>(container);
             ulong interactionId, hoverredId;
             uint bonetype;
