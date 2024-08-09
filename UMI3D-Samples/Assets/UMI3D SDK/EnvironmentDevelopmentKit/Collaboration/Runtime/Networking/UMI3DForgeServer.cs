@@ -447,7 +447,11 @@ namespace umi3d.edk.collaboration
                         {
                             if (container.environmentId != 0)
                             {
-                                UMI3DEnvironment.GetEntityInstance<UMI3DDistantEnvironmentNode>(container.environmentId)?.DispatchBrowserRequest(user, id, container);
+                                var e = UMI3DEnvironment.GetEntityInstance<UMI3DDistantEnvironmentNode>(container.environmentId);
+                                if (e is null)
+                                    UnityEngine.Debug.Log($"no UMI3DDistantEnvironmentNode with id {container.environmentId}");
+
+                                e?.DispatchBrowserRequest(user, id, container);
                                 return;
                             }
                             UMI3DBrowserRequestDispatcher.DispatchBrowserRequest(user, id, container);
