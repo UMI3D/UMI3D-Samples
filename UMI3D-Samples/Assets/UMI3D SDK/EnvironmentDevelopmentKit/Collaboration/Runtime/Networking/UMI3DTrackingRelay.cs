@@ -25,27 +25,99 @@ namespace umi3d.edk.collaboration.tracking
 {
     public class UMI3DTrackingRelay : UMI3DToUserRelay<List<UserTrackingFrameDto>>
     {
+        private const DebugScope debugScope = DebugScope.EDK | DebugScope.UserCapture | DebugScope.Collaboration | DebugScope.User;
+
+        /// <summary>
+        /// Contains all user tracking frames serialized for an update.
+        /// </summary>
+        protected Dictionary<NetworkingPlayer, (int nbOfFrames, byte[] rawFrames)> tempRawFramesPerPlayers;
+
+        /// <summary>
+        /// Temp list to contain all bytes to snd to a user.
+        /// </summary>
+        private List<byte> tempMessage = new();
+
+        private byte[] tempBytesArray;
 
         public UMI3DTrackingRelay(IForgeServer server) : base(server)
         {
             dataChannel = DataChannelTypes.Tracking;
+            tempRawFramesPerPlayers = new();
+        }
+
+        protected override void Update()
+        {
+            try
+            {
+                if (!UMI3DEnvironment.Instance.useDto)
+                {
+                    lock (framesPerSourceLock)
+                    {
+                        // Serialize all tracking frames once for all players.
+                        foreach ((NetworkingPlayer player, List<UserTrackingFrameDto> frames) in framesPerSource)
+                        {
+                            if (frames.Count == 1)
+                                tempBytesArray = UMI3DSerializer.Write(frames[0]).ToBytes();
+                            else if (frames.Count > 1)
+                                tempBytesArray = UMI3DSerializer.Write(frames).ToBytes()[5..]; // 5 = 1 (one byte for array type) + 4 (four bytes for array length)
+
+                            tempRawFramesPerPlayers[player] = (frames.Count, tempBytesArray);
+                        }
+                    }
+                }
+
+                base.Update();
+            }
+            catch (System.Exception ex)
+            {
+                UMI3DLogger.LogError("Error while sending tracking frame", debugScope);
+                UMI3DLogger.LogException(ex, debugScope);
+            }
         }
 
         /// <inheritdoc/>
-        protected override byte[] GetMessage(List<List<UserTrackingFrameDto>> frames)
+        protected override byte[] GetMessage(List<NetworkingPlayer> fromPlayers)
         {
-            var _frames = frames.SelectMany(x => x).ToList();
-            if (UMI3DEnvironment.Instance.useDto)
-                return (new UMI3DDtoListDto<UserTrackingFrameDto>() { values = _frames }).ToBson();
-            else
-                return UMI3DSerializer.WriteCollection(_frames).ToBytes();
+            try
+            {
+                if (UMI3DEnvironment.Instance.useDto)
+                {
+                    return (new UMI3DDtoListDto<UserTrackingFrameDto>() { values = fromPlayers.Select(player => framesPerSource[player][0]).ToList() }).ToBson();
+                }
+                else
+                {
+                    tempMessage.Clear();
+                    tempMessage.Add(UMI3DObjectKeys.CountArray);
+                    int nbOfFrames = fromPlayers.Sum(p =>
+                    {
+                        if (tempRawFramesPerPlayers.ContainsKey(p))
+                            return tempRawFramesPerPlayers[p].nbOfFrames;
+                        else return 0;
+                    });
+                    tempMessage.AddRange(UMI3DSerializer.Write(nbOfFrames).ToBytes());
+                    UnityEngine.Debug.Assert(tempMessage.Count == 5, tempMessage.Count);
 
+                    foreach (NetworkingPlayer player in fromPlayers)
+                    {
+                        if (tempRawFramesPerPlayers.ContainsKey(player))
+                            tempMessage.AddRange(tempRawFramesPerPlayers[player].rawFrames);
+                        else
+                            UnityEngine.Debug.LogError($"Impossible to find tracking frame from {player.NetworkId}");
+                    }
+
+                    return tempMessage.ToArray();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError(ex);
+                return new byte[0];
+            }
         }
-
 
         public void SetFrame(NetworkingPlayer source, UserTrackingFrameDto frame)
         {
-            SetFrame(source, new List<UserTrackingFrameDto>() { frame });
+            SetFrame(source, new List<UserTrackingFrameDto> { frame });
         }
     }
 }
