@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using inetum.unityUtils.systemIO;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.common;
@@ -253,6 +254,7 @@ namespace umi3d.edk
         public UMI3DUserEvent OnUserActive { get; protected set; } = new UMI3DUserEvent();
         public UMI3DUserEvent OnUserLeave { get; protected set; } = new UMI3DUserEvent();
         public UMI3DUserEvent OnUserUnregistered { get; protected set; } = new UMI3DUserEvent();
+        public UMI3DUserIsTalkingEvent OnUserIsTalkingStatusChanged { get; protected set; } = new();
         #endregion
     }
 }

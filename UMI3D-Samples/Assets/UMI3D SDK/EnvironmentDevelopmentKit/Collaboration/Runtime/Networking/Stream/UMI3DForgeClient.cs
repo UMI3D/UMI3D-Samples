@@ -14,20 +14,17 @@ limitations under the License.
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Frame;
 using BeardedManStudios.Forge.Networking.Unity;
-using inetum.unityUtils;
+using inetum.unityUtils.lifeCycle;
+using inetum.unityUtils.observation;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration;
-using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.collaboration.dto.voip;
-using umi3d.common.userCapture.pose;
 using umi3d.common.userCapture.tracking;
-using umi3d.edk.collaboration.tracking;
 using UnityEngine;
 
 namespace umi3d.edk.collaboration
@@ -445,7 +442,7 @@ namespace umi3d.edk.collaboration
 
                         //CollaborationSkeletonsManager.Instance.UpdateSkeleton(frames.values);
                         await Task.Yield();
-                        environmentClient.node.OnAvatarData(player,frames.values);
+                        environmentClient.node.OnAvatarData(player, frames.values);
                     });
                 }
             }
@@ -531,11 +528,10 @@ namespace umi3d.edk.collaboration
             NetWorker.PingForFirewall(port);
             if (!HasBeenSet)
             {
-                NotificationHub.Default.Subscribe(
+                Quitting.instance.SubscribeFor(
+                    Quitting.SubscriptionType.IsQuitting,
                     this,
-                    QuittingManagerNotificationKey.ApplicationIsQuitting,
-                    null,
-                    ApplicationQuit
+                    (Callback)ApplicationQuit
                 );
             }
             HasBeenSet = true;
@@ -546,7 +542,7 @@ namespace umi3d.edk.collaboration
         /// </summary>
         private void ApplicationQuit()
         {
-            if (!QuittingManager.applicationIsQuitting) return;
+            if (!Quitting.instance) return;
             NetworkManager.Instance.ApplicationQuit();
             Stop();
         }

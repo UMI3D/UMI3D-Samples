@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using inetum.unityUtils;
+using inetum.unityUtils.lifeCycle;
+using inetum.unityUtils.observation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -105,11 +106,10 @@ namespace umi3d.edk.collaboration.murmur
             mm._Create();
             mm.HeartBeat();
 
-            NotificationHub.Default.Subscribe(
-                typeof(MumbleManager).FullName,
-                QuittingManagerNotificationKey.ApplicationIsQuitting,
-                null,
-                mm.Delete
+            Quitting.instance.SubscribeFor(
+                Quitting.SubscriptionType.IsQuitting, 
+                typeof(MumbleManager).FullName, 
+                (Callback)mm.Delete
             );
 
             return mm;
@@ -180,8 +180,10 @@ namespace umi3d.edk.collaboration.murmur
         }
 
 
-        public void SwitchDefaultRoom(string name, IEnumerable<UMI3DCollaborationAbstractContentUser> users, bool force = false)
+        public List<Operation> SwitchDefaultRoom(string name, IEnumerable<UMI3DCollaborationAbstractContentUser> users, bool force = false)
         {
+            var ops = new List<Operation>();
+
             bool localRoom = true;
             if (name != null)
             {
@@ -199,17 +201,18 @@ namespace umi3d.edk.collaboration.murmur
 
             var room = roomList.FirstOrDefault(r => r.name == name) ?? _CreateRoom(name, localRoom);
             if (room == null)
-                return;
+                return ops;
 
             var old = defaultRoom;
             defaultRoom = room;
             if (old == defaultRoom)
-                return;
+                return ops;
 
             foreach (var user in users)
                 if (force || user.audioChannel.GetValue(user) == old.name)
-                    SwitchUserRoom(user);
+                    ops.AddRange(SwitchUserRoom(user) ?? new());
 
+            return ops;
         }
 
         public async void RefreshAsync()

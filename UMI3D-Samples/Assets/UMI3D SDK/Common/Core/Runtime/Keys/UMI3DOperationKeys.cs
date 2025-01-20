@@ -41,6 +41,10 @@ namespace umi3d.common
         public const uint MuteAllMicrophoneStatus = 24;
         public const uint MuteAllAvatarStatus = 25;
         public const uint MuteAllAttentionStatus = 26;
+        public const uint MicrophoneRequest = 27;
+        public const uint UserActionRequest = 28;
+        public const uint CanUnmuteMicrophoneRequest = 29;
+        public const uint UserIsTalkingStatus = 30;
 
         public const uint SetEntityProperty = 101;
         public const uint SetEntityDictionnaryProperty = 103;
@@ -71,11 +75,15 @@ namespace umi3d.common
         public const uint FrameRequest = 306;
         public const uint FrameConfirmation = 307;
         public const uint SetUTSBoneTargetFPS = 308;
+        public const uint PerspectiveCameraProperties = 309;
+        public const uint OrthographicCameraProperties = 310;
 
         public const uint FpsNavigationMode = 400;
         public const uint FlyingNavigationMode = 401;
         public const uint LayeredFlyingNavigationMode = 402;
         public const uint LockedNavigationMode = 403;
+
+        public const uint ServerMessageRequest = 500;
 
         public const uint InteractionRequest = 10001;
         public const uint EventStateChanged = 10002;
