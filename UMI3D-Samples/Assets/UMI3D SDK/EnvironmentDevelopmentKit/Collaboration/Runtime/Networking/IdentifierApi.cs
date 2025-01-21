@@ -32,7 +32,7 @@ namespace umi3d.edk.collaboration
         private Dictionary<ulong, bool> librariesUpdateStatus;
 
         /// <summary>
-        /// Update a client status acording to a userconnectionDto
+        /// Update a client status according to a userConnectionDto
         /// </summary>
         /// <param name="user">User.</param>
         /// <param name="identity">Identity Dto send by the user.</param>
@@ -64,6 +64,26 @@ namespace umi3d.edk.collaboration
         /// <param name="login">Login of the user.</param>
         /// <returns></returns>
         public virtual ConnectionFormDto GetParameterDtosFor(UMI3DCollaborationUser user)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public virtual WaitConnectionDto GetWaitDtosFor(UMI3DCollaborationUser user)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public virtual common.interaction.form.ConnectionFormDto GetDivDtosFor(UMI3DCollaborationUser user)
         {
             return null;
         }

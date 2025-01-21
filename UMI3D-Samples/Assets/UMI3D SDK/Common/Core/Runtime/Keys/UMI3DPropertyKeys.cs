@@ -232,6 +232,8 @@ namespace umi3d.common
         public const uint TrackingConstraintConstrainingNode = 11114;
         public const uint TrackingConstraintConstrainingBone = 11115;
 
+        public const uint UserActions = 11200;
+
         #endregion
 
         #region notification
@@ -270,6 +272,8 @@ namespace umi3d.common
         public const uint AnimationStateName = 13402;
         public const uint AnimationAnimatorParameters = 13403;
         public const uint AnimationAnimatorNormalizedTime = 13404;
+        public const uint AnimationAnimatorLookAtPosition = 13405;
+        public const uint AnimationAnimatorLookAtWeight = 13406;
 
         #endregion
 
