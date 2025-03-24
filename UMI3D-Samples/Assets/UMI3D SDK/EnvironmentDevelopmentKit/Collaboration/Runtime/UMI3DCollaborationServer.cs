@@ -285,6 +285,7 @@ namespace umi3d.edk.collaboration
 
             WorldController.SetupAfterServerStart();
             OnServerStart.Invoke();
+            NotifyServerStarted();
         }
 
         private void ShouldAcceptPlayer(string identity, NetworkingPlayer player, Action<bool> action)
@@ -436,6 +437,7 @@ namespace umi3d.edk.collaboration
             {
                 isRunning = false;
                 OnServerStop.Invoke();
+                NotifyServerStopped();
             }
             if (mumbleManager != null)
                 mumbleManager.Delete();
@@ -455,6 +457,7 @@ namespace umi3d.edk.collaboration
             {
                 isRunning = false;
                 OnServerStop.Invoke();
+                NotifyServerStopped();
             }
             if (mumbleManager != null)
                 mumbleManager.Delete();
@@ -750,7 +753,9 @@ namespace umi3d.edk.collaboration
         }
 
         #region session
+        [Obsolete("Use OnServerStarted instead.")]
         public UnityEvent OnServerStart = new UnityEvent();
+        [Obsolete("Use OnServerStopped instead.")]
         public UnityEvent OnServerStop = new UnityEvent();
         #endregion
     }
