@@ -40,7 +40,7 @@ namespace umi3d.edk
         /// <summary>
         /// Image's border
         /// </summary>
-        private Vector4 border => GetComponent<Image>().sprite.border;
+        private Vector4 border => GetComponent<Image>().sprite != null ? GetComponent<Image>().sprite.border : Vector4.zero;
 
         /// <summary>
         /// Image's sprite URL.
